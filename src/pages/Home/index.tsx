@@ -76,6 +76,8 @@ export const Home: React.FC = () => {
 
   useEffect(() => {
     getProjects();
+
+    return (() => { setMyProjects([]) });
   }, []);
 
   const handleEntrar = async () => {

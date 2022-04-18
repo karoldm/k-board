@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { FaInfo, FaPlus } from 'react-icons/fa';
+
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { Button } from '../../components/Button';
@@ -9,7 +11,7 @@ import { Modal } from '../../components/Modal';
 
 import { database } from '../../services/firebase';
 
-import { Navbar, ModalContent, Wrapper, TaskWrapper, TaskContent, TaskContainer, Task } from './style';
+import { Navbar, ModalTaskContent, Wrapper, TaskWrapper, TaskContent, TaskContainer, Task, ModalInfoContent } from './style';
 
 
 type Task = {
@@ -19,18 +21,25 @@ type Task = {
   id: string,
 }
 
+type Member = {
+  id: string,
+  name: string,
+  photoURL: string,
+}
+
 export const Project: React.FC = () => {
   const { id } = useParams();
 
-  const [modal, setModal] = useState(false);
+  const [taskModal, setTaskModal] = useState(false);
+  const [infoModal, setInfoModal] = useState(false);
 
   const [projectName, setProjectName] = useState('');
   const [projectAuthorPhoto, setProjectAuthorPhoto] = useState('');
-  //const [projectMembersPhotos, setProjectMembersPhoto] = useState<string[]>([]);
+  const [projectMembers, setProjectMembers] = useState<Member[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const [taskName, setTaskName] = useState('');
-  const [taskColor, setTaskColor] = useState('#000');
+  const [taskColor, setTaskColor] = useState('#000000');
 
 
   const getProject = async () => {
@@ -60,11 +69,36 @@ export const Project: React.FC = () => {
     });
   }
 
+  const getProjectMembers = () => {
+
+    const projectRef = database.ref(`projects/${id}`);
+
+    projectRef.on('value', project => {
+      const projectDatabase = project.val();
+
+      const firebaseMembers: Member = projectDatabase.members ?? {};
+
+      const parseMembers = Object.entries(firebaseMembers).map(([key, value]) => {
+        const objectValue = (value as Object) as Member;
+        return {
+          id: key,
+          name: objectValue.name,
+          photoURL: objectValue.photoURL,
+        }
+      })
+
+      setProjectMembers(parseMembers);
+
+    });
+  }
+
   useEffect(() => {
     getProject();
+    getProjectMembers();
 
     return () => {
       setTasks([]);
+      setProjectMembers([]);
     };
   }, []);
 
@@ -92,7 +126,7 @@ export const Project: React.FC = () => {
 
       setTaskColor('#000');
       setTaskName('');
-      setModal(false);
+      setTaskModal(false);
     }
     else {
       alert('Preencha todos os campos!');
@@ -137,27 +171,51 @@ export const Project: React.FC = () => {
 
   return (
     <Wrapper>
-      <Modal visible={modal} onHide={() => setModal(false)}>
-        <ModalContent>
+
+      <Modal visible={taskModal} onHide={() => setTaskModal(false)}>
+        <ModalTaskContent>
           <span>Nova Tarefa</span>
           <div>
             <Input value={taskName} id={'task-name'} placeholder={'Tarefa'} setValue={setTaskName} />
             <input value={taskColor} type={'color'} id={'task-color'} onChange={(e) => { setTaskColor(e.target.value) }} />
           </div>
           <Button onclick={handleNovaTarefa} ><p>Criar</p></Button>
-        </ModalContent>
+        </ModalTaskContent>
       </Modal>
+
+      <Modal visible={infoModal} onHide={() => setInfoModal(false)}>
+        <ModalInfoContent>
+          <img src={projectAuthorPhoto} alt='author project photo' />
+          <strong>{projectName}</strong>
+          <p>{id}</p>
+          <i>Participantes</i>
+          <div>
+            {projectMembers.map((member) => {
+              return (
+                <img key={member.id} src={member.photoURL} alt='member project photo' title={member.name} />
+              );
+            })}
+          </div>
+        </ModalInfoContent>
+      </Modal>
+
       <Navbar>
         <Link to={'/'}>voltar</Link>
-        <div>
+        <div id="name-div">
           <span>{projectName}</span>
           <p>{id}</p>
         </div>
-        <button onClick={() => setModal(true)}>
-          <p>+</p>
-          <p>Nova Tarefa</p>
-        </button>
+        <div id="button-div">
+          <button onClick={() => setTaskModal(true)}>
+            <FaPlus />
+            <p>Nova Tarefa</p>
+          </button>
+          <button id="info-button" onClick={() => setInfoModal(true)}>
+            <FaInfo />
+          </button>
+        </div>
       </Navbar>
+
       <TaskWrapper>
 
         <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
