@@ -77,8 +77,6 @@ export const UserContextProvider = ({ children }: Props) => {
   const isAuth = () => {
     const result = getItem(TOKEN);
 
-    console.log(result);
-
     if (!result) return false;
 
     return true;
