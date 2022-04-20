@@ -203,7 +203,7 @@ font-size: 1rem;
 
 gap: 0.5rem;
 
-border - radius: 8px;
+border-radius: 8px;
 margin: 0.5rem;
 
   > p{
