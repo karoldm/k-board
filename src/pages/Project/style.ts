@@ -100,7 +100,7 @@ export const ModalInfoContent = styled.div`
   }
 
   div > img {
-    width: 25%;
+    width: 50%;
   }
 `;
 
