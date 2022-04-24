@@ -36,6 +36,8 @@ export const Home: React.FC = () => {
 
   const { user, logout } = useUser();
 
+  const userAvatar = user?.photoURL;
+
   const navigate = useNavigate();
 
   const getProjects = () => {
@@ -184,7 +186,7 @@ export const Home: React.FC = () => {
       </ContainerLeft>
 
       <ContainerRight>
-        <img src={user?.photoURL} alt={`${user?.name} avatar`} />
+        <img src={userAvatar} alt={`${user?.name} avatar`} />
         <strong>Olá, {user?.name}!</strong>
         <div>
           <label htmlFor='project-name'>Crie um novo projeto</label>
