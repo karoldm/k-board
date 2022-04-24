@@ -9,6 +9,8 @@ import { auth, firebase } from '../../services/firebase';
 
 import { useUser } from '../../hooks/useUser';
 
+import userImage from '../../assets/user.png';
+
 
 export const Login: React.FC = () => {
   const { login } = useUser();
@@ -40,7 +42,7 @@ export const Login: React.FC = () => {
     <Wrapper>
       <ContainerLeft></ContainerLeft>
       <ContainerRight>
-        <img src={'/favicon.ico'} alt='logo icon' />
+        <img src={userImage} alt='logo icon' />
         <p> Entre com sua conta do Google</p>
         <Button onclick={handleLogin} >
           <ButtonContent>
