@@ -169,10 +169,21 @@ export const Project: React.FC = () => {
     await database.ref(`projects/${id}/tasks/${idTask}`).remove();
   }
 
+  const disableScroll = () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    window.onscroll = function () {
+      window.scrollTo(scrollLeft, scrollTop);
+    };
+  }
+
   return (
     <Wrapper>
 
-      <Modal visible={taskModal} onHide={() => setTaskModal(false)}>
+      <Modal visible={taskModal} onHide={() => {
+        setTaskModal(false);
+        window.onscroll = function () { };
+      }}>
         <ModalTaskContent>
           <span>Nova Tarefa</span>
           <div>
@@ -183,7 +194,10 @@ export const Project: React.FC = () => {
         </ModalTaskContent>
       </Modal>
 
-      <Modal visible={infoModal} onHide={() => setInfoModal(false)}>
+      <Modal visible={infoModal} onHide={() => {
+        setInfoModal(false);
+        window.onscroll = function () { };
+      }}>
         <ModalInfoContent>
           <img src={projectAuthorPhoto} alt='author project photo' />
           <strong>{projectName}</strong>
@@ -206,11 +220,17 @@ export const Project: React.FC = () => {
           <p>{id}</p>
         </div>
         <div id="button-div">
-          <button onClick={() => setTaskModal(true)}>
+          <button onClick={() => {
+            setTaskModal(true);
+            disableScroll();
+          }}>
             <FaPlus />
             <p>Nova Tarefa</p>
           </button>
-          <button id="info-button" onClick={() => setInfoModal(true)}>
+          <button id="info-button" onClick={() => {
+            setInfoModal(true);
+            disableScroll();
+          }}>
             <FaInfo />
           </button>
         </div>
