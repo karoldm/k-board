@@ -4,7 +4,7 @@
 
 <div align="left">
 
-<h3 align="left">Kanban Board  <img src="public/favicon.ico" /> </h3>
+<h3 align="left">Kanban Board  <img src="public/favicon.ico" width=30 height=30/> </h3>
 
 <p align="left">
 
