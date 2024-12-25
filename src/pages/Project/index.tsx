@@ -152,7 +152,7 @@ export const Project: React.FC = () => {
 
       const tasksRef = database.ref(`projects/${id}/tasks`);
 
-      items.map(async (task) => {
+      items.map(async (task: any) => {
         await tasksRef.push({
           name: task.name,
           color: task.color,
