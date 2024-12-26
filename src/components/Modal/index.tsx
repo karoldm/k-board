@@ -1,3 +1,4 @@
+import React from 'react';
 import { Background, ModalStyled, Wrapper } from './style';
 
 type Props = {

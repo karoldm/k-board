@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../components/Button';
@@ -8,8 +10,6 @@ import { FaGoogle } from 'react-icons/fa';
 import { auth, firebase } from '../../services/firebase';
 
 import { useUser } from '../../hooks/useUser';
-
-import userImage from '../../assets/user.png';
 
 
 export const Login: React.FC = () => {
@@ -42,7 +42,7 @@ export const Login: React.FC = () => {
     <Wrapper>
       <ContainerLeft></ContainerLeft>
       <ContainerRight>
-        <img src={userImage} alt='logo icon' />
+        <img src="./assets/user.png" alt='logo icon' />
         <p> Entre com sua conta do Google</p>
         <Button onclick={handleLogin} >
           <ButtonContent>

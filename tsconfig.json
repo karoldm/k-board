@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
-    "jsx": "react-jsx",
+    "jsx":"react-jsx",
     "strict": true,
+    "paths": {
+      "react": [ "./node_modules/@types/react" ]
+    },
+    "target": "es6",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"],
     "resolveJsonModule": true,
+    "moduleResolution": "node",
     "outDir": "./dist"
   },
   "include": ["src/**/*"],
