@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Project } from './pages/Project';
-import { Login } from './pages/Login';
-import { Home } from './pages/Home';
+import { Project } from './presentation/pages/Project';
+import { Login } from './presentation/pages/Login';
+import { Home } from './presentation/pages/Home';
 
 import { useUser } from './hooks/useUser';
+import { userMock } from './data/mocks/userMock';
+import { NotFound } from './presentation/components/NotFound';
 
 type ProtectedRouteProps = {
   authenticationPath: string;
@@ -13,7 +15,7 @@ type ProtectedRouteProps = {
 };
 
 
-export const App: React.FC = () => {
+export const App = () => {
   const { isAuth } = useUser();
 
   function ProtectedRoute({ authenticationPath, outlet }: ProtectedRouteProps) {
@@ -29,6 +31,7 @@ export const App: React.FC = () => {
       <Route path='/login' element={<Login />} />
       <Route path='/project/:id' element={<ProtectedRoute authenticationPath='/login' outlet={<Project />} />} />
       <Route path='/' element={<ProtectedRoute authenticationPath='/login' outlet={<Home />} />} />
+      <Route path='*' element={<NotFound />} />
     </Routes>
   );
 }

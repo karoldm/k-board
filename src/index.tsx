@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
 
-import './services/firebase';
+import './data/services/firebase';
 
 import { UserContextProvider } from './context/userContext';
 
-import { GlobalStyle } from './styles/global';
+import { GlobalStyle } from './presentation/styles/global';
 
 const rootElement = document.getElementById('root');
 
