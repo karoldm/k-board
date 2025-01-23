@@ -14,12 +14,6 @@ export const Navbar = styled.div`
   justify-content: space-between;
   padding: .5rem;
   color: var(--white);
-
-  @media (max-width: 480px){
-    flex-direction: column;
-    gap: .5rem;
-  }
-
   > a {
     color: var(--white);
   }

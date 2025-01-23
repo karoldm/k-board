@@ -16,7 +16,7 @@ export const StyledTooltip = styled.div<{ show: boolean }>`
   text-align: center;
   width: auto;
   min-width: 80px;
-
+  z-index: 99999;
   display: ${({ show }) => (show ? "block" : "none")};
 
   &::before {
