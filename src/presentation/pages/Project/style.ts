@@ -2,21 +2,22 @@ import styled from 'styled-components';
 
 
 export const Wrapper = styled.div`
-  height: 100%;
+  height: 100vh;
+  background: var(--background);
 `;
 
 export const Navbar = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  background: var(--primary);
+  background: var(--white);
   justify-content: space-between;
-  padding: 1.5rem;
+  padding: .5rem;
   color: var(--white);
 
   @media (max-width: 480px){
     flex-direction: column;
-    gap: 1.5rem;
+    gap: .5rem;
   }
 
   > a {
@@ -25,30 +26,6 @@ export const Navbar = styled.div`
   >a:hover{
     cursor: pointer;
   }
-
-  #button-div {
-    display: flex;
-    gap: 1rem;
-    
-    > button {
-      background: var(--button);
-      border-radius: 20px;
-      padding: 0.5rem 1.2rem;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      font-size: 1rem;
-      font-weight: bold;
-  
-      &:hover {
-        filter: brightness(0.9);
-        cursor: pointer;
-      }
-    }
-  }
-
 
   #name-div {
     display: flex;
@@ -134,11 +111,9 @@ font-weight: bold;
 
 export const TaskWrapper = styled.main`
 width: 100vw;
-height: 32rem;
 display: flex;
 flex-wrap: wrap;
-
-padding: 0 2rem;
+padding: 24px;
 
 @media(max - width: 480px) {
   flex-direction: column;
@@ -146,82 +121,8 @@ padding: 0 2rem;
 }
 `;
 
-export const TaskContent = styled.div`
-overflow-y: scroll;
-height: 100%;
-
-  &:: -webkit-scrollbar {
-  width: 6px;
-}
-  &:: -webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2)
-} 
-  &:: -webkit-scrollbar-thumb {
-  background-color: var(--primary);
-  border-radius: 8px;
-}
-`;
-
-export const TaskContainer = styled.section`
-border: 1px solid var(--black);
-display: flex;
-flex-direction: column;
-border-radius: 8px;
-margin: 1rem 2rem;
-
-height: 100%;
-
-@media (min-width: 621px){
-  flex: 1;
-}
-
-@media (max-width: 620px){
-  width: 100%;
-  margin: 1rem 0;
-}
-
-  .title-task-container {
-  background: var(--primary);
-  color: var(--white);
-  font-size: 1.2rem;
+export const ProjectTitle = styled.span`
+  color: var(--gray);
   font-weight: bold;
-  display: flex;
-  justify-content: center;
-  padding: 1rem;
-  border-radius: 6px 6px 0 0;
-}
-
-`;
-
-
-export const Task = styled.div`
-cursor: pointer;
-
-padding: 0.5rem 1rem 2rem 1rem;
-background: ${(props) => props.color};
-display: flex;
-flex-direction: column;
-align-items: center;
-color: var(--white);
-font-size: 1rem;
-
-gap: 0.5rem;
-
-border-radius: 8px;
-margin: 0.5rem;
-
-  > p{
-  width: 100%;
-}
-
-  > button{
-  background: transparent;
-  border: none;
-  color: var(--white);
-  margin-left: auto;
-}
-
-  > button:hover{
-  cursor: pointer;
-}
+  font-size: 18px;
 `;

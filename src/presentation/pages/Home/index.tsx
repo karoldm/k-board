@@ -16,8 +16,7 @@ import { Row } from '../../components/Layouts/Row';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { ProjectCard } from '../../components/ProjectCard';
 import { Grid } from '../../components/Layouts/Grid';
-import { Avatar } from '../../components/Avatar/style';
-import { redirect } from 'react-router-dom';
+import { Avatar } from '../../components/Avatar';
 
 export const Home = () => {
   const [myProjects, setMyProjects] = useState<Project[]>([]);
@@ -40,12 +39,12 @@ export const Home = () => {
               placeholder="Procure por um projeto" 
             />
             <Button width={'40px'} onclick={()=>{}}>
-              <FaSearch color="#CDCDCD" />
+              <FaSearch color='white' />
             </Button>
           </Row>
           <Row style={{height:'40px'}} justifyContent="end">
             <Button width={'40px'} onclick={()=>{}}>
-              <FaPlus color="#CDCDCD" />
+              <FaPlus color='white' />
             </Button>
             <Divider type="vertical" />
             <PopupMenu items={[
@@ -61,7 +60,7 @@ export const Home = () => {
           <Container> 
             <Grid style={{height: 'auto'}} columns={"1fr 1fr 1fr"} rows={"auto"}>
               {myProjects.map(project => 
-                <ProjectCard project={project} handleClick={() => {}} />  
+                <ProjectCard key={project.id} project={project} />  
               )}
             </Grid>
           </Container>

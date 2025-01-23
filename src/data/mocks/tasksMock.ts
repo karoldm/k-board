@@ -1,5 +1,6 @@
 import { TaskStatus } from "../enums/taskStatus";
 import { Task } from "../interfaces/task";
+import { userMock } from "./userMock";
 
 
 export const tasksMock: Task[] = [
@@ -10,7 +11,8 @@ export const tasksMock: Task[] = [
     description: "Task description",
     tags: ["urgent"],
     taskStatus: TaskStatus.COMPLETED,
-    title: "Task Title"
+    title: "Task Title",
+    members: [userMock,userMock],
   },
   {
     color: "#F456",
@@ -19,7 +21,8 @@ export const tasksMock: Task[] = [
     description: "Task description",
     tags: ["urgent"],
     taskStatus: TaskStatus.PENDING,
-    title: "Task Title"
+    title: "Task Title",
+    members: [userMock,userMock],
   },
   {
     color: "#AA156C",
@@ -28,7 +31,9 @@ export const tasksMock: Task[] = [
     description: "Task description",
     tags: ["urgent"],
     taskStatus: TaskStatus.PENDING,
-    title: "Task Title"
+    title: "Task Title",
+    members: [userMock,userMock],
+
   },
   {
     color: "#545646",
@@ -37,6 +42,8 @@ export const tasksMock: Task[] = [
     description: "Task description",
     tags: ["urgent"],
     taskStatus: TaskStatus.DOING,
-    title: "Task Title"
+    title: "Task Title",
+    members: [userMock,userMock],
+
   },
 ];

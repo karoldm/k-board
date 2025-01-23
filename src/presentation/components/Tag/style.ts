@@ -11,8 +11,9 @@ export const Wrapper = styled.div<Props>`
   padding: ${props => paddingConstants[props.size]};
   background-color: ${props => props.color ?? "var(--white)"};
   border: 1px solid ${props => props.color ?? "var(--primary)"};
-  >p{
-    color: "var(--primary)";
-    font-size: .8rem;
+  >p {
+    color: var(--gray);
+    font-size: 14px;
+    font-weight: bold;
   }
 `;  

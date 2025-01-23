@@ -42,7 +42,8 @@ export const ContainerForm = styled.section`
 
   span {
     text-align: justify;
-    font-size: .9rem;
+    font-size: 16px;
+    color: var(--gray);
     font-weight: 500;
     line-height: 1.5rem;
   }

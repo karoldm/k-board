@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Project } from './presentation/pages/Project';
@@ -6,7 +6,6 @@ import { Login } from './presentation/pages/Login';
 import { Home } from './presentation/pages/Home';
 
 import { useUser } from './hooks/useUser';
-import { userMock } from './data/mocks/userMock';
 import { NotFound } from './presentation/components/NotFound';
 
 type ProtectedRouteProps = {

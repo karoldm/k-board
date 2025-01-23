@@ -1,6 +1,8 @@
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { Project } from "../../../data/interfaces/project";
-import { Avatar } from "../Avatar/style";
+import { Avatar } from "../Avatar";
+import { Button } from "../Button";
 import { Row } from "../Layouts/Row";
 import { ProgressBar } from "../ProgressBar";
 import { Tag } from "../Tag";
@@ -8,23 +10,29 @@ import { Container } from "./style";
 
 type Props = {
   project: Project;
-  handleClick: () => void;
 }
 
-export const ProjectCard = ({project, handleClick}: Props) => {
+export const ProjectCard = ({project}: Props) => {
+  const navigate = useNavigate();
+
   return (
-    <Container onClick={handleClick}>
+    <Container onClick={() => navigate(`/project/${project.id}`)}>
       <Row fullWidth justifyContent="space-between">
         <Tag label={project.title} />
-        <Row gap="8px">
-          <FaEdit color="#666" />
-          <FaTrash color="#666" />
+        <Row>
+          <Button onclick={()=>{}} noBorder variant="secondary" >
+            <FaEdit color="#666" />
+          </Button>
+          <Button onclick={()=>{}} noBorder variant="secondary" >
+            <FaTrash color="#666" />
+          </Button>
         </Row>
       </Row>
       <Row>
         {project.members.concat([project.owner]).
           map((member, index) => 
-            <Avatar 
+            <Avatar
+              tooltip={member.name} 
               style={ index != 0 ? {marginLeft: '-8px'} : {}} 
               src={member.photoUrl} key={member.id} 
             />

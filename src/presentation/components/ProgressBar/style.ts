@@ -13,7 +13,7 @@ type Props = {
 
 export const Progress = styled.div<Props>`
   width: ${props => props.percent + "%"};
-  background: linear-gradient(36deg, red, pink, blue);
+  background: var(--blue-primary);
   height: 100%;
   border-radius: 8px;
 `;

@@ -2,11 +2,12 @@ import styled from 'styled-components';
 
 type Props = {
   width?: string;
-  borderColor?: string;
+  variant?: 'primary' | 'secondary';
+  noBorder: boolean;
 }
 
 export const ButtonStyled = styled.button<Props>`
-    background: var(--white);
+    background: ${props => props.variant == 'primary' ? 'var(--blue-primary);' : 'var(--background);'};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,7 +16,7 @@ export const ButtonStyled = styled.button<Props>`
     width: ${props => props.width ?? "100%"};
     transition: all 0.7s;
     color: var(--black);
-    border: 1px solid ${props => props.borderColor ?? "var(--primary)"};
+    border: ${props => props.noBorder ? 0 : '1px'} solid ${props => props.variant == 'primary' ? 'var(--blue-primary);' : 'var(--primary);'};
   }
 
   &:hover{

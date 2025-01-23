@@ -1,4 +1,5 @@
 import { TaskStatus } from '../enums/taskStatus';
+import { User } from './user';
 
 export interface Task { 
   title: string;
@@ -8,4 +9,5 @@ export interface Task {
   color: string;
   tags: string[];
   id: string;
+  members: User[];
 }

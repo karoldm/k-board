@@ -25,12 +25,18 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   :root {
+    --blue-primary: #5677d9;
+    --blue-dark: #524ff5;
+    --blue-light: #d2e8db;
     --primary: #CDCDCD;
     --black: #212121;
     --gray: #666;
+    --gray-light: #999;
     --background: rgb(248,248,248);
     --white: #FCFCFC;
-    --green: rgb(0, 210, 50); 
-    --red: rgb(255, 32, 32);
+    --green: #a5fc8d; 
+    --red: #fc847c;
+    --yellow: #fff47a;
+    --linear-gradient: linear-gradient(36deg, red, pink, blue);
   }
 `;

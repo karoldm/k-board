@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState, PropsWithChildren } from 'react';
 import { User } from '../data/interfaces/user';
-import { loginService, logoutService } from '../data/services/auth';
+import { logoutService } from '../data/services/auth';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const UserContext = createContext({} as UserContextType);

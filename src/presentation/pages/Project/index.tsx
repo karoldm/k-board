@@ -2,26 +2,30 @@ import React from 'react'
 
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-
-import { FaInfo, FaPlus } from 'react-icons/fa';
-
+import { toast } from "react-toastify";
+import { FaArrowLeft, FaInfo, FaPlus } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { Modal } from '../../components/Modal';
 
 import { database } from '../../../data/services/firebase';
 
-import { Navbar, ModalTaskContent, Wrapper, TaskWrapper, TaskContent, TaskContainer, Task, ModalInfoContent } from './style';
+import { 
+  Navbar, 
+  ModalTaskContent, 
+  Wrapper, 
+  TaskWrapper, 
+  ModalInfoContent, 
+  ProjectTitle } from './style';
+import { projectMock } from '../../../data/mocks/projectMock';
 
-
-type Task = {
-  name: string,
-  status: string,
-  color: string,
-  id: string,
-}
+import { Task } from '../../../data/interfaces/task';
+import { TaskStatus } from '../../../data/enums/taskStatus';
+import { Row } from '../../components/Layouts/Row';
+import { Tag } from '../../components/Tag';
+import { TaskCard } from '../../components/TaskCard';
+import { TaskColumn } from '../../components/TaskColumn';
 
 type Member = {
   id: string,
@@ -45,63 +49,14 @@ export const Project: React.FC = () => {
 
 
   const getProject = async () => {
-
-    const projectRef = database.ref(`projects/${id}`);
-
-    projectRef.on('value', project => {
-      const projectDatabase = project.val();
-
-      setProjectName(projectDatabase.name);
-      setProjectAuthorPhoto(projectDatabase.author.photoURL);
-
-      const firebaseTasks: Task = projectDatabase.tasks ?? {};
-
-      const parseTasks = Object.entries(firebaseTasks).map(([key, value]) => {
-        const objectValue = (value as Object) as Task;
-        return {
-          id: key,
-          name: objectValue.name,
-          color: objectValue.color,
-          status: objectValue.status,
-        }
-      })
-
-      setTasks(parseTasks);
-
-    });
-  }
-
-  const getProjectMembers = () => {
-
-    const projectRef = database.ref(`projects/${id}`);
-
-    projectRef.on('value', project => {
-      const projectDatabase = project.val();
-
-      const firebaseMembers: Member = projectDatabase.members ?? {};
-
-      const parseMembers = Object.entries(firebaseMembers).map(([key, value]) => {
-        const objectValue = (value as Object) as Member;
-        return {
-          id: key,
-          name: objectValue.name,
-          photoURL: objectValue.photoURL,
-        }
-      })
-
-      setProjectMembers(parseMembers);
-
-    });
+    setProjectName(projectMock.title);
+    setProjectAuthorPhoto(projectMock.owner.photoUrl);
+      setTasks(projectMock.tasks);
+  
   }
 
   useEffect(() => {
     getProject();
-    getProjectMembers();
-
-    return () => {
-      setTasks([]);
-      setProjectMembers([]);
-    };
   }, []);
 
   const handleNovaTarefa = async () => {
@@ -117,12 +72,12 @@ export const Project: React.FC = () => {
 
       const newTasks = tasks;
 
-      newTasks.push({
-        id: taskFirebase.key!,
-        name: taskName,
-        color: taskColor,
-        status: 'a fazer',
-      });
+      // newTasks.push({
+      //   id: taskFirebase.key!,
+      //   name: taskName,
+      //   color: taskColor,
+      //   status: 'a fazer',
+      // });
 
       setTasks(newTasks);
 
@@ -140,35 +95,25 @@ export const Project: React.FC = () => {
     if (!result.destination) return;
 
     if (result.source.droppableId !== result.destination.droppableId) {
-      await database.ref(`projects/${id}/tasks/${result.draggableId}`).update({
-        status: result.destination.droppableId,
-      });
+      // await database.ref(`projects/${id}/tasks/${result.draggableId}`).update({
+      //   status: result.destination.droppableId,
+      // });
     }
     else {
       const items = Array.from(tasks);
       const [reorderedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
       setTasks(items);
-
-      await database.ref(`projects/${id}/tasks`).remove();
-
-      const tasksRef = database.ref(`projects/${id}/tasks`);
-
-      items.map(async (task: any) => {
-        await tasksRef.push({
-          name: task.name,
-          color: task.color,
-          status: task.status,
-        });
-      });
     }
   }
 
   const handleDragStart = () => {
   }
 
-  const handleDeleteTask = async (idTask: string) => {
-    await database.ref(`projects/${id}/tasks/${idTask}`).remove();
+  const handleDeleteTask = async (task: Task) => {
+  }
+
+  const handleEditTask = async (task: Task) => {
   }
 
   const disableScroll = () => {
@@ -181,7 +126,6 @@ export const Project: React.FC = () => {
 
   return (
     <Wrapper>
-
       <Modal visible={taskModal} onHide={() => {
         setTaskModal(false);
         window.onscroll = function () { };
@@ -201,7 +145,7 @@ export const Project: React.FC = () => {
         window.onscroll = function () { };
       }}>
         <ModalInfoContent>
-          <img src={projectAuthorPhoto} alt='author project photo' />
+          <img style={{width: "24px"}} src={projectAuthorPhoto} alt='author project photo' />
           <strong>{projectName}</strong>
           <p>{id}</p>
           <i>Participantes</i>
@@ -216,124 +160,59 @@ export const Project: React.FC = () => {
       </Modal>
 
       <Navbar>
-        <Link to={'/'}>voltar</Link>
-        <div id="name-div">
-          <span>{projectName}</span>
-          <p>{id}</p>
-        </div>
-        <div id="button-div">
-          <button onClick={() => {
-            setTaskModal(true);
-            disableScroll();
-          }}>
-            <FaPlus />
-            <p>Nova Tarefa</p>
-          </button>
-          <button id="info-button" onClick={() => {
-            setInfoModal(true);
-            disableScroll();
-          }}>
-            <FaInfo />
-          </button>
-        </div>
+        <Link to={'/'}>
+          <FaArrowLeft color='#212121' />
+        </Link>
+        <Row gap='8px'>
+          <ProjectTitle>{projectName}</ProjectTitle>
+          <Tag onClick={() => {
+            navigator.clipboard.writeText(id ?? "");
+            toast.success('Project ID copied successfully!', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              draggable: false,
+              });
+          }} size='small' label={id ?? ""}/>
+        </Row>
+        <Row gap='8px'>
+          <Button onclick={() => {
+              setTaskModal(true);
+              disableScroll();
+            }} >
+                <FaPlus color='white' />
+          </Button>
+          <Button variant="secondary" onclick={() => {
+              setInfoModal(true);
+              disableScroll();
+            }}>
+              <FaInfo color='#CDCDCD' />
+          </Button>
+        </Row>
       </Navbar>
 
       <TaskWrapper>
-
         <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-
-          <Droppable droppableId="a fazer">
-            {(provided: any) => (
-              <TaskContainer >
-                <div className='title-task-container'>A FAZER</div>
-                <TaskContent {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, index) => {
-                    if (task.status === "a fazer")
-                      return (
-                        <Draggable draggableId={task.id} key={task.id} index={index}>
-                          {(provided: any) => (
-                            <Task
-                              color={task.color}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}>
-                              <button onClick={() => { handleDeleteTask(task.id) }}>X</button>
-                              <p>{task.name}</p>
-                            </Task>
-
-                          )}
-                        </Draggable>
-                      )
-                    else
-                      return ' ';
-                  })}
-                </TaskContent>
-              </TaskContainer>
-            )}
-          </Droppable>
-
-          <Droppable droppableId="fazendo">
-            {(provided: any) => (
-              <TaskContainer >
-                <div className='title-task-container'>FAZENDO</div>
-                <TaskContent {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, index) => {
-                    if (task.status === "fazendo")
-                      return (
-                        <Draggable draggableId={task.id} key={task.id} index={index}>
-                          {(provided: any) => (
-                            <Task
-                              color={task.color}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}>
-                              <button onClick={() => { handleDeleteTask(task.id) }}>X</button>
-                              <p>{task.name}</p>
-                            </Task>
-
-                          )}
-                        </Draggable>
-                      )
-                    else
-                      return ' ';
-                  })}
-                </TaskContent>
-              </TaskContainer>
-            )}
-          </Droppable>
-
-          <Droppable droppableId="pronto">
-            {(provided: any) => (
-              <TaskContainer >
-                <div className='title-task-container'>PRONTO</div>
-                <TaskContent {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, index) => {
-                    if (task.status === "pronto")
-                      return (
-                        <Draggable draggableId={task.id} key={task.id} index={index}>
-                          {(provided: any) => (
-                            <Task
-                              color={task.color}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}>
-                              <button onClick={() => { handleDeleteTask(task.id) }}>X</button>
-                              <p>{task.name}</p>
-                            </Task>
-
-                          )}
-                        </Draggable>
-                      )
-                    else
-                      return ' ';
-                  })}
-                </TaskContent>
-              </TaskContainer>
-            )}
-          </Droppable>
-
+          <TaskColumn
+            id='pendent'
+            percent={tasks.filter(task => task.taskStatus == TaskStatus.PENDING).length / tasks.length}
+            taskList={tasks.filter(task => task.taskStatus == TaskStatus.PENDING)}
+            title="Pendente"
+          />
+          <TaskColumn
+            id='doing'
+            percent={tasks.filter(task => task.taskStatus == TaskStatus.DOING).length / tasks.length}
+            taskList={tasks.filter(task => task.taskStatus == TaskStatus.DOING)}
+            title="Em Progresso"
+          />
+          <TaskColumn
+            id='completed'
+            percent={tasks.filter(task => task.taskStatus == TaskStatus.COMPLETED).length / tasks.length}
+            taskList={tasks.filter(task => task.taskStatus == TaskStatus.COMPLETED)}
+            title="Concluída"
+          />
         </DragDropContext>
-
       </TaskWrapper>
     </Wrapper>
   );

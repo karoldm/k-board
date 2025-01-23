@@ -25,7 +25,7 @@ export const PopupMenu = ({children, items} : PropsWithChildren<Props>) => {
         {opened && <ItemsContainer>
           {
             items.map((item: MenuItem) => 
-              <StyledMenuItem onClick={item.onClick}>
+              <StyledMenuItem key={item.label} onClick={item.onClick}>
                 <p>
                   {item.label}
                 </p>

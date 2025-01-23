@@ -7,9 +7,10 @@ export const Container = styled.div`
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
   align-items: start;
   justify-content: center;
   cursor: pointer;
   overflow: hidden;
+  border: 1px solid var(--primary);
 `;

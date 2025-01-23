@@ -44,7 +44,7 @@ export const Login: React.FC = () => {
             Acompanhe seu progresso e tenha acesso a <i>insights</i> valiosos.
           </span>
           {/* <img src="./assets/user.png" alt='logo icon' /> */}
-          <Button onclick={handleLogin} >
+          <Button  variant="secondary" onclick={handleLogin} >
             <ButtonContent>
               <FaGoogle id="icon" />
               <p>Entrar com o Google</p>

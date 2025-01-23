@@ -8,6 +8,7 @@ import './data/services/firebase';
 import { UserContextProvider } from './context/userContext';
 
 import { GlobalStyle } from './presentation/styles/global';
+import { ToastContainer } from 'react-toastify';
 
 const rootElement = document.getElementById('root');
 
@@ -16,6 +17,7 @@ if (rootElement) {
   root.render(
       <BrowserRouter>
         <UserContextProvider>
+          <ToastContainer />
           <GlobalStyle />
           <App />
         </UserContextProvider>
