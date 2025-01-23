@@ -26,7 +26,7 @@ export const TaskCard = forwardRef<HTMLDivElement, Props>(
       <Row justifyContent="start">
         {task.tags.
           map((tag) => 
-            <Tag color={task.color} size="small" key={tag} label={tag} />
+            <Tag size="small" key={tag} label={tag} />
         )}
       </Row>
       <MembersList members={task.members} />
