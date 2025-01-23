@@ -13,10 +13,8 @@ import { database } from '../../../data/services/firebase';
 
 import { 
   Navbar, 
-  ModalTaskContent, 
   Wrapper, 
   TaskWrapper, 
-  ModalInfoContent, 
   ProjectTitle } from './style';
 import { projectMock } from '../../../data/mocks/projectMock';
 
@@ -24,71 +22,28 @@ import { Task } from '../../../data/interfaces/task';
 import { TaskStatus } from '../../../data/enums/taskStatus';
 import { Row } from '../../components/Layouts/Row';
 import { Tag } from '../../components/Tag';
-import { TaskCard } from '../../components/TaskCard';
 import { TaskColumn } from '../../components/TaskColumn';
+import { NewTaskModal } from '../../components/NewTaskModal';
+import { InfoProjectModal } from '../../components/InfoProjectModal';
+import { Project } from '../../../data/interfaces/project';
 
-type Member = {
-  id: string,
-  name: string,
-  photoURL: string,
-}
-
-export const Project: React.FC = () => {
+export const ProjectPage: React.FC = () => {
   const { id } = useParams();
 
   const [taskModal, setTaskModal] = useState(false);
   const [infoModal, setInfoModal] = useState(false);
 
-  const [projectName, setProjectName] = useState('');
-  const [projectAuthorPhoto, setProjectAuthorPhoto] = useState('');
-  const [projectMembers, setProjectMembers] = useState<Member[]>([]);
+  const [project, setProject] = useState<Project | null>();
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [taskName, setTaskName] = useState('');
-  const [taskColor, setTaskColor] = useState('#000000');
-
-
   const getProject = async () => {
-    setProjectName(projectMock.title);
-    setProjectAuthorPhoto(projectMock.owner.photoUrl);
-      setTasks(projectMock.tasks);
-  
+    setProject(projectMock);
+    setTasks(projectMock.tasks);
   }
 
   useEffect(() => {
     getProject();
   }, []);
-
-  const handleNovaTarefa = async () => {
-    if (taskName.trim() !== '') {
-
-      const tasksRef = database.ref(`projects/${id}/tasks`);
-
-      const taskFirebase = await tasksRef.push({
-        name: taskName,
-        color: taskColor,
-        status: 'a fazer',
-      });
-
-      const newTasks = tasks;
-
-      // newTasks.push({
-      //   id: taskFirebase.key!,
-      //   name: taskName,
-      //   color: taskColor,
-      //   status: 'a fazer',
-      // });
-
-      setTasks(newTasks);
-
-      setTaskColor('#000');
-      setTaskName('');
-      setTaskModal(false);
-    }
-    else {
-      alert('Preencha todos os campos!');
-    }
-  }
 
   const handleDragEnd = async (result: any) => {
 
@@ -103,17 +58,11 @@ export const Project: React.FC = () => {
       const items = Array.from(tasks);
       const [reorderedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
-      setTasks(items);
+      //setTasks(items);
     }
   }
 
   const handleDragStart = () => {
-  }
-
-  const handleDeleteTask = async (task: Task) => {
-  }
-
-  const handleEditTask = async (task: Task) => {
   }
 
   const disableScroll = () => {
@@ -130,33 +79,14 @@ export const Project: React.FC = () => {
         setTaskModal(false);
         window.onscroll = function () { };
       }}>
-        <ModalTaskContent>
-          <span>Nova Tarefa</span>
-          <div>
-            <Input value={taskName} id={'task-name'} placeholder={'Tarefa'} setValue={setTaskName} />
-            <input value={taskColor} type={'color'} id={'task-color'} onChange={(e) => { setTaskColor(e.target.value) }} />
-          </div>
-          <Button onclick={handleNovaTarefa} ><p>Criar</p></Button>
-        </ModalTaskContent>
+        <NewTaskModal onConfirm={(task) => {}} />
       </Modal>
 
       <Modal visible={infoModal} onHide={() => {
         setInfoModal(false);
         window.onscroll = function () { };
       }}>
-        <ModalInfoContent>
-          <img style={{width: "24px"}} src={projectAuthorPhoto} alt='author project photo' />
-          <strong>{projectName}</strong>
-          <p>{id}</p>
-          <i>Participantes</i>
-          <div>
-            {projectMembers.map((member) => {
-              return (
-                <img key={member.id} src={member.photoURL} alt='member project photo' title={member.name} />
-              );
-            })}
-          </div>
-        </ModalInfoContent>
+        <InfoProjectModal project={projectMock} />
       </Modal>
 
       <Navbar>
@@ -164,7 +94,7 @@ export const Project: React.FC = () => {
           <FaArrowLeft color='#212121' />
         </Link>
         <Row gap='8px'>
-          <ProjectTitle>{projectName}</ProjectTitle>
+          <ProjectTitle>{project?.title}</ProjectTitle>
           <Tag onClick={() => {
             navigator.clipboard.writeText(id ?? "");
             toast.success('Project ID copied successfully!', {

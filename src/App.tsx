@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Project } from './presentation/pages/Project';
+import { ProjectPage } from './presentation/pages/Project';
 import { Login } from './presentation/pages/Login';
 import { Home } from './presentation/pages/Home';
 
@@ -28,7 +28,7 @@ export const App = () => {
   return (
     <Routes>
       <Route path='/login' element={<Login />} />
-      <Route path='/project/:id' element={<ProtectedRoute authenticationPath='/login' outlet={<Project />} />} />
+      <Route path='/project/:id' element={<ProtectedRoute authenticationPath='/login' outlet={<ProjectPage />} />} />
       <Route path='/' element={<ProtectedRoute authenticationPath='/login' outlet={<Home />} />} />
       <Route path='*' element={<NotFound />} />
     </Routes>
