@@ -44,7 +44,9 @@ export const Home = () => {
           </Row>
           <Row style={{height:'40px'}} justifyContent="end">
             <Button width={'40px'} onclick={()=>{}}>
-              <FaPlus color='white' />
+              <Row>
+                <FaPlus color='white' />
+              </Row>
             </Button>
             <Divider type="vertical" />
             <PopupMenu items={[

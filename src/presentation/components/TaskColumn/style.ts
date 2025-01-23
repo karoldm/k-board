@@ -40,7 +40,7 @@ position: relative;
 #header::after {
 content: "";
 position: absolute;
-border-radius: 8px 8px 0 0;
+border-radius: 8px ${props => props.percent >= 1 ? '8px' : 0} 0 0;
 left: 0;
 top: 0;
 z-index: 0;
