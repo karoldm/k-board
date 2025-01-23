@@ -4,6 +4,7 @@ import { Project } from "../../../data/interfaces/project";
 import { Avatar } from "../Avatar";
 import { Button } from "../Button";
 import { Row } from "../Layouts/Row";
+import { MembersList } from "../MembersList";
 import { ProgressBar } from "../ProgressBar";
 import { Tag } from "../Tag";
 import { Container } from "./style";
@@ -28,16 +29,7 @@ export const ProjectCard = ({project}: Props) => {
           </Button>
         </Row>
       </Row>
-      <Row>
-        {project.members.concat([project.owner]).
-          map((member, index) => 
-            <Avatar
-              tooltip={member.name} 
-              style={ index != 0 ? {marginLeft: '-8px'} : {}} 
-              src={member.photoUrl} key={member.id} 
-            />
-        )}
-      </Row>
+      <MembersList members={project.members.concat([project.owner])} />
       <ProgressBar percent={project.progress * 100} />
     </Container>
   );

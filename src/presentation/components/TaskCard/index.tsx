@@ -5,6 +5,7 @@ import { Task } from "../../../data/interfaces/task";
 import { Avatar } from '../Avatar';
 import { Button } from '../Button';
 import { Row } from "../Layouts/Row";
+import { MembersList } from '../MembersList';
 import { Tag } from "../Tag";
 import { TaskContainer } from "./style";
 
@@ -28,17 +29,7 @@ export const TaskCard = forwardRef<HTMLDivElement, Props>(
             <Tag color={task.color} size="small" key={tag} label={tag} />
         )}
       </Row>
-      <Row justifyContent="start">
-        {task.members.
-          map((member, index) => 
-            <Avatar 
-              tooltip={member.name}
-              key={member.id}
-              style={ index != 0 ? {marginLeft: '-8px'} : {}} 
-              src={member.photoUrl}
-            />
-        )}
-        </Row>
+      <MembersList members={task.members} />
     </TaskContainer>
   );
 });
