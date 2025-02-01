@@ -17,15 +17,18 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 import { ProjectCard } from '../../components/ProjectCard';
 import { Grid } from '../../components/Layouts/Grid';
 import { Avatar } from '../../components/Avatar';
+import { Column } from '../../components/Layouts/Column';
 
 export const Home = () => {
   const [myProjects, setMyProjects] = useState<Project[]>([]);
+  const [projectsMember, setProjectsMembers] = useState<Project[]>([]);
   const { userData, logout } = useUser();
 
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     setMyProjects([projectMock, projectMock, projectMock]);
+    setProjectsMembers([projectMock, projectMock]);
   }, []);
 
   return (
@@ -58,17 +61,33 @@ export const Home = () => {
           </Row>
         </Nav>
 
-        <Grid columns='2fr 1fr' rows='auto'>
-          <Container> 
-            <Grid style={{height: 'auto'}} columns={"1fr 1fr 1fr"} rows={"auto"}>
-              {myProjects.map(project => 
-                <ProjectCard key={project.id} project={project} />  
-              )}
-            </Grid>
+        <Grid columns='1fr 1fr' rows='auto'>
+          <Container>
+            <Column justifyContent='start' alignItems='start' gap='24px'>
+              <Row justifyContent='space-between' fullWidth>
+                <h3 className='text'>Meus Projetos</h3>
+                <p className='text'>{myProjects.length}</p>
+              </Row>
+              <Grid style={{height: 'auto'}} columns={"1fr 1fr"} rows={"auto"}>
+                {myProjects.map(project => 
+                  <ProjectCard key={project.id} project={project} />  
+                )}
+              </Grid>
+            </Column>
           </Container>
 
           <Container>
-              
+            <Column justifyContent='start' alignItems='start' gap='24px'>
+              <Row justifyContent='space-between' fullWidth>
+                <h3 className='text'>Outros Projetos</h3>
+                <p className='text'>{projectsMember.length}</p>
+              </Row>
+              <Grid style={{height: 'auto'}} columns={"1fr 1fr"} rows={"auto"}>
+                  {projectsMember.map(project => 
+                    <ProjectCard key={project.id} project={project} />  
+                  )}
+              </Grid>
+            </Column>
           </Container>
         </Grid>
     </Wrapper>

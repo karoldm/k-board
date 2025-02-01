@@ -26,9 +26,15 @@ export const Wrapper = styled.div`
 `;
 
 
-export const Container = styled.main`
+export const Container = styled.div`
   background: var(--white);
-  width: 100%;
   padding: 32px;
-  flex: 1;
-`
+  border-radius: 8px;
+
+  .text {
+    color: var(--black);
+    letter-spacing: 1px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+`;
