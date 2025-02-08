@@ -16,19 +16,4 @@ export const ModalInfoContent = styled.div`
   p {
     color: gray;
   }
-
-  img {
-    border-radius: 100%;
-  }
-
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  div > img {
-    width: 50%;
-  }
 `;

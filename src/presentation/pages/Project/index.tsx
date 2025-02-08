@@ -6,10 +6,7 @@ import { toast } from "react-toastify";
 import { FaArrowLeft, FaInfo, FaPlus } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
-import { Modal } from '../../components/Modal';
-
-import { database } from '../../../data/services/firebase';
+import { CustomModal } from '../../components/Modal';
 
 import { 
   Navbar, 
@@ -26,6 +23,7 @@ import { TaskColumn } from '../../components/TaskColumn';
 import { NewTaskModal } from '../../components/NewTaskModal';
 import { InfoProjectModal } from '../../components/InfoProjectModal';
 import { Project } from '../../../data/interfaces/project';
+import { withCopy } from '../../hooks/withCopy';
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams();
@@ -75,19 +73,19 @@ export const ProjectPage: React.FC = () => {
 
   return (
     <Wrapper>
-      <Modal visible={taskModal} onHide={() => {
+      <CustomModal title='Nova Tarefa' visible={taskModal} onHide={() => {
         setTaskModal(false);
         window.onscroll = function () { };
       }}>
-        <NewTaskModal onConfirm={(task) => {}} />
-      </Modal>
+        <NewTaskModal project={project!} onConfirm={(task) => {}} />
+      </CustomModal>
 
-      <Modal visible={infoModal} onHide={() => {
+      <CustomModal title='Informações do Projeto' visible={infoModal} onHide={() => {
         setInfoModal(false);
         window.onscroll = function () { };
       }}>
         <InfoProjectModal project={projectMock} />
-      </Modal>
+      </CustomModal>
 
       <Navbar>
         <Link to={'/'}>
@@ -95,16 +93,7 @@ export const ProjectPage: React.FC = () => {
         </Link>
         <Row gap='8px'>
           <ProjectTitle>{project?.title}</ProjectTitle>
-          <Tag onClick={() => {
-            navigator.clipboard.writeText(id ?? "");
-            toast.success('Project ID copied successfully!', {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              draggable: false,
-              });
-          }} size='small' label={id ?? ""}/>
+          {withCopy(<Tag size='small' label={id??""} />, id ?? "")}
         </Row>
         <Row gap='8px'>
           <Button onclick={() => {

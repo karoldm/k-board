@@ -4,6 +4,7 @@ type Props = {
   justifyContent?: "center" | "space-between" | "space-around" | "start" | "end";
   fullWidth?: boolean;
   gap?: string;
+  wrap?: boolean;
 }
 
 export const Row = styled.div<Props>`
@@ -11,6 +12,7 @@ export const Row = styled.div<Props>`
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: ${props => props.wrap ? "wrap" : "nowrap"};
   gap: ${props => props.gap ?? 0};
   justify-content: ${props => props.justifyContent ?? "center"};
 `;

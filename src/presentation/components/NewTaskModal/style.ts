@@ -2,29 +2,37 @@ import styled from "styled-components";
 
 
 export const ModalTaskContent = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-
-font-size: 1.2rem;
-font-weight: bold;
-
-  > span {
-  margin-bottom: 2rem;
-}
-
-  > div {
   display: flex;
-  width: 100%;
+  flex-direction: column;
   align-items: center;
-  justify-content: space - between;
+  justify-content: center;
+
+  font-size: 1.2rem;
+  font-weight: bold;
   gap: 1rem;
 
-    > input[type = "color"] {
-    border: none;
-    background: var(--white);
-    height: 2.5rem;
+  > span {
+    margin-bottom: 2rem;
   }
-}
+
+  input[type="color"] {
+    cursor: pointer;
+    height: 32px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  input[type="color"]::-webkit-color-swatch {
+      border: none;
+  }
+
+  #text-button {
+    color: var(--white);
+    font-size: 14px;
+    font-weight: bold;
+  }
 `;

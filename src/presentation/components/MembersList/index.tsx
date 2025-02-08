@@ -16,6 +16,7 @@ export const MembersList = ({members}: Props) => {
             key={member.id}
             style={ index != 0 ? {marginLeft: '-8px'} : {}} 
             src={member.photoUrl}
+            alt={member.name + " photo"}
           />
       )}
       </Row>

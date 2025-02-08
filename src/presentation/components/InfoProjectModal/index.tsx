@@ -1,4 +1,8 @@
 import { Project } from "../../../data/interfaces/project";
+import { withCopy } from "../../hooks/withCopy";
+import { Avatar } from "../Avatar";
+import { MembersList } from "../MembersList";
+import { Tag } from "../Tag";
 import { ModalInfoContent } from "./style";
 
 type Props = {
@@ -9,17 +13,12 @@ export const InfoProjectModal = ({project}: Props) => {
 
   return (
     <ModalInfoContent>
-      <img style={{width: "40px"}} src={project.owner.photoUrl} alt='author project photo' />
+      <Avatar src={project.owner.photoUrl} alt={project.owner.name + " photo"}/>
       <strong>{project.title}</strong>
-      <p>{project.id}</p>
+      {withCopy(<Tag size='small' label={project.id ?? ""} />, project.id ?? "")}
+
       <i>Participantes</i>
-      <div>
-        {project.members.map((member) => {
-          return (
-            <img key={member.id} src={member.photoUrl} alt='member project photo' title={member.name} />
-          );
-        })}
-      </div>
+      <MembersList members={project.members} />
     </ModalInfoContent>
   );
 }

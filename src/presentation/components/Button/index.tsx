@@ -1,19 +1,35 @@
 import React, { PropsWithChildren } from 'react';
 
-import { ButtonStyled } from './style';
+import { IconButton, PrimaryButton, SecondaryButton } from './style';
 
 type Props = {
   onclick: () => void;
   width?: string;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'icon';
   id?: string;
   noBorder?: boolean;
  }
 
 export const Button = ({ children, width, noBorder=false, onclick, variant='primary', id }: PropsWithChildren<Props>) => {
-  return (
-    <ButtonStyled noBorder={noBorder} id={id} variant={variant} width={width} onClick={onclick} >
-      {children}
-    </ButtonStyled>
-  );
+    if(variant == "secondary") {
+      return (
+        <SecondaryButton noBorder={noBorder} id={id} width={width} onClick={onclick}>
+          {children}
+        </SecondaryButton>
+      )
+    }
+
+    if(variant == 'icon'){
+      return (
+        <IconButton noBorder={true} id={id} width={width} onClick={onclick}>
+          {children}
+        </IconButton>
+      )
+    }
+
+    return (
+      <PrimaryButton noBorder={noBorder} id={id} width={width} onClick={onclick}>
+        {children}
+      </PrimaryButton>
+    )
 }

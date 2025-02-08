@@ -7,8 +7,10 @@ import './data/services/firebase';
 
 import { UserContextProvider } from './context/userContext';
 
-import { GlobalStyle } from './presentation/styles/global';
 import { ToastContainer } from 'react-toastify';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { GlobalStyle } from './presentation/styles/global';
 
 const rootElement = document.getElementById('root');
 

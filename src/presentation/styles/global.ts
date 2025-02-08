@@ -1,5 +1,4 @@
-import React from 'react';
-import { createGlobalStyle } from 'styled-components';
+ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
   html, body, #root, .app {
@@ -14,6 +13,10 @@ export const GlobalStyle = createGlobalStyle`
 
     a {
       text-decoration: none;
+    } 
+    
+    p {
+      margin: 0;
     }
 
     button {

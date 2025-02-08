@@ -2,12 +2,10 @@ import styled from 'styled-components';
 
 type Props = {
   width?: string;
-  variant?: 'primary' | 'secondary';
   noBorder: boolean;
 }
 
 export const ButtonStyled = styled.button<Props>`
-    background: ${props => props.variant == 'primary' ? 'var(--blue-primary);' : 'var(--background);'};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,7 +14,7 @@ export const ButtonStyled = styled.button<Props>`
     width: ${props => props.width ?? "100%"};
     transition: all 0.7s;
     color: var(--black);
-    border: ${props => props.noBorder ? 0 : '1px'} solid ${props => props.variant == 'primary' ? 'var(--blue-primary);' : 'var(--primary);'};
+    border: ${props => props.noBorder ? 0 : '1px'} solid;
   }
 
   &:hover{
@@ -28,4 +26,21 @@ export const ButtonStyled = styled.button<Props>`
     filter: brightness(0.93);
     cursor: pointer;
   }
+`;
+
+export const PrimaryButton = styled(ButtonStyled)`
+  background: var(--blue-primary);
+  border-color: var(--blue-primary);
+`;
+
+export const SecondaryButton = styled(ButtonStyled)`
+  background: var(--background);
+  border-color: var(--primary);
+`;
+
+export const IconButton = styled(ButtonStyled)`
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+  width: ${props => props.width ?? "auto"};
 `;

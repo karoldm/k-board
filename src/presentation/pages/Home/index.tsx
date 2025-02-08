@@ -56,7 +56,7 @@ export const Home = () => {
               {onClick: () => {}, label: userData?.email ?? ""},
               {onClick: () =>{}, label: "Sair"}
             ]}>
-              <Avatar src={userData?.photoUrl ?? ""} />
+              <Avatar src={userData?.photoUrl ?? ""} alt={userData?.name + " photo"} />
             </PopupMenu>
           </Row>
         </Nav>
