@@ -20,10 +20,11 @@ import { TaskStatus } from '../../../data/enums/taskStatus';
 import { Row } from '../../components/Layouts/Row';
 import { Tag } from '../../components/Tag';
 import { TaskColumn } from '../../components/TaskColumn';
-import { NewTaskModal } from '../../components/NewTaskModal';
-import { InfoProjectModal } from '../../components/InfoProjectModal';
+import { NewTaskModal } from '../../components/Modal/NewTaskModal';
 import { Project } from '../../../data/interfaces/project';
 import { withCopy } from '../../hooks/withCopy';
+import { InfoProjectModal } from '../../components/Modal/InfoProjectModal';
+import { NewProjectModal } from '../../components/Modal/NewProjectModal';
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams();
@@ -73,17 +74,25 @@ export const ProjectPage: React.FC = () => {
 
   return (
     <Wrapper>
-      <CustomModal title='Nova Tarefa' visible={taskModal} onHide={() => {
-        setTaskModal(false);
-        window.onscroll = function () { };
-      }}>
+      <CustomModal 
+        title='Nova Tarefa' 
+        visible={taskModal} 
+        onHide={() => {
+          setTaskModal(false);
+          window.onscroll = function () { };
+        }}
+      >
         <NewTaskModal project={project!} onConfirm={(task) => {}} />
       </CustomModal>
 
-      <CustomModal title='Informações do Projeto' visible={infoModal} onHide={() => {
-        setInfoModal(false);
-        window.onscroll = function () { };
-      }}>
+      <CustomModal 
+        title='Informações do Projeto' 
+        visible={infoModal} 
+        onHide={() => {
+          setInfoModal(false);
+          window.onscroll = function () { };
+        }}
+      >
         <InfoProjectModal project={projectMock} />
       </CustomModal>
 

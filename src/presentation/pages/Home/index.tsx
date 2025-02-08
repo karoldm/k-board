@@ -18,6 +18,8 @@ import { ProjectCard } from '../../components/ProjectCard';
 import { Grid } from '../../components/Layouts/Grid';
 import { Avatar } from '../../components/Avatar';
 import { Column } from '../../components/Layouts/Column';
+import { CustomModal } from '../../components/Modal';
+import { NewProjectModal } from '../../components/Modal/NewProjectModal';
 
 export const Home = () => {
   const [myProjects, setMyProjects] = useState<Project[]>([]);
@@ -26,6 +28,8 @@ export const Home = () => {
 
   const [searchText, setSearchText] = useState("");
 
+  const [newProjectModal, setNewProjectModal] = useState(false);
+
   useEffect(() => {
     setMyProjects([projectMock, projectMock, projectMock]);
     setProjectsMembers([projectMock, projectMock]);
@@ -33,6 +37,17 @@ export const Home = () => {
 
   return (
     <Wrapper>
+        <CustomModal 
+          title='Novo Projeto' 
+          visible={newProjectModal} 
+          onHide={() => {
+            setNewProjectModal(false);
+            window.onscroll = function () { };
+          }}
+        >
+          <NewProjectModal handleConfirm={(title) => {}} />
+        </CustomModal>
+
         <Nav>
           <Row fullWidth gap="8px">
             <Input 
@@ -46,7 +61,9 @@ export const Home = () => {
             </Button>
           </Row>
           <Row style={{height:'40px'}} justifyContent="end">
-            <Button width={'40px'} onclick={()=>{}}>
+            <Button width={'40px'} onclick={()=>{
+              setNewProjectModal(true);
+            }}>
               <Row>
                 <FaPlus color='white' />
               </Row>

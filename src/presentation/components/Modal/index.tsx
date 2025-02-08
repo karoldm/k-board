@@ -11,10 +11,6 @@ type Props = {
 export const CustomModal = ({ title, visible, children, onHide }: PropsWithChildren<Props>) => {
   return (
     <Wrapper style={visible ? { display: 'flex' } : { display: 'none' }}>
-      {/* <Background onClick={onHide} />
-      <ModalStyled>
-        {children}
-      </ModalStyled> */}
        <Modal
           backdrop="static"
           show={visible} 

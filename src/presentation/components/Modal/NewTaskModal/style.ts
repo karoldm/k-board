@@ -1,16 +1,8 @@
 import styled from "styled-components";
+import { Column } from "../../Layouts/Column";
 
 
-export const ModalTaskContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 1.2rem;
-  font-weight: bold;
-  gap: 1rem;
-
+export const ModalTaskContent = styled(Column)`
   > span {
     margin-bottom: 2rem;
   }
