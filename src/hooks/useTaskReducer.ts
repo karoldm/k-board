@@ -29,7 +29,8 @@ type Type =
   "remove-member" | 
   "add-member" | 
   "remove-tag" |
-  "add-tag";
+  "add-tag" | 
+  "reset";
 
 
 type ActionWithPayload<T extends Type> = {
@@ -37,6 +38,7 @@ type ActionWithPayload<T extends Type> = {
   payload:  
   T extends "title" | "description" | "color" | "add-tag" | "remove-tag" ?  string :
   T extends "add-member" | "remove-nmember" ? MemberPayload :
+  T extends "reset" ? undefined :
   never;
 }
 
@@ -64,6 +66,12 @@ const taskReducer = (
     case "remove-member":
       task.members = task.members.filter(member => member.id !== (action.payload as MemberPayload).id);
       break;
+    case "reset":
+      task.members = [];
+      task.tags = [];
+      task.title = "";
+      task.description = "";
+      task.color = "#000";
   }  
   return { task: task };
 }

@@ -12,7 +12,7 @@ export const tasksMock: Task[] = [
     tags: ["urgent"],
     taskStatus: TaskStatus.COMPLETED,
     title: "Task Title",
-    members: [userMock,userMock],
+    members: [userMock],
   },
   {
     color: "#F456",
@@ -22,7 +22,7 @@ export const tasksMock: Task[] = [
     tags: ["urgent"],
     taskStatus: TaskStatus.PENDING,
     title: "Task Title",
-    members: [userMock,userMock],
+    members: [userMock],
   },
   {
     color: "#AA156C",
@@ -32,7 +32,7 @@ export const tasksMock: Task[] = [
     tags: ["urgent"],
     taskStatus: TaskStatus.PENDING,
     title: "Task Title",
-    members: [userMock,userMock],
+    members: [userMock],
 
   },
   {
@@ -43,7 +43,7 @@ export const tasksMock: Task[] = [
     tags: ["urgent"],
     taskStatus: TaskStatus.DOING,
     title: "Task Title",
-    members: [userMock,userMock],
+    members: [userMock],
 
   },
 ];

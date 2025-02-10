@@ -8,6 +8,6 @@ export const projectMock: Project = {
   tasks: tasksMock,
   title: "K-board api",
   owner: userMock,
-  members: [userMock, userMock],
+  members: [userMock],
   progress: 0.5,
 }

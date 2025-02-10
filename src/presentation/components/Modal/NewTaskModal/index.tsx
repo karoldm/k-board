@@ -41,6 +41,10 @@ export const NewTaskModal = ({ onConfirm, project }: Props) => {
   const onSubmit = (data: FormData) => {
     console.log(data);
     reset();
+    dispatch({
+      type: "reset",
+      payload: undefined
+    });
     onConfirm(data);
   };
 
@@ -81,7 +85,7 @@ export const NewTaskModal = ({ onConfirm, project }: Props) => {
           placeholder="Tag"
           setValue={setTagText}
         />
-        <Button width="auto" onClick={handleAddTag}>
+        <Button type="button" width="auto" onClick={handleAddTag}>
           <FaPlus size={18} color="white" />
         </Button>
       </Row>
