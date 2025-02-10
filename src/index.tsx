@@ -1,21 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { App } from './App';
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { App } from './App'
 
-import './services/firebase';
+import './data/services/firebase'
 
-import { UserContextProvider } from './context/userContext';
+import { UserContextProvider } from './context/userContext'
 
-import { GlobalStyle } from './styles/global';
+import { ToastContainer } from 'react-toastify'
 
-ReactDOM.render(
-  <BrowserRouter>
-    <UserContextProvider>
-      <GlobalStyle />
-      <App />
-    </UserContextProvider>
-  </BrowserRouter>,
-  document.getElementById('root')
-);
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { GlobalStyle } from './presentation/styles/global'
 
+const rootElement = document.getElementById('root')
+
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement)
+  root.render(
+    <BrowserRouter>
+      <UserContextProvider>
+        <ToastContainer />
+        <GlobalStyle />
+        <App />
+      </UserContextProvider>
+    </BrowserRouter>
+  )
+}
