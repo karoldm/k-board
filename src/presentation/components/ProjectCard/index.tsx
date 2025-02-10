@@ -11,20 +11,22 @@ import { Container } from "./style";
 
 type Props = {
   project: Project;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
-export const ProjectCard = ({project}: Props) => {
+export const ProjectCard = ({project, onEdit, onDelete}: Props) => {
   const navigate = useNavigate();
 
   return (
-    <Container onClick={() => navigate(`/project/${project.id}`)}>
+    <Container>
       <Row fullWidth justifyContent="space-between">
-        <Tag label={project.title} />
+        <Tag label={project.title} onClick={() => navigate(`/project/${project.id}`)} />
         <Row>
-          <Button onClick={()=>{}} noBorder variant="secondary" >
+          <Button onClick={onEdit} noBorder variant="secondary" >
             <FaEdit color="#666" />
           </Button>
-          <Button onClick={()=>{}} noBorder variant="secondary" >
+          <Button onClick={onDelete} noBorder variant="secondary" >
             <FaTrash color="#666" />
           </Button>
         </Row>

@@ -10,7 +10,6 @@ export const Container = styled.div`
   gap: 24px;
   align-items: start;
   justify-content: center;
-  cursor: pointer;
   overflow: hidden;
   border: 1px solid var(--primary);
 `;

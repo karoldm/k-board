@@ -15,10 +15,9 @@ export const ButtonStyled = styled.button<Props>`
     color: var(--black);
     border: ${props => props.noBorder ? 0 : '1px'} solid;
 
-    >p{
+    p{
       font-size: 14px;
       font-weight: bold;
-      color: var(--white);
     }
 
     &:hover{
@@ -35,11 +34,18 @@ export const ButtonStyled = styled.button<Props>`
 export const PrimaryButton = styled(ButtonStyled)`
   background: var(--blue-primary);
   border-color: var(--blue-primary);
+  p {
+    color: var(--white);
+  }
 `;
 
 export const SecondaryButton = styled(ButtonStyled)`
   background: var(--background);
   border-color: var(--primary);
+
+  p {
+    color: var(--gray);
+  }
 `;
 
 export const IconButton = styled(ButtonStyled)`

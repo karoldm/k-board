@@ -20,6 +20,7 @@ import { Avatar } from '../../components/Avatar';
 import { Column } from '../../components/Layouts/Column';
 import { CustomModal } from '../../components/Modal';
 import { NewProjectModal } from '../../components/Modal/NewProjectModal';
+import { ConfirmModal } from '../../components/Modal/ConfirmModal';
 
 export const Home = () => {
   const [myProjects, setMyProjects] = useState<Project[]>([]);
@@ -29,23 +30,63 @@ export const Home = () => {
   const [searchText, setSearchText] = useState("");
 
   const [newProjectModal, setNewProjectModal] = useState(false);
+  const [deleteProjectModal, setDeleteProjectModal] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     setMyProjects([projectMock, projectMock, projectMock]);
     setProjectsMembers([projectMock, projectMock]);
   }, []);
 
+  const onEditProject = (project: Project) => {
+    setSelectedProject(project);
+    setNewProjectModal(true);
+  }
+
+  const onDeleteProject = (project: Project) => {
+    setSelectedProject(project);
+    setDeleteProjectModal(true);
+  }
+
+  const saveProject = (title: string) => {
+    
+  }
+
+  const deleteProject = () => {
+    
+  }
+
   return (
     <Wrapper>
         <CustomModal 
-          title='Novo Projeto' 
+          title={selectedProject ? 'Editar Projeto' : 'Novo Projeto'} 
           visible={newProjectModal} 
           onHide={() => {
             setNewProjectModal(false);
             window.onscroll = function () { };
           }}
         >
-          <NewProjectModal handleConfirm={(title) => {}} />
+          <NewProjectModal 
+            initialValue={selectedProject?.title ?? ""} 
+            handleConfirm={saveProject} 
+          />
+        </CustomModal>
+
+        <CustomModal 
+          title='Excluir Projeto' 
+          visible={deleteProjectModal} 
+          onHide={() => {
+            setDeleteProjectModal(false);
+            window.onscroll = function () { };
+          }}
+        >
+          <ConfirmModal
+            onConfirm={deleteProject} 
+            onCancel={()=>{
+              setDeleteProjectModal(false);
+            }} 
+            text="Ao excluir o projeto ele será removido permanentemente, bem como todas as tarefas atreladas a ele. Deseja continuar?" 
+          />
         </CustomModal>
 
         <Nav>
@@ -87,7 +128,12 @@ export const Home = () => {
               </Row>
               <Grid style={{height: 'auto'}} columns={"1fr 1fr"} rows={"auto"}>
                 {myProjects.map(project => 
-                  <ProjectCard key={project.id} project={project} />  
+                  <ProjectCard
+                    onEdit={() => onEditProject(project)}
+                    onDelete={() => onDeleteProject(project)}
+                    key={project.id}
+                    project={project} 
+                  />  
                 )}
               </Grid>
             </Column>
@@ -101,7 +147,12 @@ export const Home = () => {
               </Row>
               <Grid style={{height: 'auto'}} columns={"1fr 1fr"} rows={"auto"}>
                   {projectsMember.map(project => 
-                    <ProjectCard key={project.id} project={project} />  
+                    <ProjectCard
+                      onEdit={() => onEditProject(project)}
+                      onDelete={() => onDeleteProject(project)}
+                      key={project.id}
+                      project={project} 
+                    />  
                   )}
               </Grid>
             </Column>
