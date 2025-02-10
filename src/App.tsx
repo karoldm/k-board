@@ -19,7 +19,7 @@ export const App = () => {
   const { isAuth } = useUser();
 
   function ProtectedRoute({ authenticationPath, outlet }: ProtectedRouteProps) {
-    if (/*isAuth()*/ true) {
+    if (isAuth()) {
       return outlet;
     } else {
       return <Navigate to={{ pathname: authenticationPath }} />;
