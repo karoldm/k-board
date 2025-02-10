@@ -9,7 +9,7 @@ export const NotFound = ( ) => {
     <Wrapper>
       <h1>404</h1>
       <span>Ops! Parece que esta rota não existe.</span>
-      <Button width="240px" onclick={() => {navigate("/")}}>
+      <Button width="240px" onClick={() => {navigate("/")}}>
         <p>
           Voltar página inicial
         </p>

@@ -11,8 +11,17 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     box-sizing: border-box;
 
+    transition: all 0.7s;
+
     a {
       text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--blue-primary);
+
+      &:hover{
+        color: var(--blue-dark);
+      }
     } 
     
     p {

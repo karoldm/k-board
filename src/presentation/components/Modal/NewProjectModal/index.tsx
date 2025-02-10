@@ -17,7 +17,7 @@ export const NewProjectModal = ({handleConfirm}: Props) => {
         placeholder='Título' 
         setValue={setTitle} 
       />
-      <Button onclick={() => handleConfirm(title)} ><p>Criar</p></Button>
+      <Button onClick={() => handleConfirm(title)} ><p>Criar</p></Button>
     </>
   );
 }

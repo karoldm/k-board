@@ -1,20 +1,23 @@
-import React from 'react';
-import { InputStyled } from './style';
+import React, { ComponentPropsWithoutRef } from 'react';
+import { InputStyled, InputStyledFile } from './style';
 
-type Props = {
-  placeholder: string,
+type Props =  ComponentPropsWithoutRef<'input'> & {
   setValue: (value: string) => void,
-  id: string,
-  value: string,
 }
 
-export const Input = ({ placeholder, setValue, id, value }: Props) => {
-  return (
-    <InputStyled
-      placeholder={placeholder}
-      onChange={(e) => setValue(e.target.value)}
-      id={id}
-      value={value}
-    />
-  );
+export const Input = ({ setValue, ...props}: Props) => {
+    if(props.type && props.type=="file") {
+      return (
+        <InputStyledFile
+          {...props}
+          onChange={(e) => setValue(e.target.value)} 
+        />
+      )
+    }
+    return (
+      <InputStyled
+        {...props}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    );
 }

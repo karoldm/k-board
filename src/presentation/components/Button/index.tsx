@@ -1,19 +1,17 @@
-import React, { PropsWithChildren } from 'react';
+import React, { ComponentPropsWithoutRef, PropsWithChildren } from 'react';
 
 import { IconButton, PrimaryButton, SecondaryButton } from './style';
 
-type Props = {
-  onclick: () => void;
+type Props = ComponentPropsWithoutRef<'button'> & {
   width?: string;
   variant?: 'primary' | 'secondary' | 'icon';
-  id?: string;
   noBorder?: boolean;
  }
 
-export const Button = ({ children, width, noBorder=false, onclick, variant='primary', id }: PropsWithChildren<Props>) => {
+export const Button = ({ children, width, noBorder=false, variant='primary', ...props }: PropsWithChildren<Props>) => {
     if(variant == "secondary") {
       return (
-        <SecondaryButton noBorder={noBorder} id={id} width={width} onClick={onclick}>
+        <SecondaryButton noBorder={noBorder} width={width} {...props} >
           {children}
         </SecondaryButton>
       )
@@ -21,14 +19,14 @@ export const Button = ({ children, width, noBorder=false, onclick, variant='prim
 
     if(variant == 'icon'){
       return (
-        <IconButton noBorder={true} id={id} width={width} onClick={onclick}>
+        <IconButton noBorder={true} width={width}  {...props}>
           {children}
         </IconButton>
       )
     }
 
     return (
-      <PrimaryButton noBorder={noBorder} id={id} width={width} onClick={onclick}>
+      <PrimaryButton noBorder={noBorder} width={width}  {...props}>
         {children}
       </PrimaryButton>
     )

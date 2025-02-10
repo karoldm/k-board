@@ -75,7 +75,7 @@ export const NewTaskModal = ({onConfirm, project}: Props) => {
           placeholder='Tag'
           setValue={setTagText} 
         />
-        <Button width="auto" onclick={addTag}>
+        <Button width="auto" onClick={addTag}>
           <FaPlus size={18} color="white" />
         </Button>
       </Row>
@@ -115,7 +115,7 @@ export const NewTaskModal = ({onConfirm, project}: Props) => {
           /> 
         )}
       </Row>
-      <Button onclick={handleConfirm} ><p>Criar</p></Button>
+      <Button onClick={handleConfirm} ><p>Criar</p></Button>
   </ModalTaskContent>
   );
 }

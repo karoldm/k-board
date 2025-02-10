@@ -7,6 +7,7 @@ import { Home } from './presentation/pages/Home';
 
 import { useUser } from './hooks/useUser';
 import { NotFound } from './presentation/components/NotFound';
+import { Register } from './presentation/pages/Register';
 
 type ProtectedRouteProps = {
   authenticationPath: string;
@@ -28,6 +29,7 @@ export const App = () => {
   return (
     <Routes>
       <Route path='/login' element={<Login />} />
+      <Route path='/register' element={<Register />} />
       <Route path='/project/:id' element={<ProtectedRoute authenticationPath='/login' outlet={<ProjectPage />} />} />
       <Route path='/' element={<ProtectedRoute authenticationPath='/login' outlet={<Home />} />} />
       <Route path='*' element={<NotFound />} />

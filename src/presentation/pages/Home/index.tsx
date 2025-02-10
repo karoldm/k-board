@@ -56,12 +56,12 @@ export const Home = () => {
               id="searchText" 
               placeholder="Procure por um projeto" 
             />
-            <Button width={'40px'} onclick={()=>{}}>
+            <Button width={'40px'} onClick={()=>{}}>
               <FaSearch color='white' />
             </Button>
           </Row>
           <Row style={{height:'40px'}} justifyContent="end">
-            <Button width={'40px'} onclick={()=>{
+            <Button width={'40px'} onClick={()=>{
               setNewProjectModal(true);
             }}>
               <Row>

@@ -26,7 +26,6 @@ export const ItemsContainer = styled.div`
 
 export const StyledMenuItem = styled.button`
   background: transparent;
-  transition: all 0.5s;
   padding: 8px;
   cursor: pointer;
   border-radius: 4px;

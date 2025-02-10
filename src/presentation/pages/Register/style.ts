@@ -28,6 +28,7 @@ export const BorderBackground = styled.div`
 export const ContainerForm = styled.section`
   background: var(--white);
   padding: 32px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

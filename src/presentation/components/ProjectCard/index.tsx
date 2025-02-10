@@ -21,10 +21,10 @@ export const ProjectCard = ({project}: Props) => {
       <Row fullWidth justifyContent="space-between">
         <Tag label={project.title} />
         <Row>
-          <Button onclick={()=>{}} noBorder variant="secondary" >
+          <Button onClick={()=>{}} noBorder variant="secondary" >
             <FaEdit color="#666" />
           </Button>
-          <Button onclick={()=>{}} noBorder variant="secondary" >
+          <Button onClick={()=>{}} noBorder variant="secondary" >
             <FaTrash color="#666" />
           </Button>
         </Row>

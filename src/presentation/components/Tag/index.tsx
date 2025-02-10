@@ -21,7 +21,7 @@ export const Tag = ({label, color, size="medium", onClick, onRemove}: Props) => 
         </p>
         {
           onRemove && (
-            <Button variant="icon" noBorder onclick={onRemove}>
+            <Button variant="icon" noBorder onClick={onRemove}>
               <FaTimes size={10} color={color != null ? getColorByContrast(color) : "#666"}/>
             </Button>
           )

@@ -105,13 +105,13 @@ export const ProjectPage: React.FC = () => {
           {withCopy(<Tag size='small' label={id??""} />, id ?? "")}
         </Row>
         <Row gap='8px'>
-          <Button onclick={() => {
+          <Button onClick={() => {
               setTaskModal(true);
               disableScroll();
             }} >
                 <FaPlus color='white' />
           </Button>
-          <Button variant="secondary" onclick={() => {
+          <Button variant="secondary" onClick={() => {
               setInfoModal(true);
               disableScroll();
             }}>

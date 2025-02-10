@@ -10,26 +10,16 @@ import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { Column } from '../../components/Layouts/Column';
 
-export const Login = () => {
-  const { login } = useUser();
+export const Register = () => {
+  const {  } = useUser();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      // const result = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-
-      // if (result.user) {
-      //   const { displayName, uid, photoURL } = result.user;
-
-      //   if (displayName && photoURL) {
-          login(userMock);
-
-          navigate('/');
-        // }
-    //   }
+    
     } catch (error) {
       console.error(error);
     }
@@ -39,21 +29,18 @@ export const Login = () => {
     <Wrapper>
       <BorderBackground>
         <ContainerForm>
-          <span>
-            Organize seus projetos usando quadros Kanban. <br/><br/> 
-            Adicione nos seus projetos os membros que desejar de forma simples e rápida. <br/><br/>
-            Acompanhe seu progresso e tenha acesso a <i>insights</i> valiosos.
-          </span>
-          
+          <span>Registre-se e comece a organizar seus projetos :)</span>
           <Column as="form" gap="16px" fullWidth>
-            <Input required type="email" id="email" placeholder='Email' value={email} setValue={setEmail} />
+            <Input required type="text" id="name" placeholder='Nome' value={email} setValue={setEmail} />
+            <Input required type="email" id="email" placeholder='Email' value={password} setValue={setPassword} />
             <Input required type="password" id="password" placeholder='Senha' value={password} setValue={setPassword} />
+            <Input type="file" id="photo" placeholder='Foto' value={password} setValue={setPassword} />
             <Button type="submit" onClick={()=>{}}>
-              <p>Entrar</p>
+              <p>Registrar</p>
             </Button>
           </Column>
 
-          <a href="/register">Registrar-se</a>
+          <a href="/login">Já tenho uma conta</a>
         </ContainerForm>
       </BorderBackground>
     </Wrapper >

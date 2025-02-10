@@ -12,7 +12,6 @@ export const ButtonStyled = styled.button<Props>`
     padding: 8px;
     border-radius: 8px;
     width: ${props => props.width ?? "100%"};
-    transition: all 0.7s;
     color: var(--black);
     border: ${props => props.noBorder ? 0 : '1px'} solid;
 

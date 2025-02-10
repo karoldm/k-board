@@ -18,7 +18,7 @@ export const TaskCard = forwardRef<HTMLDivElement, Props>(
   
   return (
     <TaskContainer ref={ref} {...props} color={task.color}>
-      <Button id="close-button" onclick={() => {}} variant="secondary" noBorder width='auto'>
+      <Button id="close-button" onClick={() => {}} variant="secondary" noBorder width='auto'>
         <FaTimes color="#CCC" size={12} />
       </Button>
       <p id="title">{task.title}</p>
