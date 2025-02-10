@@ -14,10 +14,4 @@ export const Wrapper = styled.div`
   span {
     font-size: .9rem;
   }
-
-  p {
-    font-size: 14px;
-    font-weight: bold;
-    color: var(--white);
-  }
 `;

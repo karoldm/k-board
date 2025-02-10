@@ -21,10 +21,4 @@ export const ModalTaskContent = styled(Column)`
   input[type="color"]::-webkit-color-swatch {
       border: none;
   }
-
-  #text-button {
-    color: var(--white);
-    font-size: 14px;
-    font-weight: bold;
-  }
 `;

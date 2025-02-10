@@ -6,7 +6,7 @@ export const withCopy = (element: ReactNode, text: string) => {
     return (
         <div style={{cursor: "pointer"}} onClick={() => {
             navigator.clipboard.writeText(text);
-            toast.success('Text copied successfully!', {
+            toast.success('Copiado com sucesso!', {
               position: "top-right",
               autoClose: 5000,
               hideProgressBar: true,

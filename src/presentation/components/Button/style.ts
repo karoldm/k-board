@@ -15,17 +15,22 @@ export const ButtonStyled = styled.button<Props>`
     transition: all 0.7s;
     color: var(--black);
     border: ${props => props.noBorder ? 0 : '1px'} solid;
-  }
 
-  &:hover{
-    filter: brightness(0.98);
-    cursor: pointer;
-  }
+    >p{
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--white);
+    }
 
-  &:active {
-    filter: brightness(0.93);
-    cursor: pointer;
-  }
+    &:hover{
+      filter: brightness(0.98);
+      cursor: pointer;
+    }
+
+    &:active {
+      filter: brightness(0.93);
+      cursor: pointer;
+    }
 `;
 
 export const PrimaryButton = styled(ButtonStyled)`

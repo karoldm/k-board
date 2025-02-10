@@ -115,7 +115,7 @@ export const NewTaskModal = ({onConfirm, project}: Props) => {
           /> 
         )}
       </Row>
-      <Button onclick={handleConfirm} ><p id="text-button">Criar</p></Button>
+      <Button onclick={handleConfirm} ><p>Criar</p></Button>
   </ModalTaskContent>
   );
 }

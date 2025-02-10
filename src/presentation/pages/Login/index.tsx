@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '../../components/Button';
-import { ContainerForm, Wrapper, ButtonContent, BorderBackground } from './style';
-
-import { FaGoogle } from 'react-icons/fa';
-
-import { auth, firebase } from '../../../data/services/firebase';
+import { ContainerForm, Wrapper, BorderBackground } from './style';
 
 import { useUser } from '../../../hooks/useUser';
 import { userMock } from '../../../data/mocks/userMock';
+import { Input } from '../../components/Input';
+import { Button } from '../../components/Button';
+import { Column } from '../../components/Layouts/Column';
 
-export const Login: React.FC = () => {
+export const Login = () => {
   const { login } = useUser();
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
@@ -43,13 +44,16 @@ export const Login: React.FC = () => {
             Adicione nos seus projetos os membros que desejar de forma simples e rápida. <br/><br/>
             Acompanhe seu progresso e tenha acesso a <i>insights</i> valiosos.
           </span>
-          {/* <img src="./assets/user.png" alt='logo icon' /> */}
-          <Button  variant="secondary" onclick={handleLogin} >
-            <ButtonContent>
-              <FaGoogle id="icon" />
-              <p>Entrar com o Google</p>
-            </ButtonContent>
-          </Button>
+          
+          <Column gap="16px" fullWidth>
+            <Input id="email" placeholder='Email' value={email} setValue={setEmail} />
+            <Input id="password" placeholder='Senha' value={password} setValue={setPassword} />
+            <Button onclick={()=>{}}>
+              <p>Entrar</p>
+            </Button>
+          </Column>
+
+          <a>Registrar-se</a>
         </ContainerForm>
       </BorderBackground>
     </Wrapper >
