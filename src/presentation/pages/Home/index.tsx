@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useEffect, useState } from 'react';
 
 import { Button } from '../../components/Button';
@@ -21,11 +19,13 @@ import { Column } from '../../components/Layouts/Column';
 import { CustomModal } from '../../components/Modal';
 import { NewProjectModal } from '../../components/Modal/NewProjectModal';
 import { ConfirmModal } from '../../components/Modal/ConfirmModal';
+import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
   const [myProjects, setMyProjects] = useState<Project[]>([]);
   const [projectsMember, setProjectsMembers] = useState<Project[]>([]);
   const { userData, logout } = useUser();
+  const navigate = useNavigate();
 
   const [searchText, setSearchText] = useState("");
 
@@ -53,7 +53,7 @@ export const Home = () => {
   }
 
   const deleteProject = () => {
-    
+
   }
 
   return (
@@ -112,7 +112,10 @@ export const Home = () => {
             <Divider type="vertical" />
             <PopupMenu items={[
               {onClick: () => {}, label: userData?.email ?? ""},
-              {onClick: () =>{}, label: "Sair"}
+              {onClick: () => {
+                logout();
+                navigate('/login');
+              }, label: "Sair"}
             ]}>
               <Avatar src={userData?.photoUrl ?? ""} alt={userData?.name + " photo"} />
             </PopupMenu>

@@ -1,7 +1,7 @@
 import { useReducer } from "react";
-import { Task } from "../../data/interfaces/task";
+import { Task } from "../data/interfaces/task";
 
-type MemberPayload = {
+export type MemberPayload = {
   id: string;
   name: string;
 }

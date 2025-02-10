@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Column } from '../Layouts/Column';
 
 export const InputStyled = styled.input`
   color: var(--black);
@@ -19,4 +20,13 @@ export const InputStyledFile = styled.input`
   padding: 0.5rem;
   width: 100%;
   font-size: .9rem;
+`;
+
+export const StyledColumn = styled(Column)`
+  .error-message {
+    color: var(--red);
+    font-size: 14px;
+    text-align: start;
+    width: 100%;
+  }
 `;

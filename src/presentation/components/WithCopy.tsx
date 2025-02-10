@@ -1,8 +1,11 @@
 import { PropsWithChildren, ReactNode } from "react";
 import { toast } from "react-toastify";
 
+type Props = {
+    text: string;
+}
 
-export const withCopy = (element: ReactNode, text: string) => {
+export const WithCopy = ({text, children}: PropsWithChildren<Props>) => {
     return (
         <div style={{cursor: "pointer"}} onClick={() => {
             navigator.clipboard.writeText(text);
@@ -15,7 +18,7 @@ export const withCopy = (element: ReactNode, text: string) => {
               });
           }}
         >
-            {element}
+            {children}
         </div>
     );
 }

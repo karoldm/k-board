@@ -22,9 +22,8 @@ import { Tag } from '../../components/Tag';
 import { TaskColumn } from '../../components/TaskColumn';
 import { NewTaskModal } from '../../components/Modal/NewTaskModal';
 import { Project } from '../../../data/interfaces/project';
-import { withCopy } from '../../hooks/withCopy';
 import { InfoProjectModal } from '../../components/Modal/InfoProjectModal';
-import { NewProjectModal } from '../../components/Modal/NewProjectModal';
+import { WithCopy } from '../../components/WithCopy';
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams();
@@ -102,7 +101,9 @@ export const ProjectPage: React.FC = () => {
         </Link>
         <Row gap='8px'>
           <ProjectTitle>{project?.title}</ProjectTitle>
-          {withCopy(<Tag size='small' label={id??""} />, id ?? "")}
+          <WithCopy text={id ?? ""}>
+            <Tag size='small' label={id ?? ""} />
+          </WithCopy>
         </Row>
         <Row gap='8px'>
           <Button onClick={() => {

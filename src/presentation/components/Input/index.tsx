@@ -1,23 +1,34 @@
-import React, { ComponentPropsWithoutRef } from 'react';
-import { InputStyled, InputStyledFile } from './style';
+import React, { ComponentPropsWithoutRef, forwardRef } from 'react';
+import { InputStyled, InputStyledFile, StyledColumn } from './style';
 
 type Props =  ComponentPropsWithoutRef<'input'> & {
-  setValue: (value: string) => void,
+  setValue?: (value: string) => void;
+  error?: string;
 }
 
-export const Input = ({ setValue, ...props}: Props) => {
-    if(props.type && props.type=="file") {
+export const Input = forwardRef<HTMLInputElement, Props>(
+  ({ setValue, error, ...props }, ref) => {
+  if(props.type && props.type=="file") {
       return (
-        <InputStyledFile
-          {...props}
-          onChange={(e) => setValue(e.target.value)} 
-        />
+        <StyledColumn gap="8px" fullWidth>
+          <InputStyledFile
+            ref={ref}
+            {...props}
+            onChange={(e) => setValue ? setValue(e.target.value) : ()=>{}} 
+          />
+          {error && <span className='error-message'>{error}</span>}
+        </StyledColumn>
       )
     }
     return (
-      <InputStyled
-        {...props}
-        onChange={(e) => setValue(e.target.value)}
-      />
+      <StyledColumn gap="8px" fullWidth>
+          <InputStyled
+            ref={ref}
+            {...props}
+            onChange={(e) => setValue ? setValue(e.target.value) : ()=>{}} 
+          />
+          {error && <span className='error-message'>{error}</span>}
+        </StyledColumn>
     );
-}
+  }
+)

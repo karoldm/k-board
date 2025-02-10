@@ -1,38 +1,30 @@
-import React, { useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form"
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { ContainerForm, Wrapper, BorderBackground } from './style';
 
-import { useUser } from '../../../hooks/useUser';
-import { userMock } from '../../../data/mocks/userMock';
+import { loginSchema } from '../../schemas/login.schema';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { Column } from '../../components/Layouts/Column';
 
+type FormData = {
+  email: string;
+  password: string;
+};
 export const Login = () => {
-  const { login } = useUser();
-  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = async () => {
-    try {
-      // const result = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-
-      // if (result.user) {
-      //   const { displayName, uid, photoURL } = result.user;
-
-      //   if (displayName && photoURL) {
-          login(userMock);
-
-          navigate('/');
-        // }
-    //   }
-    } catch (error) {
-      console.error(error);
-    }
+  const handleLogin = async (data: FormData) => {
+    console.log(data);
+    reset();
   }
 
   return (
@@ -45,10 +37,24 @@ export const Login = () => {
             Acompanhe seu progresso e tenha acesso a <i>insights</i> valiosos.
           </span>
           
-          <Column as="form" gap="16px" fullWidth>
-            <Input required type="email" id="email" placeholder='Email' value={email} setValue={setEmail} />
-            <Input required type="password" id="password" placeholder='Senha' value={password} setValue={setPassword} />
-            <Button type="submit" onClick={()=>{}}>
+          <Column
+            as="form"
+            onSubmit={handleSubmit((data) => handleLogin(data))}
+            gap="16px"
+            fullWidth
+          >
+           <Input
+              error={errors.email?.message?.toString()}
+              {...register('email')}
+              placeholder='Email'
+            />
+            <Input
+              error={errors.password?.message?.toString()}
+              {...register('password')}
+              type="password"
+              placeholder='Senha'
+            />
+            <Button type="submit">
               <p>Entrar</p>
             </Button>
           </Column>

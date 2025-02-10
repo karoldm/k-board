@@ -1,28 +1,33 @@
-import React, { useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form"
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { ContainerForm, Wrapper, BorderBackground } from './style';
 
-import { useUser } from '../../../hooks/useUser';
-import { userMock } from '../../../data/mocks/userMock';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { Column } from '../../components/Layouts/Column';
+import { registerSchema } from '../../schemas/register.schema';
+
+type FormData = {
+  name: string;
+  email: string;
+  password: string;
+  photo: File;
+};
 
 export const Register = () => {
-  const {  } = useUser();
-  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(registerSchema),
+  });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleRegister = async () => {
-    try {
-    
-    } catch (error) {
-      console.error(error);
-    }
+  const handleRegister = async (data: FormData) => {
+    console.log(data);
+    reset();
   }
 
   return (
@@ -30,12 +35,42 @@ export const Register = () => {
       <BorderBackground>
         <ContainerForm>
           <span>Registre-se e comece a organizar seus projetos :)</span>
-          <Column as="form" gap="16px" fullWidth>
-            <Input required type="text" id="name" placeholder='Nome' value={email} setValue={setEmail} />
-            <Input required type="email" id="email" placeholder='Email' value={password} setValue={setPassword} />
-            <Input required type="password" id="password" placeholder='Senha' value={password} setValue={setPassword} />
-            <Input type="file" id="photo" placeholder='Foto' value={password} setValue={setPassword} />
-            <Button type="submit" onClick={()=>{}}>
+          <Column
+            as="form"
+            onSubmit={handleSubmit((data) => handleRegister(data))} 
+            gap="16px" 
+            fullWidth
+          >
+            <Input
+              error={errors.name?.message?.toString()}
+              {...register('name')}
+              max={60}
+              type="text"
+              id="name"
+              placeholder='Nome'
+            />
+           <Input
+            error={errors.email?.message?.toString()}
+            {...register('email')}
+            type="email"
+            id="email"
+            placeholder='Email'
+           />
+            <Input
+              error={errors.password?.message?.toString()}
+            {...register('password')}
+              type="password"
+              id="password"
+              placeholder='Senha'
+            />
+            <Input
+              error={errors.photo?.message?.toString()}
+              {...register('photo')}
+              type="file"
+              id="photo"
+              placeholder='Foto'
+            />
+            <Button type="submit">
               <p>Registrar</p>
             </Button>
           </Column>
