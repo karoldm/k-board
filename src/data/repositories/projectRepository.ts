@@ -1,6 +1,5 @@
-import { Project } from "../interfaces/project";
 
-const apiInstance = kboardApi("/projects");
+//const apiInstance = kboardApi("/projects");
 
 // export const createProject: (project: Project) => Promise<Project> = 
 //   async (project: Project) => {

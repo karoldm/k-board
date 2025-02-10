@@ -6,20 +6,20 @@ import { Input } from '../../components/Input';
 
 import { useUser } from '../../../hooks/useUser';
 
-import { Container, Nav, Wrapper } from './style';
-import { projectMock } from '../../../data/mocks/projectMock';
-import { Project } from '../../../data/interfaces/project';
-import { PopupMenu } from '../../components/PopMenu';
-import { Row } from '../../components/Layouts/Row';
 import { FaPlus, FaSearch } from 'react-icons/fa';
-import { ProjectCard } from '../../components/ProjectCard';
-import { Grid } from '../../components/Layouts/Grid';
+import { useNavigate } from 'react-router-dom';
+import { Project } from '../../../data/interfaces/project';
+import { projectMock } from '../../../data/mocks/projectMock';
 import { Avatar } from '../../components/Avatar';
 import { Column } from '../../components/Layouts/Column';
+import { Grid } from '../../components/Layouts/Grid';
+import { Row } from '../../components/Layouts/Row';
 import { CustomModal } from '../../components/Modal';
-import { NewProjectModal } from '../../components/Modal/NewProjectModal';
 import { ConfirmModal } from '../../components/Modal/ConfirmModal';
-import { useNavigate } from 'react-router-dom';
+import { NewProjectModal } from '../../components/Modal/NewProjectModal';
+import { PopupMenu } from '../../components/PopMenu';
+import { ProjectCard } from '../../components/ProjectCard';
+import { Container, Nav, Wrapper } from './style';
 
 export const Home = () => {
   const [myProjects, setMyProjects] = useState<Project[]>([]);

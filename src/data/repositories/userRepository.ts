@@ -1,8 +1,5 @@
-import { Project } from "../interfaces/project";
-import { Task } from "../interfaces/task";
-import { User } from "../interfaces/user";
 
-const apiInstance = kboardApi("/users");
+//const apiInstance = kboardApi("/users");
 
 // export const registerUser: (user: User) => Promise<User> = 
 //   async (user: User) => {

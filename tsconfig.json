@@ -3,8 +3,8 @@
     "jsx":"react-jsx",
     "strict": true,
     "paths": {
-      "react": [ "./node_modules/@types/react" ]
-    },
+      "react": ["./node_modules/@types/react"]
+    },    
     "target": "es6",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

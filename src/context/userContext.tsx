@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState, PropsWithChildren } from 'react';
+import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 import { User } from '../data/interfaces/user';
 import { logoutService } from '../data/services/auth';
 import { useLocalStorage } from '../hooks/useLocalStorage';

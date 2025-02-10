@@ -1,28 +1,25 @@
-import React from 'react'
+import React from 'react';
 
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { toast } from "react-toastify";
+import { DragDropContext } from 'react-beautiful-dnd';
 import { FaArrowLeft, FaInfo, FaPlus } from 'react-icons/fa';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Link, useParams } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { CustomModal } from '../../components/Modal';
 
-import { 
-  Navbar, 
-  Wrapper, 
-  TaskWrapper, 
-  ProjectTitle } from './style';
 import { projectMock } from '../../../data/mocks/projectMock';
+import {
+  Navbar, ProjectTitle, TaskWrapper, Wrapper
+} from './style';
 
-import { Task } from '../../../data/interfaces/task';
 import { TaskStatus } from '../../../data/enums/taskStatus';
+import { Project } from '../../../data/interfaces/project';
+import { Task } from '../../../data/interfaces/task';
 import { Row } from '../../components/Layouts/Row';
+import { InfoProjectModal } from '../../components/Modal/InfoProjectModal';
+import { NewTaskModal } from '../../components/Modal/NewTaskModal';
 import { Tag } from '../../components/Tag';
 import { TaskColumn } from '../../components/TaskColumn';
-import { NewTaskModal } from '../../components/Modal/NewTaskModal';
-import { Project } from '../../../data/interfaces/project';
-import { InfoProjectModal } from '../../components/Modal/InfoProjectModal';
 import { WithCopy } from '../../components/WithCopy';
 
 export const ProjectPage: React.FC = () => {
@@ -96,10 +93,10 @@ export const ProjectPage: React.FC = () => {
       </CustomModal>
 
       <Navbar>
-        <Link to={'/'}>
-          <FaArrowLeft color='#212121' />
-        </Link>
-        <Row gap='8px'>
+          <Link to={'/'}>
+            <FaArrowLeft color='#212121' />
+          </Link>
+          <Row gap='8px'>
           <ProjectTitle>{project?.title}</ProjectTitle>
           <WithCopy text={id ?? ""}>
             <Tag size='small' label={id ?? ""} />
