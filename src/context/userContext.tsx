@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { User } from '../data/interfaces/user'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
@@ -16,6 +17,7 @@ const KEY = process.env.REACT_APP_STORAGE_KEY ?? ''
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const { saveItem, getItem, removeItem } = useLocalStorage()
   const [userData, setUserData] = useState<User | undefined>(getItem(KEY))
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (userData) {
@@ -25,6 +27,8 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
 
   const logout = () => {
     removeItem(KEY)
+    setUserData(undefined)
+    navigate('/login')
   }
 
   const isAuth = () => userData != null
