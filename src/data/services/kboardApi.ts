@@ -3,7 +3,8 @@ import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 export const KBoardApi = () => {
   const { getItem } = useLocalStorage()
-  const user = JSON.parse(getItem(process.env.REACT_APP_STORAGE_KEY ?? ''))
+
+  const user = getItem(process.env.REACT_APP_STORAGE_KEY ?? '') ?? null
 
   const instance = Axios.create({
     baseURL: process.env.REACT_APP_API_URL ?? 'http://localhost:8080',

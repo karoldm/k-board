@@ -6,7 +6,7 @@ import { BorderBackground, ContainerForm, Wrapper } from './style'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { authService } from '../../../data/services/auth'
+import { useRegister } from '../../../data/repositories/userRepository'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 import { Column } from '../../components/Layouts/Column'
@@ -32,10 +32,11 @@ export const Register = () => {
   const [file, setFile] = useState<File | undefined>()
 
   const navigate = useNavigate()
+  const { mutateAsync } = useRegister()
 
   const handleRegister = async (data: FormData) => {
     try {
-      await authService().register({ ...data, photo: file })
+      await mutateAsync({ ...data, photo: file })
       showToast('Conta criada com sucesso!', 'success')
       reset()
       navigate('/login')

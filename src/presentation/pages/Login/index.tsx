@@ -5,6 +5,7 @@ import { BorderBackground, ContainerForm, Wrapper } from './style'
 
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useLogin } from '../../../data/repositories/userRepository'
 import { useUser } from '../../../hooks/useUser'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
@@ -26,15 +27,18 @@ export const Login = () => {
     resolver: zodResolver(loginSchema),
   })
 
-  const { login } = useUser()
+  const { mutateAsync, isPending } = useLogin()
   const navigate = useNavigate()
+  const { setUserData } = useUser()
 
   const handleLogin = async (data: FormData) => {
     try {
-      await login(data)
+      const user = await mutateAsync(data)
+      setUserData(user)
       reset()
       navigate('/')
     } catch (error) {
+      console.log(error)
       const errorData = (error as AxiosError)?.response?.data as {
         message: string
         status: string
@@ -42,7 +46,7 @@ export const Login = () => {
 
       showToast(
         'Erro ao acessar o sistema: ' +
-          (errorData.message || 'Erro desconhecido'),
+          (errorData?.message || 'Erro desconhecido'),
         'error'
       )
     }
@@ -78,7 +82,7 @@ export const Login = () => {
               type='password'
               placeholder='Senha'
             />
-            <Button type='submit'>
+            <Button loading={isPending} type='submit'>
               <p>Entrar</p>
             </Button>
           </Column>
