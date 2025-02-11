@@ -1,24 +1,35 @@
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { LoginPayload, RegisterPayload } from '../interfaces/auth'
+import { User } from '../interfaces/user'
+import { authService } from '../services/authService'
 
-//const apiInstance = kboardApi("/users");
+export const useLogin = () => {
+  return useMutation({
+    mutationFn: (payload: LoginPayload) => authService().login(payload),
+    onError: (error: AxiosError) => {
+      throw error
+    },
+    onSuccess: (data) => {
+      const userData = data['user']
+      const user: User = {
+        id: userData['id'],
+        name: userData['name'],
+        email: userData['email'],
+        token: data['token'],
+        createdAt: userData['createdAt'],
+        photoUrl: userData['photoUrl'],
+      }
+      return user
+    },
+  })
+}
 
-// export const registerUser: (user: User) => Promise<User> = 
-//   async (user: User) => {
-//   try {
-//     const response = await apiInstance.post("/", user);
-
-//     return JSON.parse(response.data) as User;
-//   } catch(error) {
-//     throw new Error("Error registering user: " + error?.toString());
-//   }
-// }
-
-// export const getUserData: () => Promise<User> = 
-//   async () => {
-//   try {
-//     const response = await apiInstance.get("/");
-
-//     return JSON.parse(response.data) as User;
-//   } catch(error) {
-//     throw new Error("Error getting user data: " + error?.toString());
-//   }
-// }
+export const useRegister = () => {
+  return useMutation({
+    mutationFn: (payload: RegisterPayload) => authService().register(payload),
+    onError: (error: AxiosError) => {
+      throw error
+    },
+  })
+}
