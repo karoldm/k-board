@@ -13,7 +13,7 @@ type UserContextType = {
   isAuth: () => boolean
 }
 
-const KEY = 'KBOARD@USER'
+const KEY = process.env.REACT_APP_STORAGE_KEY ?? ''
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const [userData, setUserData] = useState<User | undefined>()
