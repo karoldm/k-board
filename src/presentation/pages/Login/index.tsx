@@ -1,17 +1,21 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 
-import { ContainerForm, Wrapper, BorderBackground } from './style';
+import { BorderBackground, ContainerForm, Wrapper } from './style'
 
-import { loginSchema } from '../../schemas/login.schema';
-import { Input } from '../../components/Input';
-import { Button } from '../../components/Button';
-import { Column } from '../../components/Layouts/Column';
+import { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { useUser } from '../../../hooks/useUser'
+import { Button } from '../../components/Button'
+import { Input } from '../../components/Input'
+import { Column } from '../../components/Layouts/Column'
+import { loginSchema } from '../../schemas/login.schema'
+import { showToast } from '../../utils/showToast'
 
 type FormData = {
-  email: string;
-  password: string;
-};
+  email: string
+  password: string
+}
 export const Login = () => {
   const {
     register,
@@ -20,11 +24,28 @@ export const Login = () => {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(loginSchema),
-  });
+  })
+
+  const { login } = useUser()
+  const navigate = useNavigate()
 
   const handleLogin = async (data: FormData) => {
-    console.log(data);
-    reset();
+    try {
+      await login(data)
+      reset()
+      navigate('/')
+    } catch (error) {
+      const errorData = (error as AxiosError)?.response?.data as {
+        message: string
+        status: string
+      }
+
+      showToast(
+        'Erro ao acessar o sistema: ' +
+          (errorData.message || 'Erro desconhecido'),
+        'error'
+      )
+    }
   }
 
   return (
@@ -32,18 +53,21 @@ export const Login = () => {
       <BorderBackground>
         <ContainerForm>
           <span>
-            Organize seus projetos usando quadros Kanban. <br/><br/> 
-            Adicione nos seus projetos os membros que desejar de forma simples e rápida. <br/><br/>
+            Organize seus projetos usando quadros Kanban. <br />
+            <br />
+            Adicione nos seus projetos os membros que desejar de forma simples e
+            rápida. <br />
+            <br />
             Acompanhe seu progresso e tenha acesso a <i>insights</i> valiosos.
           </span>
-          
+
           <Column
-            as="form"
+            as='form'
             onSubmit={handleSubmit((data) => handleLogin(data))}
-            gap="16px"
+            gap='16px'
             fullWidth
           >
-           <Input
+            <Input
               error={errors.email?.message?.toString()}
               {...register('email')}
               placeholder='Email'
@@ -51,17 +75,17 @@ export const Login = () => {
             <Input
               error={errors.password?.message?.toString()}
               {...register('password')}
-              type="password"
+              type='password'
               placeholder='Senha'
             />
-            <Button type="submit">
+            <Button type='submit'>
               <p>Entrar</p>
             </Button>
           </Column>
 
-          <a href="/register">Registrar-se</a>
+          <a href='/register'>Registrar-se</a>
         </ContainerForm>
       </BorderBackground>
-    </Wrapper >
-  );
+    </Wrapper>
+  )
 }

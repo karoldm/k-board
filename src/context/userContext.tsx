@@ -1,53 +1,49 @@
-import { createContext, PropsWithChildren, useEffect, useState } from 'react';
-import { User } from '../data/interfaces/user';
-import { logoutService } from '../data/services/auth';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { createContext, PropsWithChildren, useEffect, useState } from 'react'
+import { LoginPayload } from '../data/interfaces/auth'
+import { User } from '../data/interfaces/user'
+import { authService } from '../data/services/auth'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 
-export const UserContext = createContext({} as UserContextType);
+export const UserContext = createContext({} as UserContextType)
 
 type UserContextType = {
-  userData: User | undefined,
-  login: (userData: User) => void,
-  logout: () => void,
-  isAuth: () => boolean,
+  userData: User | undefined
+  login: (payload: LoginPayload) => Promise<void>
+  logout: () => void
+  isAuth: () => boolean
 }
 
-const TOKEN = "KBOARD@USER";
+const KEY = 'KBOARD@USER'
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
-  const [userData, setUserData] = useState<User>();
-  const { saveItem, getItem, removeItem } = useLocalStorage();
+  const [userData, setUserData] = useState<User | undefined>()
+  const { saveItem, getItem, removeItem } = useLocalStorage()
 
   useEffect(() => {
     if (userData) {
-      saveItem(TOKEN, userData);
+      saveItem(KEY, userData)
     }
-  }, [userData]);
+  }, [userData])
 
   useEffect(() => {
-    const storageUser: User = getItem(TOKEN);
-    setUserData(storageUser);
-  }, []);
+    const storageUser: User = getItem(KEY)
+    setUserData(storageUser)
+  }, [])
 
   const logout = () => {
-    removeItem(TOKEN);
-    logoutService();
+    removeItem(KEY)
   }
 
-  const login = (data: User) => {
-    //const userData = loginService();
-    setUserData(data);
+  const login = async (payload: LoginPayload) => {
+    const userData = await authService().login(payload)
+    setUserData(userData)
   }
 
-  const isAuth = () => {
-    const result = getItem(TOKEN);
-
-    return result != null;
-  }
+  const isAuth = () => userData != null
 
   return (
-    <UserContext.Provider value={{ userData, login, logout, isAuth }} >
+    <UserContext.Provider value={{ userData, login, logout, isAuth }}>
       {children}
     </UserContext.Provider>
-  );
+  )
 }

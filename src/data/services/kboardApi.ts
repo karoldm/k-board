@@ -1,6 +1,9 @@
+import Axios from 'axios'
 
-//import Axios from 'axios';
-
-const kboardApi = (path: String) => {
-  //return Axios(process.env.REACT_APP_API_URL);
-}
+export const KBoardApi = () =>
+  Axios.create({
+    baseURL: process.env.REACT_APP_API_URL ?? 'http://localhost:8080',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
