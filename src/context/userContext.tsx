@@ -8,7 +8,7 @@ export const UserContext = createContext({} as UserContextType)
 type UserContextType = {
   userData: User | undefined
   setUserData: React.Dispatch<React.SetStateAction<User | undefined>>
-  logout: () => void
+  clearUserData: () => void
   isAuth: () => boolean
 }
 
@@ -25,7 +25,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     }
   }, [userData])
 
-  const logout = () => {
+  const clearUserData = () => {
     removeItem(KEY)
     setUserData(undefined)
     navigate('/login')
@@ -34,7 +34,9 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const isAuth = () => userData != null
 
   return (
-    <UserContext.Provider value={{ userData, setUserData, logout, isAuth }}>
+    <UserContext.Provider
+      value={{ userData, setUserData, clearUserData, isAuth }}
+    >
       {children}
     </UserContext.Provider>
   )

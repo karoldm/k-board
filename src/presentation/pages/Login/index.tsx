@@ -5,7 +5,7 @@ import { BorderBackground, ContainerForm, Wrapper } from './style'
 
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { useLogin } from '../../../data/repositories/userRepository'
+import { useUserRepository } from '../../../data/repositories/userRepository'
 import { useUser } from '../../../hooks/useUser'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
@@ -27,13 +27,13 @@ export const Login = () => {
     resolver: zodResolver(loginSchema),
   })
 
-  const mutation = useLogin()
+  const { loginMutation } = useUserRepository()
   const navigate = useNavigate()
   const { setUserData } = useUser()
 
   const handleLogin = async (data: FormData) => {
     try {
-      const user = await mutation.mutateAsync(data)
+      const user = await loginMutation.mutateAsync(data)
       setUserData(user)
       reset()
       navigate('/')
@@ -81,7 +81,7 @@ export const Login = () => {
               type='password'
               placeholder='Senha'
             />
-            <Button loading={mutation.isPending} type='submit'>
+            <Button loading={loginMutation.isPending} type='submit'>
               <p>Entrar</p>
             </Button>
           </Column>

@@ -1,13 +1,6 @@
 import Axios from 'axios'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
-import { useUser } from '../../hooks/useUser'
 
 export const KBoardApi = () => {
-  const { getItem } = useLocalStorage()
-  const { logout } = useUser()
-
-  const user = getItem(process.env.REACT_APP_STORAGE_KEY ?? '') ?? null
-
   const instance = Axios.create({
     baseURL: process.env.REACT_APP_API_URL ?? 'http://localhost:8080',
     headers: {
@@ -16,6 +9,9 @@ export const KBoardApi = () => {
   })
 
   instance.interceptors.request.use((config) => {
+    const user = JSON.parse(
+      localStorage.getItem(process.env.REACT_APP_STORAGE_KEY ?? '') ?? `null`
+    )
     if (user?.token) {
       config.headers.Authorization = `Bearer ${user.token}`
     }
@@ -31,8 +27,8 @@ export const KBoardApi = () => {
         const { status } = error.response
 
         if (status === 401 || status === 403) {
-          console.log('Unauthorized or Forbidden, redirecting to login...')
-          logout()
+          localStorage.removeItem(process.env.REACT_APP_STORAGE_KEY ?? '')
+          window.location.pathname = '/login'
         }
       }
 

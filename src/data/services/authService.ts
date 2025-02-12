@@ -1,17 +1,18 @@
 import { LoginPayload, RegisterPayload } from '../interfaces/auth'
 import { KBoardApi } from './kboardApi'
 
-export const authService = () => {
-  const login = async (payload: LoginPayload) => {
+class AuthService {
+  async login(payload: LoginPayload) {
     try {
       const result = await KBoardApi().post('/auth/login', payload)
       return result.data
     } catch (error) {
+      console.error('Login API error:', error)
       throw error
     }
   }
 
-  const register = async (payload: RegisterPayload) => {
+  async register(payload: RegisterPayload) {
     try {
       const formData = new FormData()
       formData.append('email', payload.email)
@@ -22,19 +23,15 @@ export const authService = () => {
       }
 
       const result = await KBoardApi().post('/auth/register', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
 
       return result.data
     } catch (error) {
+      console.error('Register API error:', error)
       throw error
     }
   }
-
-  return {
-    login,
-    register,
-  }
 }
+
+export const authService = new AuthService()
