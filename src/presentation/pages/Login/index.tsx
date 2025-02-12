@@ -27,13 +27,13 @@ export const Login = () => {
     resolver: zodResolver(loginSchema),
   })
 
-  const { mutateAsync, isPending } = useLogin()
+  const mutation = useLogin()
   const navigate = useNavigate()
   const { setUserData } = useUser()
 
   const handleLogin = async (data: FormData) => {
     try {
-      const user = await mutateAsync(data)
+      const user = await mutation.mutateAsync(data)
       setUserData(user)
       reset()
       navigate('/')
@@ -45,8 +45,7 @@ export const Login = () => {
       }
 
       showToast(
-        'Erro ao acessar o sistema: ' +
-          (errorData?.message || 'Erro desconhecido'),
+        'Erro ao acessar o app: ' + (errorData?.message || 'Erro desconhecido'),
         'error'
       )
     }
@@ -82,7 +81,7 @@ export const Login = () => {
               type='password'
               placeholder='Senha'
             />
-            <Button loading={isPending} type='submit'>
+            <Button loading={mutation.isPending} type='submit'>
               <p>Entrar</p>
             </Button>
           </Column>

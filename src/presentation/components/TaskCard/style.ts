@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-export const TaskContainer = styled.div<{color: String}>`
+export const TaskContainer = styled.div<{ color: string }>`
   width: 100%;
   height: auto;
   background: var(--background);
   border: 1px solid var(--primary);
-  border-top: 6px solid ${props => props.color};
+  border-top: 6px solid ${(props) => props.color};
   border-radius: 8px;
   padding: 4px;
   gap: 8px;
@@ -30,4 +30,4 @@ export const TaskContainer = styled.div<{color: String}>`
     font-size: 14px;
     color: var(--gray-light);
   }
-`;
+`
