@@ -1,8 +1,3 @@
-export interface User {
-  name: string
-  photoUrl: string
-  createdAt: Date
-  email: string
-  id: string
-  token: string
-}
+import { UserAuth } from './userAuth'
+
+export type User = Omit<UserAuth, 'token'>

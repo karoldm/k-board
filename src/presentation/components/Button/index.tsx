@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef, PropsWithChildren } from 'react'
-import { Spinner } from 'react-bootstrap'
+import { Loading } from '../Loading'
 
 import { IconButton, PrimaryButton, SecondaryButton } from './style'
 
@@ -18,11 +18,7 @@ export const Button = ({
   loading,
   ...props
 }: PropsWithChildren<Props>) => {
-  const child = loading ? (
-    <Spinner color='white' animation='border' role='status' />
-  ) : (
-    children
-  )
+  const child = loading ? <Loading /> : children
 
   if (variant == 'secondary') {
     return (

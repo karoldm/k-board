@@ -1,24 +1,25 @@
+import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
+import { FaPlus, FaSearch } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 
+import { Project } from '../../../data/interfaces/project'
+import { useProjectRespository } from '../../../data/repositories/projectRepository'
+import { useUser } from '../../../hooks/useUser'
+import { Avatar } from '../../components/Avatar'
 import { Button } from '../../components/Button'
 import { Divider } from '../../components/Divider'
 import { Input } from '../../components/Input'
-
-import { useUser } from '../../../hooks/useUser'
-
-import { FaPlus, FaSearch } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
-import { Project } from '../../../data/interfaces/project'
-import { projectMock } from '../../../data/mocks/projectMock'
-import { Avatar } from '../../components/Avatar'
 import { Column } from '../../components/Layouts/Column'
 import { Grid } from '../../components/Layouts/Grid'
 import { Row } from '../../components/Layouts/Row'
+import { Loading } from '../../components/Loading'
 import { CustomModal } from '../../components/Modal'
 import { ConfirmModal } from '../../components/Modal/ConfirmModal'
 import { NewProjectModal } from '../../components/Modal/NewProjectModal'
 import { PopupMenu } from '../../components/PopMenu'
 import { ProjectCard } from '../../components/ProjectCard'
+import { showToast } from '../../utils/showToast'
 import { Container, Nav, Wrapper } from './style'
 
 export const Home = () => {
@@ -33,9 +34,34 @@ export const Home = () => {
   const [deleteProjectModal, setDeleteProjectModal] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
+  const { getProjectsOwnerMutation } = useProjectRespository()
+
+  const handleError = (error: any) => {
+    console.log(error)
+    const errorData = (error as AxiosError)?.response?.data as {
+      message: string
+      status: string
+    }
+
+    showToast(
+      'Erro ao carregar projetos: ' +
+        (errorData?.message || 'Erro desconhecido'),
+      'error'
+    )
+  }
+
+  const fetchProjects = async () => {
+    try {
+      const projects = await getProjectsOwnerMutation.mutateAsync()
+      setMyProjects(projects)
+    } catch (error) {
+      handleError(error)
+    }
+  }
+
   useEffect(() => {
-    setMyProjects([projectMock, projectMock, projectMock])
-    setProjectsMembers([projectMock, projectMock])
+    fetchProjects()
+    console.log(userData)
   }, [])
 
   const onEditProject = (project: Project) => {
@@ -130,24 +156,32 @@ export const Home = () => {
       </Nav>
 
       <Grid columns='1fr 1fr' rows='auto'>
-        <Container>
-          <Column justifyContent='start' alignItems='start' gap='24px'>
-            <Row justifyContent='space-between' fullWidth>
-              <h3 className='text'>Meus Projetos</h3>
-              <p className='text'>{myProjects.length}</p>
-            </Row>
-            <Grid style={{ height: 'auto' }} columns={'1fr 1fr'} rows={'auto'}>
-              {myProjects.map((project) => (
-                <ProjectCard
-                  onEdit={() => onEditProject(project)}
-                  onDelete={() => onDeleteProject(project)}
-                  key={project.id}
-                  project={project}
-                />
-              ))}
-            </Grid>
-          </Column>
-        </Container>
+        {getProjectsOwnerMutation.isPending ? (
+          <Loading color='#5677d9' />
+        ) : (
+          <Container>
+            <Column justifyContent='start' alignItems='start' gap='24px'>
+              <Row justifyContent='space-between' fullWidth>
+                <h3 className='text'>Meus Projetos</h3>
+                <p className='text'>{myProjects.length}</p>
+              </Row>
+              <Grid
+                style={{ height: 'auto' }}
+                columns={'1fr 1fr'}
+                rows={'auto'}
+              >
+                {myProjects.map((project) => (
+                  <ProjectCard
+                    onEdit={() => onEditProject(project)}
+                    onDelete={() => onDeleteProject(project)}
+                    key={project.id}
+                    project={project}
+                  />
+                ))}
+              </Grid>
+            </Column>
+          </Container>
+        )}
 
         <Container>
           <Column justifyContent='start' alignItems='start' gap='24px'>

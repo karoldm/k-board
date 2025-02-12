@@ -1,24 +1,16 @@
+import { useMutation } from '@tanstack/react-query'
+import { projectMapper } from '../mappers/projectMapper'
+import { projectService } from '../services/projectService'
 
-//const apiInstance = kboardApi("/projects");
+export const useProjectRespository = () => {
+  const getProjectsOwnerMutation = useMutation({
+    mutationFn: async () => {
+      const data = await projectService.getProjectsOwner()
+      return data ? data.map((data: any) => projectMapper(data)) : []
+    },
+  })
 
-// export const createProject: (project: Project) => Promise<Project> = 
-//   async (project: Project) => {
-//   try {
-//     const response = await apiInstance.post("/", project);
-
-//     return JSON.parse(response.data) as Project;
-//   } catch(error) {
-//     throw new Error("Error creating project: " + error?.toString());
-//   }
-// }
-
-// export const getProjects: () => Promise<Project[]> = 
-//   async () => {
-//   try {
-//     const response = await apiInstance.get("/");
-
-//     return JSON.parse(response.data) as Project[];
-//   } catch(error) {
-//     throw new Error("Error getting project: " + error?.toString());
-//   }
-// }
+  return {
+    getProjectsOwnerMutation,
+  }
+}

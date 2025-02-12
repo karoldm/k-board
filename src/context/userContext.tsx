@@ -1,13 +1,13 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User } from '../data/interfaces/user'
+import { UserAuth } from '../data/interfaces/userAuth'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 export const UserContext = createContext({} as UserContextType)
 
 type UserContextType = {
-  userData: User | undefined
-  setUserData: React.Dispatch<React.SetStateAction<User | undefined>>
+  userData: UserAuth | undefined
+  setUserData: React.Dispatch<React.SetStateAction<UserAuth | undefined>>
   clearUserData: () => void
   isAuth: () => boolean
 }
@@ -16,7 +16,7 @@ const KEY = process.env.REACT_APP_STORAGE_KEY ?? ''
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const { saveItem, getItem, removeItem } = useLocalStorage()
-  const [userData, setUserData] = useState<User | undefined>(getItem(KEY))
+  const [userData, setUserData] = useState<UserAuth | undefined>(getItem(KEY))
   const navigate = useNavigate()
 
   useEffect(() => {
