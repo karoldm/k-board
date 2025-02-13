@@ -1,5 +1,11 @@
-import { Spinner } from 'react-bootstrap'
+import { Spinner, SpinnerProps } from 'react-bootstrap'
 
-export const Loading = ({ color = 'white' }: { color?: string }) => {
-  return <Spinner color={color} animation='border' role='status' />
+export const Loading = ({
+  variant = 'light',
+}: {
+  variant?: SpinnerProps['variant']
+}) => {
+  return (
+    <Spinner size='sm' variant={variant} animation='border' role='status' />
+  )
 }

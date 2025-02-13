@@ -1,4 +1,4 @@
- import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
   html, body, #root, .app {
@@ -36,6 +36,27 @@ export const GlobalStyle = createGlobalStyle`
     font-style: normal;
   }
 
+  /* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-light);
+}
+
   :root {
     --blue-primary: #5677d9;
     --blue-dark: #524ff5;
@@ -51,4 +72,4 @@ export const GlobalStyle = createGlobalStyle`
     --yellow: #fff47a;
     --linear-gradient: linear-gradient(36deg, red, pink, blue);
   }
-`;
+`

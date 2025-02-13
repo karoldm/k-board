@@ -151,7 +151,7 @@ export const Home = () => {
 
       <Grid columns='1fr 1fr' rows='auto'>
         {getProjectsOwnerMutation.isPending ? (
-          <Loading color='#5677d9' />
+          <Loading variant='primary' />
         ) : (
           <Container>
             <Column justifyContent='start' alignItems='start' gap='24px'>
