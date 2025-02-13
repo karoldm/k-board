@@ -1,27 +1,26 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldValues, useForm } from 'react-hook-form'
-import { newProjectSchema } from '../../../schemas/project.schema'
+import { enterProjectSchema } from '../../../schemas/project.schema'
 import { Button } from '../../Button'
 import { Input } from '../../Input'
 import { Column } from '../../Layouts/Column'
 
 type Props = {
-  initialValue?: string
-  handleConfirm: (title: string) => void
+  handleConfirm: (id: string) => void
 }
 
-export const NewProjectModal = ({ handleConfirm, initialValue }: Props) => {
+export const EnterProjectModal = ({ handleConfirm }: Props) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(newProjectSchema),
+    resolver: zodResolver(enterProjectSchema),
   })
 
   const handleSave = async (data: FieldValues) => {
-    handleConfirm(data.title)
+    handleConfirm(data.id)
     reset()
   }
 
@@ -32,13 +31,12 @@ export const NewProjectModal = ({ handleConfirm, initialValue }: Props) => {
       gap='8px'
     >
       <Input
-        defaultValue={initialValue}
-        placeholder='Título'
-        error={errors.title?.message?.toString()}
-        {...register('title')}
+        placeholder='ID do Projeto'
+        error={errors.id?.message?.toString()}
+        {...register('id')}
       />
       <Button type='submit'>
-        <p>Salvar</p>
+        <p>Participar</p>
       </Button>
     </Column>
   )

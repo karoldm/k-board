@@ -6,7 +6,7 @@ import { projectService } from '../services/projectService'
 export const useProjectRespository = () => {
   const queryClient = useQueryClient()
 
-  const getProjectsOwnerMutation = useQuery<Project[]>({
+  const getProjectsOwnerQuery = useQuery<Project[]>({
     queryKey: ['getProjectsOwner'],
     queryFn: async () => {
       const data = await projectService.getProjectsOwner()
@@ -14,7 +14,7 @@ export const useProjectRespository = () => {
     },
   })
 
-  const getProjectsParticipationMutation = useQuery<Project[]>({
+  const getProjectsParticipationQuery = useQuery<Project[]>({
     queryKey: ['getProjectsParticipation'],
     queryFn: async () => {
       const data = await projectService.getProjectsParticipation()
@@ -22,21 +22,34 @@ export const useProjectRespository = () => {
     },
   })
 
-  const createProject = useMutation({
+  const createProjectMutation = useMutation({
     mutationFn: async (title: string) => {
       const data = await projectService.createProject(title)
       return projectMapper(data)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['getProjectsOwner'],
+    onSuccess: (newProject) => {
+      queryClient.setQueryData(['getProjectsOwner'], (oldData: any) => {
+        return oldData ? [...oldData, newProject] : [newProject]
+      })
+    },
+  })
+
+  const enterProjectMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const data = await projectService.enterProject(id)
+      return projectMapper(data)
+    },
+    onSuccess: (newProject) => {
+      queryClient.setQueryData(['getProjectsParticipation'], (oldData: any) => {
+        return oldData ? [...oldData, newProject] : [newProject]
       })
     },
   })
 
   return {
-    getProjectsOwnerMutation,
-    getProjectsParticipationMutation,
-    createProject,
+    createProjectMutation,
+    enterProjectMutation,
+    getProjectsOwnerQuery,
+    getProjectsParticipationQuery,
   }
 }

@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 import { useState } from 'react'
-import { FaPlus, FaSearch } from 'react-icons/fa'
+import { FaPlus, FaSearch, FaUserPlus } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import { Project } from '../../../data/interfaces/project'
@@ -16,6 +16,7 @@ import { Row } from '../../components/Layouts/Row'
 import { Loading } from '../../components/Loading'
 import { CustomModal } from '../../components/Modal'
 import { ConfirmModal } from '../../components/Modal/ConfirmModal'
+import { EnterProjectModal } from '../../components/Modal/EnterProjectModal'
 import { NewProjectModal } from '../../components/Modal/NewProjectModal'
 import { PopupMenu } from '../../components/PopMenu'
 import { ProjectCard } from '../../components/ProjectCard'
@@ -29,17 +30,22 @@ export const Home = () => {
   const [searchText, setSearchText] = useState('')
 
   const [newProjectModal, setNewProjectModal] = useState(false)
+  const [enterProjectModal, setEnterProjectModal] = useState(false)
   const [deleteProjectModal, setDeleteProjectModal] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   const {
-    getProjectsOwnerMutation,
-    createProject,
-    getProjectsParticipationMutation,
+    getProjectsOwnerQuery,
+    createProjectMutation,
+    getProjectsParticipationQuery,
+    enterProjectMutation,
   } = useProjectRespository()
 
-  const projects = getProjectsOwnerMutation.data
-  const projectsParticipation = getProjectsParticipationMutation.data
+  const { data: projects, isLoading: projectsLoading } = getProjectsOwnerQuery
+  const {
+    data: projectsParticipation,
+    isLoading: projectsParticipationLoading,
+  } = getProjectsParticipationQuery
 
   const handleError = (error: any) => {
     console.error(error)
@@ -67,12 +73,23 @@ export const Home = () => {
 
   const saveProject = async (title: string) => {
     try {
-      await createProject.mutateAsync(title)
+      await createProjectMutation.mutateAsync(title)
       showToast('Projeto criado com sucesso!', 'success')
     } catch (error) {
       handleError(error)
     } finally {
       setNewProjectModal(false)
+    }
+  }
+
+  const enterProject = async (id: string) => {
+    try {
+      await enterProjectMutation.mutateAsync(id)
+      showToast('Participação adicionada com sucesso!', 'success')
+    } catch (error) {
+      handleError(error)
+    } finally {
+      setEnterProjectModal(false)
     }
   }
 
@@ -92,6 +109,17 @@ export const Home = () => {
           initialValue={selectedProject?.title ?? ''}
           handleConfirm={saveProject}
         />
+      </CustomModal>
+
+      <CustomModal
+        title={'Participar de um Projeto'}
+        visible={enterProjectModal}
+        onHide={() => {
+          setEnterProjectModal(false)
+          window.onscroll = function () {}
+        }}
+      >
+        <EnterProjectModal handleConfirm={enterProject} />
       </CustomModal>
 
       <CustomModal
@@ -123,7 +151,7 @@ export const Home = () => {
             <FaSearch color='white' />
           </Button>
         </Row>
-        <Row style={{ height: '40px' }} justifyContent='end'>
+        <Row gap='8px' style={{ height: '40px' }} justifyContent='end'>
           <Button
             width={'40px'}
             onClick={() => {
@@ -132,6 +160,18 @@ export const Home = () => {
           >
             <Row>
               <FaPlus color='white' />
+            </Row>
+          </Button>
+
+          <Button
+            variant='secondary'
+            width={'40px'}
+            onClick={() => {
+              setEnterProjectModal(true)
+            }}
+          >
+            <Row>
+              <FaUserPlus color='gray' />
             </Row>
           </Button>
           <Divider type='vertical' />
@@ -156,7 +196,7 @@ export const Home = () => {
       </Nav>
 
       <Grid columns='1fr 1fr' rows='auto'>
-        {getProjectsOwnerMutation.isPending ? (
+        {projectsLoading ? (
           <Loading variant='primary' />
         ) : (
           <Container>
@@ -170,7 +210,7 @@ export const Home = () => {
                 columns={'1fr 1fr'}
                 rows={'auto'}
               >
-                {projects?.map((project) => (
+                {projects?.map((project: Project) => (
                   <ProjectCard
                     onEdit={() => onEditProject(project)}
                     onDelete={() => onDeleteProject(project)}
@@ -183,7 +223,7 @@ export const Home = () => {
           </Container>
         )}
 
-        {getProjectsParticipationMutation.isPending ? (
+        {projectsParticipationLoading ? (
           <Loading variant='primary' />
         ) : (
           <Container>

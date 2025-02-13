@@ -30,6 +30,18 @@ class ProjectService {
       throw error
     }
   }
+
+  async enterProject(id: string) {
+    try {
+      const result = await KBoardApi().post('/project/member', {
+        projectId: id,
+      })
+      return result.data
+    } catch (error) {
+      console.error('getProjectsOwner API error:', error)
+      throw error
+    }
+  }
 }
 
 export const projectService = new ProjectService()
