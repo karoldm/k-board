@@ -6,26 +6,30 @@ import { projectService } from '../services/projectService'
 
 export const useProjectRespository = (
   projectsPage?: number,
-  projectsParticipationPage?: number
+  projectsParticipationPage?: number,
+  filter?: string
 ) => {
   const queryClient = useQueryClient()
 
   const getProjectsOwnerQuery = useQuery<GetResponseAPI<Project[]>>({
-    queryKey: ['getProjectsOwner', projectsPage],
+    queryKey: ['getProjectsOwner', projectsPage, filter],
     queryFn: async () => {
-      const data = await projectService.getProjectsOwner(projectsPage)
+      const data = await projectService.getProjectsOwner(projectsPage, filter)
       return data
     },
+    enabled: !!filter || filter === '', // Avoids refetching on every render
   })
 
   const getProjectsParticipationQuery = useQuery<GetResponseAPI<Project[]>>({
-    queryKey: ['getProjectsParticipation', projectsParticipationPage],
+    queryKey: ['getProjectsParticipation', projectsParticipationPage, filter],
     queryFn: async () => {
       const data = await projectService.getProjectsParticipation(
-        projectsParticipationPage
+        projectsParticipationPage,
+        filter
       )
       return data
     },
+    enabled: !!filter || filter === '', // Avoids refetching on every render
   })
 
   const createProjectMutation = useMutation({

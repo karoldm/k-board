@@ -17,14 +17,13 @@ import { showToast } from '../../../../utils/showToast'
 import { Nav } from './style'
 
 type Props = {
-  onSearchProject: (text: string) => void
+  text: string
+  setText: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const NavBar = ({ onSearchProject }: Props) => {
+export const NavBar = ({ setText, text }: Props) => {
   const { userData, clearUserData } = useUser()
   const navigate = useNavigate()
-
-  const [searchText, setSearchText] = useState('')
 
   const [projectModal, setProjectModal] = useState(false)
   const [enterProjectModal, setEnterProjectModal] = useState(false)
@@ -78,20 +77,13 @@ export const NavBar = ({ onSearchProject }: Props) => {
       </CustomModal>
       <Nav>
         <Row fullWidth gap='8px'>
+          <FaSearch color='gray' />
           <Input
-            value={searchText}
-            setValue={setSearchText}
+            value={text}
+            setValue={setText}
             id='searchText'
             placeholder='Procure por um projeto'
           />
-          <Button
-            width={'40px'}
-            onClick={() => {
-              onSearchProject(searchText)
-            }}
-          >
-            <FaSearch color='white' />
-          </Button>
         </Row>
         <Row gap='8px' style={{ height: '40px' }} justifyContent='end'>
           <Button
