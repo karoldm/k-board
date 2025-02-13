@@ -11,6 +11,6 @@ export const Nav = styled.nav`
   padding: 8px 16px;
 
   @media (max-width: 768px) {
-    gap: 16%;
+    gap: 8px;
   }
 `
