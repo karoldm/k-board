@@ -22,7 +22,6 @@ export const NewProjectModal = ({ handleConfirm, initialValue }: Props) => {
 
   const handleSave = async (data: FieldValues) => {
     handleConfirm(data.title)
-    console.log(data)
     reset()
   }
 

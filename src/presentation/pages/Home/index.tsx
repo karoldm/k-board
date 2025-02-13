@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FaPlus, FaSearch } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
@@ -23,8 +23,6 @@ import { showToast } from '../../utils/showToast'
 import { Container, Nav, Wrapper } from './style'
 
 export const Home = () => {
-  const [myProjects, setMyProjects] = useState<Project[]>([])
-  const [projectsMember, setProjectsMembers] = useState<Project[]>([])
   const { userData, clearUserData } = useUser()
   const navigate = useNavigate()
 
@@ -34,35 +32,22 @@ export const Home = () => {
   const [deleteProjectModal, setDeleteProjectModal] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
-  const { getProjectsOwnerMutation } = useProjectRespository()
+  const { getProjectsOwnerMutation, createProject } = useProjectRespository()
+  const projects = getProjectsOwnerMutation.data
 
   const handleError = (error: any) => {
-    console.log(error)
+    console.error(error)
     const errorData = (error as AxiosError)?.response?.data as {
       message: string
       status: string
     }
 
     showToast(
-      'Erro ao carregar projetos: ' +
+      'Erro ao processar solicitação: ' +
         (errorData?.message || 'Erro desconhecido'),
       'error'
     )
   }
-
-  const fetchProjects = async () => {
-    try {
-      const projects = await getProjectsOwnerMutation.mutateAsync()
-      setMyProjects(projects)
-    } catch (error) {
-      handleError(error)
-    }
-  }
-
-  useEffect(() => {
-    fetchProjects()
-    console.log(userData)
-  }, [])
 
   const onEditProject = (project: Project) => {
     setSelectedProject(project)
@@ -74,7 +59,16 @@ export const Home = () => {
     setDeleteProjectModal(true)
   }
 
-  const saveProject = (title: string) => {}
+  const saveProject = async (title: string) => {
+    try {
+      await createProject.mutateAsync(title)
+      showToast('Projeto criado com sucesso!', 'success')
+    } catch (error) {
+      handleError(error)
+    } finally {
+      setNewProjectModal(false)
+    }
+  }
 
   const deleteProject = () => {}
 
@@ -163,14 +157,14 @@ export const Home = () => {
             <Column justifyContent='start' alignItems='start' gap='24px'>
               <Row justifyContent='space-between' fullWidth>
                 <h3 className='text'>Meus Projetos</h3>
-                <p className='text'>{myProjects.length}</p>
+                <p className='text'>{projects?.length ?? 0}</p>
               </Row>
               <Grid
                 style={{ height: 'auto' }}
                 columns={'1fr 1fr'}
                 rows={'auto'}
               >
-                {myProjects.map((project) => (
+                {projects?.map((project) => (
                   <ProjectCard
                     onEdit={() => onEditProject(project)}
                     onDelete={() => onDeleteProject(project)}
@@ -187,10 +181,10 @@ export const Home = () => {
           <Column justifyContent='start' alignItems='start' gap='24px'>
             <Row justifyContent='space-between' fullWidth>
               <h3 className='text'>Outros Projetos</h3>
-              <p className='text'>{projectsMember.length}</p>
+              <p className='text'>{0}</p>
             </Row>
             <Grid style={{ height: 'auto' }} columns={'1fr 1fr'} rows={'auto'}>
-              {projectsMember.map((project) => (
+              {[].map((project: Project) => (
                 <ProjectCard
                   onEdit={() => onEditProject(project)}
                   onDelete={() => onDeleteProject(project)}
