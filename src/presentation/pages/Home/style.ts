@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Nav = styled.nav`
   width: 100%;
@@ -13,7 +13,7 @@ export const Nav = styled.nav`
   @media (max-width: 768px) {
     gap: 16%;
   }
-`;
+`
 
 export const Wrapper = styled.div`
   height: 100vh;
@@ -23,13 +23,17 @@ export const Wrapper = styled.div`
   align-items: start;
   flex-direction: column;
   background: var(--background);
-`;
-
+`
 
 export const Container = styled.div`
   background: var(--white);
   padding: 32px;
   border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 
   .text {
     color: var(--black);
@@ -37,4 +41,4 @@ export const Container = styled.div`
     font-size: 16px;
     font-weight: bold;
   }
-`;
+`

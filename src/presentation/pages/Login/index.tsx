@@ -34,7 +34,6 @@ export const Login = () => {
   const handleLogin = async (data: FormData) => {
     try {
       const user = await loginMutation.mutateAsync(data)
-      console.log('user', user)
       setUserData(user)
       reset()
       navigate('/')

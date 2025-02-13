@@ -1,24 +1,28 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Project } from '../interfaces/project'
 import { projectMapper } from '../mappers/projectMapper'
 import { projectService } from '../services/projectService'
 
-export const useProjectRespository = () => {
+export const useProjectRespository = (
+  projectsPage: number,
+  projectsParticipationPage: number
+) => {
   const queryClient = useQueryClient()
 
-  const getProjectsOwnerQuery = useQuery<Project[]>({
-    queryKey: ['getProjectsOwner'],
+  const getProjectsOwnerQuery = useQuery({
+    queryKey: ['getProjectsOwner', projectsPage],
     queryFn: async () => {
-      const data = await projectService.getProjectsOwner()
-      return data?.map((data: any) => projectMapper(data)) || []
+      const data = await projectService.getProjectsOwner(projectsPage)
+      return data
     },
   })
 
-  const getProjectsParticipationQuery = useQuery<Project[]>({
-    queryKey: ['getProjectsParticipation'],
+  const getProjectsParticipationQuery = useQuery({
+    queryKey: ['getProjectsParticipation', projectsParticipationPage],
     queryFn: async () => {
-      const data = await projectService.getProjectsParticipation()
-      return data?.map((data: any) => projectMapper(data)) || []
+      const data = await projectService.getProjectsParticipation(
+        projectsParticipationPage
+      )
+      return data
     },
   })
 
@@ -52,7 +56,9 @@ export const useProjectRespository = () => {
       return projectMapper(data)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getProjectsOwner'] })
+      queryClient.invalidateQueries({
+        queryKey: ['getProjectsOwner', projectsPage],
+      })
     },
   })
 
@@ -61,7 +67,9 @@ export const useProjectRespository = () => {
       await projectService.deleteProject(id)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getProjectsOwner'] })
+      queryClient.invalidateQueries({
+        queryKey: ['getProjectsOwner', projectsPage],
+      })
     },
   })
 

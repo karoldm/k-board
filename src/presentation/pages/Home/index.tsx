@@ -18,6 +18,7 @@ import { CustomModal } from '../../components/Modal'
 import { ConfirmModal } from '../../components/Modal/ConfirmModal'
 import { EnterProjectModal } from '../../components/Modal/EnterProjectModal'
 import { NewProjectModal } from '../../components/Modal/NewProjectModal'
+import { Pagination } from '../../components/Pagination'
 import { PopupMenu } from '../../components/PopMenu'
 import { ProjectCard } from '../../components/ProjectCard'
 import { showToast } from '../../utils/showToast'
@@ -34,6 +35,9 @@ export const Home = () => {
   const [deleteProjectModal, setDeleteProjectModal] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
+  const [projectsPage, setProjectsPage] = useState(0)
+  const [projectsParticipationPage, setProjectsParticipationPage] = useState(0)
+
   const {
     getProjectsOwnerQuery,
     createProjectMutation,
@@ -41,12 +45,17 @@ export const Home = () => {
     enterProjectMutation,
     editProjectMutation,
     deleteProjectMutation,
-  } = useProjectRespository()
+  } = useProjectRespository(projectsPage, projectsParticipationPage)
 
-  const { data: projects, isLoading: projectsLoading } = getProjectsOwnerQuery
+  const {
+    data: projects,
+    isLoading: projectsLoading,
+    isFetching: projectsFetching,
+  } = getProjectsOwnerQuery
   const {
     data: projectsParticipation,
     isLoading: projectsParticipationLoading,
+    isFetching: projectsParticipationFetching,
   } = getProjectsParticipationQuery
 
   const handleError = (error: any) => {
@@ -219,60 +228,102 @@ export const Home = () => {
       </Nav>
 
       <Grid columns='1fr 1fr' rows='auto'>
-        {projectsLoading ? (
-          <Loading variant='primary' />
-        ) : (
-          <Container>
-            <Column justifyContent='start' alignItems='start' gap='24px'>
-              <Row justifyContent='space-between' fullWidth>
-                <h3 className='text'>Meus Projetos</h3>
-                <p className='text'>{projects?.length ?? 0}</p>
-              </Row>
-              <Grid
-                style={{ height: 'auto' }}
-                columns={'1fr 1fr'}
-                rows={'auto'}
+        <Container>
+          {projectsLoading || projectsFetching ? (
+            <Loading variant='primary' />
+          ) : (
+            <Column
+              fullWidth
+              justifyContent='space-between'
+              alignItems='end'
+              gap='24px'
+            >
+              <Column
+                fullWidth
+                justifyContent='start'
+                alignItems='end'
+                gap='24px'
               >
-                {projects?.map((project: Project) => (
-                  <ProjectCard
-                    isOwner
-                    onEdit={() => onEditProject(project)}
-                    onDelete={() => onDeleteProject(project)}
-                    key={project.id}
-                    project={project}
-                  />
-                ))}
-              </Grid>
+                <Row justifyContent='space-between' fullWidth>
+                  <h3 className='text'>Meus Projetos</h3>
+                  <p className='text'>{projects?.totalElements ?? 0}</p>
+                </Row>
+                <Grid
+                  style={{ height: 'auto' }}
+                  columns={'1fr 1fr'}
+                  rows={'auto'}
+                >
+                  {projects?.content.map((project: Project) => (
+                    <ProjectCard
+                      isOwner
+                      onEdit={() => onEditProject(project)}
+                      onDelete={() => onDeleteProject(project)}
+                      key={project.id}
+                      project={project}
+                    />
+                  ))}
+                </Grid>
+              </Column>
+              <Pagination
+                current={projectsPage}
+                hasNext={!(projects?.last ?? true)}
+                onChangePage={(newpage) => {
+                  setProjectsPage(newpage)
+                }}
+                total={projects?.totalPages ?? 0}
+              />
             </Column>
-          </Container>
-        )}
+          )}
+        </Container>
 
-        {projectsParticipationLoading ? (
-          <Loading variant='primary' />
-        ) : (
-          <Container>
-            <Column justifyContent='start' alignItems='start' gap='24px'>
-              <Row justifyContent='space-between' fullWidth>
-                <h3 className='text'>Outros Projetos</h3>
-                <p className='text'>{projectsParticipation?.length ?? 0}</p>
-              </Row>
-              <Grid
-                style={{ height: 'auto' }}
-                columns={'1fr 1fr'}
-                rows={'auto'}
+        <Container>
+          {projectsParticipationLoading || projectsParticipationFetching ? (
+            <Loading variant='primary' />
+          ) : (
+            <Column
+              fullWidth
+              justifyContent='space-between'
+              alignItems='end'
+              gap='24px'
+            >
+              <Column
+                fullWidth
+                justifyContent='start'
+                alignItems='end'
+                gap='24px'
               >
-                {projectsParticipation?.map((project: Project) => (
-                  <ProjectCard
-                    onEdit={() => onEditProject(project)}
-                    onDelete={() => onDeleteProject(project)}
-                    key={project.id}
-                    project={project}
-                  />
-                ))}
-              </Grid>
+                <Row justifyContent='space-between' fullWidth>
+                  <h3 className='text'>Outros Projetos</h3>
+                  <p className='text'>
+                    {projectsParticipation?.totalElements ?? 0}
+                  </p>
+                </Row>
+                <Grid
+                  style={{ height: 'auto' }}
+                  columns={'1fr 1fr'}
+                  rows={'auto'}
+                >
+                  {projectsParticipation?.content.map((project: Project) => (
+                    <ProjectCard
+                      onEdit={() => onEditProject(project)}
+                      onDelete={() => onDeleteProject(project)}
+                      key={project.id}
+                      project={project}
+                    />
+                  ))}
+                </Grid>
+              </Column>
+              <Pagination
+                current={projectsParticipationPage}
+                hasNext={!(projectsParticipation?.last ?? true)}
+                onChangePage={(newpage) => {
+                  setProjectsParticipationPage(newpage)
+                }}
+                total={projectsParticipation?.totalPages ?? 0}
+              />
             </Column>
-          </Container>
-        )}
+          )}
+        </Container>
       </Grid>
     </Wrapper>
   )

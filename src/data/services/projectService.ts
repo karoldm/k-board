@@ -1,20 +1,38 @@
+import { GetResponseAPI } from '../interfaces/apiResponse'
+import { Project } from '../interfaces/project'
 import { KBoardApi } from './kboardApi'
 
 class ProjectService {
-  async getProjectsOwner() {
+  async getProjectsOwner(page: number): Promise<GetResponseAPI<Project[]>> {
     try {
-      const result = await KBoardApi().get('/project/owner')
-      return result.data
+      const result = await KBoardApi().get(`/project/owner?page=${page}&size=4`)
+      return {
+        content: result.data['content'] ?? [],
+        last: result.data['last'],
+        numberOfElements: result.data['numberOfElements'],
+        totalPages: result.data['totalPages'],
+        totalElements: result.data['totalElements'],
+      }
     } catch (error) {
       console.error('getProjectsOwner API error:', error)
       throw error
     }
   }
 
-  async getProjectsParticipation() {
+  async getProjectsParticipation(
+    page: number
+  ): Promise<GetResponseAPI<Project[]>> {
     try {
-      const result = await KBoardApi().get('/project/member')
-      return result.data
+      const result = await KBoardApi().get(
+        `/project/member?page=${page}&size=4`
+      )
+      return {
+        content: result.data['content'] ?? [],
+        last: result.data['last'],
+        numberOfElements: result.data['numberOfElements'],
+        totalPages: result.data['totalPages'],
+        totalElements: result.data['totalElements'],
+      }
     } catch (error) {
       console.error('getProjectsParticipation API error:', error)
       throw error
