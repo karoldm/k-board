@@ -5,6 +5,7 @@ type Props = {
   alignItems?: 'center' | 'start' | 'end'
   fullWidth?: boolean
   gap?: string
+  fullHeight?: boolean
 }
 
 export const Column = styled.div<Props>`
@@ -15,5 +16,5 @@ export const Column = styled.div<Props>`
   gap: ${(props) => props.gap ?? 0};
   justify-content: ${(props) => props.justifyContent ?? 'center'};
   align-items: ${(props) => props.alignItems ?? 'center'};
-  height: 100%;
+  height: ${(props) => (props.fullHeight ? '100%' : 'auto')};
 `

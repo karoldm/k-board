@@ -25,9 +25,11 @@ export const Home = () => {
     isFetching: isFetchingParticipation,
   } = getProjectsParticipationQuery
 
+  const onFilterProject = (text: string) => {}
+
   return (
     <Wrapper>
-      <NavBar onSearchProject={(text) => {}} />
+      <NavBar onSearchProject={(text) => onFilterProject} />
       <Grid columns='1fr 1fr' rows='auto'>
         <ProjectList
           data={projectsOwner}

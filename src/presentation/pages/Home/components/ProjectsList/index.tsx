@@ -114,6 +114,7 @@ export const ProjectList = ({
           <Loading variant='primary' />
         ) : (
           <Column
+            fullHeight
             fullWidth
             justifyContent='space-between'
             alignItems='end'
