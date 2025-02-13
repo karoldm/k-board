@@ -54,6 +54,15 @@ class ProjectService {
       throw error
     }
   }
+
+  async deleteProject(id: string) {
+    try {
+      await KBoardApi().delete(`/project/${id}`)
+    } catch (error) {
+      console.error('deleteProject API error:', error)
+      throw error
+    }
+  }
 }
 
 export const projectService = new ProjectService()

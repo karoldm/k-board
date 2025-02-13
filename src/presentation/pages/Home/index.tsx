@@ -40,6 +40,7 @@ export const Home = () => {
     getProjectsParticipationQuery,
     enterProjectMutation,
     editProjectMutation,
+    deleteProjectMutation,
   } = useProjectRespository()
 
   const { data: projects, isLoading: projectsLoading } = getProjectsOwnerQuery
@@ -103,7 +104,19 @@ export const Home = () => {
     }
   }
 
-  const deleteProject = () => {}
+  const deleteProject = async () => {
+    try {
+      if (!selectedProject) return
+
+      await deleteProjectMutation.mutateAsync(selectedProject.id!)
+      showToast('Projeto deletado com sucesso!', 'success')
+    } catch (error) {
+      handleError(error)
+    } finally {
+      setDeleteProjectModal(false)
+      setSelectedProject(null)
+    }
+  }
 
   return (
     <Wrapper>

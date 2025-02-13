@@ -56,11 +56,21 @@ export const useProjectRespository = () => {
     },
   })
 
+  const deleteProjectMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await projectService.deleteProject(id)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getProjectsOwner'] })
+    },
+  })
+
   return {
     createProjectMutation,
     enterProjectMutation,
     getProjectsOwnerQuery,
     getProjectsParticipationQuery,
     editProjectMutation,
+    deleteProjectMutation,
   }
 }
