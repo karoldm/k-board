@@ -16,7 +16,7 @@ class ProjectService {
       const result = await KBoardApi().get('/project/member')
       return result.data
     } catch (error) {
-      console.error('getProjectsOwner API error:', error)
+      console.error('getProjectsParticipation API error:', error)
       throw error
     }
   }
@@ -26,7 +26,7 @@ class ProjectService {
       const result = await KBoardApi().post('/project', { title })
       return result.data
     } catch (error) {
-      console.error('getProjectsOwner API error:', error)
+      console.error('createProject API error:', error)
       throw error
     }
   }
@@ -38,7 +38,19 @@ class ProjectService {
       })
       return result.data
     } catch (error) {
-      console.error('getProjectsOwner API error:', error)
+      console.error('enterProject API error:', error)
+      throw error
+    }
+  }
+
+  async editProject(id: string, title: string) {
+    try {
+      const result = await KBoardApi().put(`/project/${id}`, {
+        title,
+      })
+      return result.data
+    } catch (error) {
+      console.error('editProject API error:', error)
       throw error
     }
   }

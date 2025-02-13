@@ -46,10 +46,21 @@ export const useProjectRespository = () => {
     },
   })
 
+  const editProjectMutation = useMutation({
+    mutationFn: async ({ id, title }: { id: string; title: string }) => {
+      const data = await projectService.editProject(id, title)
+      return projectMapper(data)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getProjectsOwner'] })
+    },
+  })
+
   return {
     createProjectMutation,
     enterProjectMutation,
     getProjectsOwnerQuery,
     getProjectsParticipationQuery,
+    editProjectMutation,
   }
 }

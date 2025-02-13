@@ -29,7 +29,7 @@ export const Home = () => {
 
   const [searchText, setSearchText] = useState('')
 
-  const [newProjectModal, setNewProjectModal] = useState(false)
+  const [projectModal, setProjectModal] = useState(false)
   const [enterProjectModal, setEnterProjectModal] = useState(false)
   const [deleteProjectModal, setDeleteProjectModal] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -39,6 +39,7 @@ export const Home = () => {
     createProjectMutation,
     getProjectsParticipationQuery,
     enterProjectMutation,
+    editProjectMutation,
   } = useProjectRespository()
 
   const { data: projects, isLoading: projectsLoading } = getProjectsOwnerQuery
@@ -63,7 +64,7 @@ export const Home = () => {
 
   const onEditProject = (project: Project) => {
     setSelectedProject(project)
-    setNewProjectModal(true)
+    setProjectModal(true)
   }
 
   const onDeleteProject = (project: Project) => {
@@ -73,12 +74,21 @@ export const Home = () => {
 
   const saveProject = async (title: string) => {
     try {
-      await createProjectMutation.mutateAsync(title)
-      showToast('Projeto criado com sucesso!', 'success')
+      if (selectedProject) {
+        await editProjectMutation.mutateAsync({
+          id: selectedProject.id!,
+          title: title,
+        })
+        showToast('Projeto editado com sucesso!', 'success')
+      } else {
+        await createProjectMutation.mutateAsync(title)
+        showToast('Projeto criado com sucesso!', 'success')
+      }
     } catch (error) {
       handleError(error)
     } finally {
-      setNewProjectModal(false)
+      setProjectModal(false)
+      setSelectedProject(null)
     }
   }
 
@@ -99,9 +109,9 @@ export const Home = () => {
     <Wrapper>
       <CustomModal
         title={selectedProject ? 'Editar Projeto' : 'Novo Projeto'}
-        visible={newProjectModal}
+        visible={projectModal}
         onHide={() => {
-          setNewProjectModal(false)
+          setProjectModal(false)
           window.onscroll = function () {}
         }}
       >
@@ -155,7 +165,7 @@ export const Home = () => {
           <Button
             width={'40px'}
             onClick={() => {
-              setNewProjectModal(true)
+              setProjectModal(true)
             }}
           >
             <Row>
@@ -212,6 +222,7 @@ export const Home = () => {
               >
                 {projects?.map((project: Project) => (
                   <ProjectCard
+                    isOwner
                     onEdit={() => onEditProject(project)}
                     onDelete={() => onDeleteProject(project)}
                     key={project.id}
