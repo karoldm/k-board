@@ -3,9 +3,11 @@ import { Project } from '../interfaces/project'
 import { KBoardApi } from './kboardApi'
 
 class ProjectService {
-  async getProjectsOwner(page: number): Promise<GetResponseAPI<Project[]>> {
+  async getProjectsOwner(page?: number): Promise<GetResponseAPI<Project[]>> {
     try {
-      const result = await KBoardApi().get(`/project/owner?page=${page}&size=4`)
+      const result = await KBoardApi().get(
+        `/project/owner?${page ? `page=${page}&` : ''}size=4`
+      )
       return {
         content: result.data['content'] ?? [],
         last: result.data['last'],
@@ -20,11 +22,11 @@ class ProjectService {
   }
 
   async getProjectsParticipation(
-    page: number
+    page?: number
   ): Promise<GetResponseAPI<Project[]>> {
     try {
       const result = await KBoardApi().get(
-        `/project/member?page=${page}&size=4`
+        `/project/member?${page ? `page=${page}&` : ''}size=4`
       )
       return {
         content: result.data['content'] ?? [],
