@@ -18,10 +18,10 @@ import { Nav } from './style'
 
 type Props = {
   text: string
-  setText: React.Dispatch<React.SetStateAction<string>>
+  onChange: (value: string) => void
 }
 
-export const NavBar = ({ setText, text }: Props) => {
+export const NavBar = ({ onChange, text }: Props) => {
   const { userData, clearUserData } = useUser()
   const navigate = useNavigate()
 
@@ -80,7 +80,9 @@ export const NavBar = ({ setText, text }: Props) => {
           <FaSearch color='gray' />
           <Input
             value={text}
-            setValue={setText}
+            onChange={(e) => {
+              onChange(e.target.value)
+            }}
             id='searchText'
             placeholder='Procure por um projeto'
           />

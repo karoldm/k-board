@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { useProjectRespository } from '../../../data/repositories/projectRepository'
 import { Grid } from '../../components/Layouts/Grid'
+import { debounce } from '../../utils/debounce'
 import { NavBar } from './components/NavBar'
 import { ProjectList } from './components/ProjectsList'
 import { Wrapper } from './style'
@@ -10,9 +11,10 @@ export const Home = () => {
   const [pageOwner, setPageOwner] = useState(0)
   const [pageParticipation, setPageParticipation] = useState(0)
   const [searchText, setSearchText] = useState('')
+  const [filter, setFilter] = useState('')
 
   const { getProjectsOwnerQuery, getProjectsParticipationQuery } =
-    useProjectRespository(pageOwner, pageParticipation, searchText)
+    useProjectRespository(pageOwner, pageParticipation, filter)
 
   const {
     data: projectsOwner,
@@ -26,9 +28,23 @@ export const Home = () => {
     isFetching: isFetchingParticipation,
   } = getProjectsParticipationQuery
 
+  // it persists the timeout of debouncer between renders
+  const debouncedSetFilter = useMemo(
+    () =>
+      debounce({
+        fn: (value: string) => setFilter(value),
+      }),
+    []
+  )
+
+  const onFilter = (value: string) => {
+    setSearchText(value)
+    debouncedSetFilter(value)
+  }
+
   return (
     <Wrapper>
-      <NavBar text={searchText} setText={setSearchText} />
+      <NavBar text={searchText} onChange={onFilter} />
       <Grid columns='1fr 1fr' rows='auto'>
         <ProjectList
           data={projectsOwner}
