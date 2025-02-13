@@ -14,18 +14,29 @@ export const useProjectRespository = () => {
     },
   })
 
+  const getProjectsParticipationMutation = useQuery<Project[]>({
+    queryKey: ['getProjectsParticipation'],
+    queryFn: async () => {
+      const data = await projectService.getProjectsParticipation()
+      return data?.map((data: any) => projectMapper(data)) || []
+    },
+  })
+
   const createProject = useMutation({
     mutationFn: async (title: string) => {
       const data = await projectService.createProject(title)
       return projectMapper(data)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getProjectsOwner'] })
+      queryClient.invalidateQueries({
+        queryKey: ['getProjectsOwner', 'getProjectsParticipation'],
+      })
     },
   })
 
   return {
     getProjectsOwnerMutation,
+    getProjectsParticipationMutation,
     createProject,
   }
 }

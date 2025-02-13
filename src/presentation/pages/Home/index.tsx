@@ -32,8 +32,14 @@ export const Home = () => {
   const [deleteProjectModal, setDeleteProjectModal] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
-  const { getProjectsOwnerMutation, createProject } = useProjectRespository()
+  const {
+    getProjectsOwnerMutation,
+    createProject,
+    getProjectsParticipationMutation,
+  } = useProjectRespository()
+
   const projects = getProjectsOwnerMutation.data
+  const projectsParticipation = getProjectsParticipationMutation.data
 
   const handleError = (error: any) => {
     console.error(error)
@@ -177,24 +183,32 @@ export const Home = () => {
           </Container>
         )}
 
-        <Container>
-          <Column justifyContent='start' alignItems='start' gap='24px'>
-            <Row justifyContent='space-between' fullWidth>
-              <h3 className='text'>Outros Projetos</h3>
-              <p className='text'>{0}</p>
-            </Row>
-            <Grid style={{ height: 'auto' }} columns={'1fr 1fr'} rows={'auto'}>
-              {[].map((project: Project) => (
-                <ProjectCard
-                  onEdit={() => onEditProject(project)}
-                  onDelete={() => onDeleteProject(project)}
-                  key={project.id}
-                  project={project}
-                />
-              ))}
-            </Grid>
-          </Column>
-        </Container>
+        {getProjectsParticipationMutation.isPending ? (
+          <Loading variant='primary' />
+        ) : (
+          <Container>
+            <Column justifyContent='start' alignItems='start' gap='24px'>
+              <Row justifyContent='space-between' fullWidth>
+                <h3 className='text'>Outros Projetos</h3>
+                <p className='text'>{projectsParticipation?.length ?? 0}</p>
+              </Row>
+              <Grid
+                style={{ height: 'auto' }}
+                columns={'1fr 1fr'}
+                rows={'auto'}
+              >
+                {projectsParticipation?.map((project: Project) => (
+                  <ProjectCard
+                    onEdit={() => onEditProject(project)}
+                    onDelete={() => onDeleteProject(project)}
+                    key={project.id}
+                    project={project}
+                  />
+                ))}
+              </Grid>
+            </Column>
+          </Container>
+        )}
       </Grid>
     </Wrapper>
   )

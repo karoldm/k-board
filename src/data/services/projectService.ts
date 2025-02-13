@@ -11,6 +11,16 @@ class ProjectService {
     }
   }
 
+  async getProjectsParticipation() {
+    try {
+      const result = await KBoardApi().get('/project/member')
+      return result.data
+    } catch (error) {
+      console.error('getProjectsOwner API error:', error)
+      throw error
+    }
+  }
+
   async createProject(title: string) {
     try {
       const result = await KBoardApi().post('/project', { title })
