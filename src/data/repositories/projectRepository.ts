@@ -29,7 +29,7 @@ export const useProjectRespository = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['getProjectsOwner', 'getProjectsParticipation'],
+        queryKey: ['getProjectsOwner'],
       })
     },
   })
