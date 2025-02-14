@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 
 import { FaPlus } from 'react-icons/fa'
 import { Project } from '../../../../data/interfaces/project'
+import { TaskPayload } from '../../../../data/interfaces/task'
 import { useTaskReducer } from '../../../../hooks/useTaskReducer'
 import { taskSchema } from '../../../schemas/task.schema'
 import { Button } from '../../Button'
@@ -21,7 +22,7 @@ type FormData = {
 }
 
 type Props = {
-  onConfirm: (task: FormData) => void
+  onConfirm: (task: TaskPayload) => void
   project: Project
 }
 
@@ -39,13 +40,16 @@ export const NewTaskModal = ({ onConfirm, project }: Props) => {
   })
 
   const onSubmit = (data: FormData) => {
-    console.log(data)
     reset()
     dispatch({
       type: 'reset',
       payload: undefined,
     })
-    onConfirm(data)
+    onConfirm({
+      ...data,
+      tags: task.tags,
+      members: task.members.map((member) => member.id),
+    })
   }
 
   const handleAddTag = () => {

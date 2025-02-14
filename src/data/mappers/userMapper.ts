@@ -1,3 +1,4 @@
+import { User } from '../interfaces/user'
 import { UserAuth } from '../interfaces/userAuth'
 
 export const userMapper = (data: Record<string, any>) => {
@@ -9,6 +10,17 @@ export const userMapper = (data: Record<string, any>) => {
     photoUrl: userData['photo'],
     createdAt: userData['createdAt'],
     token: data['token'],
+  }
+  return user
+}
+
+export const simpleUserMapper = (data: Record<string, any>) => {
+  const user: User = {
+    id: data['id'],
+    email: data['email'],
+    name: data['name'],
+    photoUrl: data['photo'],
+    createdAt: data['createdAt'],
   }
   return user
 }

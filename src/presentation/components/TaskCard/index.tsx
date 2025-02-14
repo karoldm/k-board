@@ -40,7 +40,7 @@ export const TaskCard = forwardRef<HTMLDivElement, Props>(
               <Tag size='small' key={tag} label={tag} />
             ))}
           </Row>
-          <MembersList members={task.members} />
+          <MembersList noToolTip members={task.members} />
         </Column>
       </TaskContainer>
     )

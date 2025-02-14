@@ -10,7 +10,7 @@ import { CustomModal } from '../../components/Modal'
 import { Navbar, ProjectTitle, TaskWrapper, Wrapper } from './style'
 
 import { taskStatusFromString } from '../../../data/enums/taskStatus'
-import { Task } from '../../../data/interfaces/task'
+import { Task, TaskPayload } from '../../../data/interfaces/task'
 import { useProjectRespository } from '../../../data/repositories/projectRepository'
 import { useTaskRespository } from '../../../data/repositories/taskRepository'
 import { Row } from '../../components/Layouts/Row'
@@ -21,6 +21,7 @@ import { Tag } from '../../components/Tag'
 import { TaskColumn } from '../../components/TaskColumn'
 import { WithCopy } from '../../components/WithCopy'
 import { handleError } from '../../utils/handleError'
+import { showToast } from '../../utils/showToast'
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams()
@@ -30,10 +31,8 @@ export const ProjectPage: React.FC = () => {
 
   const [filter, setFilter] = useState('')
 
-  const { getTasksByProjectQuery, editTaskMutation } = useTaskRespository(
-    id!,
-    filter
-  )
+  const { getTasksByProjectQuery, editTaskMutation, createTaskMutation } =
+    useTaskRespository(id!, filter)
   const { data: tasks, isLoading: taskLoading } = getTasksByProjectQuery
 
   const { getProjectByIdQuery } = useProjectRespository({ projectId: id! })
@@ -81,6 +80,19 @@ export const ProjectPage: React.FC = () => {
     }
   }
 
+  const onCreateTask = async (data: TaskPayload) => {
+    try {
+      await createTaskMutation.mutateAsync({
+        projectId: id!,
+        payload: data,
+      })
+      setTaskModal(false)
+      showToast('Tarefa criada com sucesso!', 'success')
+    } catch (error) {
+      handleError(error)
+    }
+  }
+
   return (
     <Wrapper>
       <CustomModal
@@ -91,7 +103,7 @@ export const ProjectPage: React.FC = () => {
           window.onscroll = function () {}
         }}
       >
-        <NewTaskModal project={project!} onConfirm={(task) => {}} />
+        <NewTaskModal project={project!} onConfirm={onCreateTask} />
       </CustomModal>
 
       <CustomModal

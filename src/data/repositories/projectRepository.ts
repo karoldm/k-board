@@ -71,8 +71,8 @@ export const useProjectRespository = ({
       const data = await projectService.editProject(id, title)
       return projectMapper(data)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
         queryKey: ['getProjectsOwner', projectsPage],
       })
     },
@@ -82,8 +82,8 @@ export const useProjectRespository = ({
     mutationFn: async (id: string) => {
       await projectService.deleteProject(id)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
         queryKey: ['getProjectsOwner', projectsPage],
       })
     },

@@ -4,14 +4,15 @@ import { Row } from '../Layouts/Row'
 
 type Props = {
   members: User[]
+  noToolTip?: boolean
 }
 
-export const MembersList = ({ members }: Props) => {
+export const MembersList = ({ members, noToolTip = false }: Props) => {
   return (
     <Row justifyContent='start'>
       {members.map((member, index) => (
         <Avatar
-          tooltip={member.name}
+          tooltip={!noToolTip ? member.name : undefined}
           key={member.id}
           style={index != 0 ? { marginLeft: '-8px' } : {}}
           src={member.photoUrl}

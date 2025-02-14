@@ -1,6 +1,6 @@
 import { taskStatusToString } from '../enums/taskStatus'
 import { TasksResponse } from '../interfaces/apiResponse'
-import { Task } from '../interfaces/task'
+import { Task, TaskPayload } from '../interfaces/task'
 import { KBoardApi } from './kboardApi'
 
 class TaskService {
@@ -32,6 +32,23 @@ class TaskService {
       return result.data
     } catch (error) {
       console.error('editTask API error:', error)
+      throw error
+    }
+  }
+
+  async createTask(projectId: string, data: TaskPayload): Promise<Task> {
+    try {
+      const result = await KBoardApi().post(`/task`, {
+        projectId: projectId,
+        title: data.title,
+        description: data.description,
+        color: data.color,
+        tags: data.tags,
+        membersId: data.members,
+      })
+      return result.data
+    } catch (error) {
+      console.error('createTask API error:', error)
       throw error
     }
   }
