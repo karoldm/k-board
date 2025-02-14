@@ -3,14 +3,14 @@ import { useForm } from 'react-hook-form'
 
 import { BorderBackground, ContainerForm, Wrapper } from './style'
 
-import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useRegister } from '../../../data/repositories/userRepository'
+import { useUserRepository } from '../../../data/repositories/userRepository'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 import { Column } from '../../components/Layouts/Column'
 import { registerSchema } from '../../schemas/register.schema'
+import { handleError } from '../../utils/handleError'
 import { showToast } from '../../utils/showToast'
 
 type FormData = {
@@ -32,25 +32,16 @@ export const Register = () => {
   const [file, setFile] = useState<File | undefined>()
 
   const navigate = useNavigate()
-  const { mutateAsync } = useRegister()
+  const { registerMutation } = useUserRepository()
 
   const handleRegister = async (data: FormData) => {
     try {
-      await mutateAsync({ ...data, photo: file })
+      await registerMutation.mutateAsync({ ...data, photo: file })
       showToast('Conta criada com sucesso!', 'success')
       reset()
       navigate('/login')
     } catch (error) {
-      const errorData = (error as AxiosError)?.response?.data as {
-        message: string
-        status: string
-      }
-
-      showToast(
-        'Tivemos um problema ao criar sua conta: ' +
-          (errorData.message || 'Erro desconhecido'),
-        'error'
-      )
+      handleError(error)
     }
   }
 
@@ -93,7 +84,7 @@ export const Register = () => {
                 }
               }}
             />
-            <Button type='submit'>
+            <Button loading={registerMutation.isPending} type='submit'>
               <p>Registrar</p>
             </Button>
           </Column>

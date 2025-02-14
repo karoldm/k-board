@@ -32,7 +32,7 @@ export const ButtonStyled = styled.button<Props>`
 
   &:disabled {
     cursor: default;
-    filter: brightness(0.7);
+    filter: brightness(1.5);
   }
 `
 

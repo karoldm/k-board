@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef, PropsWithChildren } from 'react'
-import { Spinner } from 'react-bootstrap'
+import { Loading } from '../Loading'
 
 import { IconButton, PrimaryButton, SecondaryButton } from './style'
 
@@ -18,6 +18,8 @@ export const Button = ({
   loading,
   ...props
 }: PropsWithChildren<Props>) => {
+  const child = loading ? <Loading /> : children
+
   if (variant == 'secondary') {
     return (
       <SecondaryButton
@@ -26,7 +28,7 @@ export const Button = ({
         width={width}
         {...props}
       >
-        {loading ? <Spinner animation='border' role='status' /> : children}
+        {child}
       </SecondaryButton>
     )
   }
@@ -34,7 +36,7 @@ export const Button = ({
   if (variant == 'icon') {
     return (
       <IconButton disabled={loading} noBorder={true} width={width} {...props}>
-        {loading ? <Spinner animation='border' role='status' /> : children}
+        {child}
       </IconButton>
     )
   }
@@ -46,7 +48,7 @@ export const Button = ({
       width={width}
       {...props}
     >
-      {loading ? <Spinner animation='border' role='status' /> : children}
+      {child}
     </PrimaryButton>
   )
 }

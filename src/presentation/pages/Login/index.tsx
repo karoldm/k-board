@@ -3,15 +3,14 @@ import { useForm } from 'react-hook-form'
 
 import { BorderBackground, ContainerForm, Wrapper } from './style'
 
-import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { useLogin } from '../../../data/repositories/userRepository'
+import { useUserRepository } from '../../../data/repositories/userRepository'
 import { useUser } from '../../../hooks/useUser'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 import { Column } from '../../components/Layouts/Column'
 import { loginSchema } from '../../schemas/login.schema'
-import { showToast } from '../../utils/showToast'
+import { handleError } from '../../utils/handleError'
 
 type FormData = {
   email: string
@@ -27,28 +26,18 @@ export const Login = () => {
     resolver: zodResolver(loginSchema),
   })
 
-  const { mutateAsync, isPending } = useLogin()
+  const { loginMutation } = useUserRepository()
   const navigate = useNavigate()
   const { setUserData } = useUser()
 
   const handleLogin = async (data: FormData) => {
     try {
-      const user = await mutateAsync(data)
+      const user = await loginMutation.mutateAsync(data)
       setUserData(user)
       reset()
       navigate('/')
     } catch (error) {
-      console.log(error)
-      const errorData = (error as AxiosError)?.response?.data as {
-        message: string
-        status: string
-      }
-
-      showToast(
-        'Erro ao acessar o sistema: ' +
-          (errorData?.message || 'Erro desconhecido'),
-        'error'
-      )
+      handleError(error)
     }
   }
 
@@ -82,7 +71,7 @@ export const Login = () => {
               type='password'
               placeholder='Senha'
             />
-            <Button loading={isPending} type='submit'>
+            <Button loading={loginMutation.isPending} type='submit'>
               <p>Entrar</p>
             </Button>
           </Column>

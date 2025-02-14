@@ -1,145 +1,192 @@
-import React from 'react';
+import React from 'react'
 
-import { useEffect, useState } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
-import { FaArrowLeft, FaInfo, FaPlus } from 'react-icons/fa';
-import { Link, useParams } from 'react-router-dom';
-import { Button } from '../../components/Button';
-import { CustomModal } from '../../components/Modal';
+import { DragDropContext, DropResult } from '@hello-pangea/dnd'
+import { useState } from 'react'
+import { FaArrowLeft, FaInfo, FaPlus } from 'react-icons/fa'
+import { Link, useParams } from 'react-router-dom'
+import { Button } from '../../components/Button'
+import { CustomModal } from '../../components/Modal'
 
-import { projectMock } from '../../../data/mocks/projectMock';
-import {
-  Navbar, ProjectTitle, TaskWrapper, Wrapper
-} from './style';
+import { Navbar, ProjectTitle, TaskWrapper, Wrapper } from './style'
 
-import { TaskStatus } from '../../../data/enums/taskStatus';
-import { Project } from '../../../data/interfaces/project';
-import { Task } from '../../../data/interfaces/task';
-import { Row } from '../../components/Layouts/Row';
-import { InfoProjectModal } from '../../components/Modal/InfoProjectModal';
-import { NewTaskModal } from '../../components/Modal/NewTaskModal';
-import { Tag } from '../../components/Tag';
-import { TaskColumn } from '../../components/TaskColumn';
-import { WithCopy } from '../../components/WithCopy';
+import { taskStatusFromString } from '../../../data/enums/taskStatus'
+import { Task, TaskPayload } from '../../../data/interfaces/task'
+import { useProjectRespository } from '../../../data/repositories/projectRepository'
+import { useTaskRepository } from '../../../data/repositories/taskRepository'
+import { Row } from '../../components/Layouts/Row'
+import { Loading } from '../../components/Loading'
+import { InfoProjectModal } from '../../components/Modal/InfoProjectModal'
+import { NewTaskModal } from '../../components/Modal/NewTaskModal'
+import { Tag } from '../../components/Tag'
+import { TaskColumn } from '../../components/TaskColumn'
+import { WithCopy } from '../../components/WithCopy'
+import { handleError } from '../../utils/handleError'
+import { showToast } from '../../utils/showToast'
 
 export const ProjectPage: React.FC = () => {
-  const { id } = useParams();
+  const { id } = useParams()
 
-  const [taskModal, setTaskModal] = useState(false);
-  const [infoModal, setInfoModal] = useState(false);
+  const [taskModal, setTaskModal] = useState(false)
+  const [infoModal, setInfoModal] = useState(false)
 
-  const [project, setProject] = useState<Project | null>();
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [filter, setFilter] = useState('')
 
-  const getProject = async () => {
-    setProject(projectMock);
-    setTasks(projectMock.tasks);
-  }
+  const { getTasksByProjectQuery, editTaskMutation, createTaskMutation } =
+    useTaskRepository({ projectId: id!, filter: filter })
+  const { data: tasks, isLoading: taskLoading } = getTasksByProjectQuery
 
-  useEffect(() => {
-    getProject();
-  }, []);
+  const { getProjectByIdQuery } = useProjectRespository({ projectId: id! })
+  const { data: project, isLoading: projectLoading } = getProjectByIdQuery
 
-  const handleDragEnd = async (result: any) => {
-
-    if (!result.destination) return;
-
-    if (result.source.droppableId !== result.destination.droppableId) {
-      // await database.ref(`projects/${id}/tasks/${result.draggableId}`).update({
-      //   status: result.destination.droppableId,
-      // });
-    }
-    else {
-      const items = Array.from(tasks);
-      const [reorderedItem] = items.splice(result.source.index, 1);
-      items.splice(result.destination.index, 0, reorderedItem);
-      //setTasks(items);
+  const editTask = async (task: Task) => {
+    try {
+      await editTaskMutation.mutateAsync(task)
+    } catch (error) {
+      handleError(error)
     }
   }
 
-  const handleDragStart = () => {
+  const handleDragEnd = async ({ source, destination }: DropResult<string>) => {
+    if (!destination || !tasks) return
+
+    const sourceKey = source.droppableId as keyof typeof taskStatusFromString
+    const destinationKey =
+      destination.droppableId as keyof typeof taskStatusFromString
+    if (sourceKey === destinationKey) return
+
+    const sourceList: Task[] =
+      tasks![sourceKey.toLowerCase() as 'pending' | 'doing' | 'completed']
+    const task = sourceList[source.index]
+    if (!task) return
+
+    tasks![sourceKey.toLowerCase() as 'pending' | 'doing' | 'completed'] =
+      sourceList.filter((item) => item.id !== task.id)
+
+    tasks![
+      destinationKey.toLowerCase() as 'pending' | 'doing' | 'completed'
+    ].push(task)
+
+    task.taskStatus = taskStatusFromString[destinationKey]
+    await editTask(task)
   }
+
+  const handleDragStart = ({ ...args }) => {}
 
   const disableScroll = () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft
     window.onscroll = function () {
-      window.scrollTo(scrollLeft, scrollTop);
-    };
+      window.scrollTo(scrollLeft, scrollTop)
+    }
+  }
+
+  const onCreateTask = async (data: TaskPayload) => {
+    try {
+      await createTaskMutation.mutateAsync({
+        projectId: id!,
+        payload: data,
+      })
+      setTaskModal(false)
+      showToast('Tarefa criada com sucesso!', 'success')
+    } catch (error) {
+      handleError(error)
+    }
   }
 
   return (
     <Wrapper>
-      <CustomModal 
-        title='Nova Tarefa' 
-        visible={taskModal} 
+      <CustomModal
+        title='Nova Tarefa'
+        visible={taskModal}
         onHide={() => {
-          setTaskModal(false);
-          window.onscroll = function () { };
+          setTaskModal(false)
+          window.onscroll = function () {}
         }}
       >
-        <NewTaskModal project={project!} onConfirm={(task) => {}} />
+        <NewTaskModal project={project!} onConfirm={onCreateTask} />
       </CustomModal>
 
-      <CustomModal 
-        title='Informações do Projeto' 
-        visible={infoModal} 
+      <CustomModal
+        title='Informações do Projeto'
+        visible={infoModal}
         onHide={() => {
-          setInfoModal(false);
-          window.onscroll = function () { };
+          setInfoModal(false)
+          window.onscroll = function () {}
         }}
       >
-        <InfoProjectModal project={projectMock} />
+        <InfoProjectModal project={project!} />
       </CustomModal>
 
       <Navbar>
-          <Link to={'/'}>
-            <FaArrowLeft color='#212121' />
-          </Link>
-          <Row gap='8px'>
+        <Link to={'/'}>
+          <FaArrowLeft color='#212121' />
+        </Link>
+        <Row wrap gap='8px'>
           <ProjectTitle>{project?.title}</ProjectTitle>
-          <WithCopy text={id ?? ""}>
-            <Tag size='small' label={id ?? ""} />
+          <WithCopy text={id ?? ''}>
+            <Tag size='small' label={id ?? ''} />
           </WithCopy>
         </Row>
         <Row gap='8px'>
-          <Button onClick={() => {
-              setTaskModal(true);
-              disableScroll();
-            }} >
-                <FaPlus color='white' />
+          <Button
+            onClick={() => {
+              setTaskModal(true)
+              disableScroll()
+            }}
+          >
+            <FaPlus color='white' />
           </Button>
-          <Button variant="secondary" onClick={() => {
-              setInfoModal(true);
-              disableScroll();
-            }}>
-              <FaInfo color='#CDCDCD' />
+          <Button
+            variant='secondary'
+            onClick={() => {
+              setInfoModal(true)
+              disableScroll()
+            }}
+          >
+            <FaInfo color='#CDCDCD' />
           </Button>
         </Row>
       </Navbar>
 
       <TaskWrapper>
-        <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-          <TaskColumn
-            id='pendent'
-            percent={tasks.filter(task => task.taskStatus == TaskStatus.PENDING).length / tasks.length}
-            taskList={tasks.filter(task => task.taskStatus == TaskStatus.PENDING)}
-            title="Pendente"
-          />
-          <TaskColumn
-            id='doing'
-            percent={tasks.filter(task => task.taskStatus == TaskStatus.DOING).length / tasks.length}
-            taskList={tasks.filter(task => task.taskStatus == TaskStatus.DOING)}
-            title="Em Progresso"
-          />
-          <TaskColumn
-            id='completed'
-            percent={tasks.filter(task => task.taskStatus == TaskStatus.COMPLETED).length / tasks.length}
-            taskList={tasks.filter(task => task.taskStatus == TaskStatus.COMPLETED)}
-            title="Concluída"
-          />
-        </DragDropContext>
+        {taskLoading || projectLoading ? (
+          <Loading variant='primary' />
+        ) : (
+          <DragDropContext
+            onDragEnd={handleDragEnd}
+            onDragStart={handleDragStart}
+          >
+            <TaskColumn
+              id='PENDING'
+              percent={
+                tasks && tasks!.total > 0
+                  ? tasks!.totalPending / tasks!.total
+                  : 0
+              }
+              taskList={tasks?.pending ?? []}
+              title='Pendente'
+            />
+            <TaskColumn
+              id='DOING'
+              percent={
+                tasks && tasks!.total > 0 ? tasks!.totalDoing / tasks!.total : 0
+              }
+              taskList={tasks?.doing ?? []}
+              title='Em progresso'
+            />
+            <TaskColumn
+              id='COMPLETED'
+              percent={
+                tasks && tasks!.total > 0
+                  ? tasks!.totalCompleted / tasks!.total
+                  : 0
+              }
+              taskList={tasks?.completed ?? []}
+              title='Concluídas'
+            />
+          </DragDropContext>
+        )}
       </TaskWrapper>
     </Wrapper>
-  );
+  )
 }

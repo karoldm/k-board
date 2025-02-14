@@ -6,5 +6,4 @@ export const userMock: User = {
   name: 'user mock',
   photoUrl: '/assets/profile.jpg',
   id: '1',
-  token: '',
 }

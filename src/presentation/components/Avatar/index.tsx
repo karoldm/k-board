@@ -9,7 +9,7 @@ type Props = ComponentPropsWithoutRef<'img'> & {
 
 export const Avatar = ({ src, tooltip, style, alt }: Props) => {
   const AvatarComponent =
-    src == '' ? (
+    !src || src == '' ? (
       <StyledAvatar as='div' style={style}>
         <FaUser size={20} color='white' />
       </StyledAvatar>
