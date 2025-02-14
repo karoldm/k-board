@@ -36,6 +36,7 @@ export const TaskColumn = ({ id, taskList, percent, title }: Props) => {
               height: '40px',
               borderBottom: '1px solid var(--primary)',
               borderRadius: '8px 8px 0 0',
+              backgroundColor: 'var(--background)',
             }}
             percent={percent}
           >
