@@ -19,7 +19,7 @@ class TaskService {
     }
   }
 
-  async editTask(taskId: string, data: Task): Promise<TasksResponse> {
+  async editTask(taskId: string, data: Task): Promise<Task> {
     try {
       const result = await KBoardApi().put(`/task/${taskId}`, {
         status: taskStatusToString[data.taskStatus],

@@ -12,7 +12,7 @@ import { Navbar, ProjectTitle, TaskWrapper, Wrapper } from './style'
 import { taskStatusFromString } from '../../../data/enums/taskStatus'
 import { Task, TaskPayload } from '../../../data/interfaces/task'
 import { useProjectRespository } from '../../../data/repositories/projectRepository'
-import { useTaskRespository } from '../../../data/repositories/taskRepository'
+import { useTaskRepository } from '../../../data/repositories/taskRepository'
 import { Row } from '../../components/Layouts/Row'
 import { Loading } from '../../components/Loading'
 import { InfoProjectModal } from '../../components/Modal/InfoProjectModal'
@@ -32,7 +32,7 @@ export const ProjectPage: React.FC = () => {
   const [filter, setFilter] = useState('')
 
   const { getTasksByProjectQuery, editTaskMutation, createTaskMutation } =
-    useTaskRespository({ projectId: id!, filter: filter })
+    useTaskRepository({ projectId: id!, filter: filter })
   const { data: tasks, isLoading: taskLoading } = getTasksByProjectQuery
 
   const { getProjectByIdQuery } = useProjectRespository({ projectId: id! })
@@ -54,7 +54,7 @@ export const ProjectPage: React.FC = () => {
       destination.droppableId as keyof typeof taskStatusFromString
     if (sourceKey === destinationKey) return
 
-    const sourceList =
+    const sourceList: Task[] =
       tasks![sourceKey.toLowerCase() as 'pending' | 'doing' | 'completed']
     const task = sourceList[source.index]
     if (!task) return

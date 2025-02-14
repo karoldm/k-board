@@ -9,7 +9,7 @@ type Props = {
   filter?: string
 }
 
-export const useTaskRespository = ({ projectId, filter }: Props) => {
+export const useTaskRepository = ({ projectId, filter }: Props) => {
   const queryClient = useQueryClient()
 
   const getTasksByProjectQuery = useQuery<TasksResponse>({

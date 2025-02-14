@@ -1,6 +1,6 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd'
 import { Task } from '../../../data/interfaces/task'
-import { useTaskRespository } from '../../../data/repositories/taskRepository'
+import { useTaskRepository } from '../../../data/repositories/taskRepository'
 import { handleError } from '../../utils/handleError'
 import { showToast } from '../../utils/showToast'
 import { Row } from '../Layouts/Row'
@@ -16,7 +16,7 @@ type Props = {
 }
 
 export const TaskColumn = ({ id, taskList, percent, title }: Props) => {
-  const { deleteTaskMutation } = useTaskRespository({})
+  const { deleteTaskMutation } = useTaskRepository({})
 
   const handleRemoveTask = async (taskId: string) => {
     try {
