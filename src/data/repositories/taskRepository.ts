@@ -1,24 +1,20 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { TasksResponse } from '../interfaces/apiResponse'
+import { taskService } from '../services/taskService'
 
-//const apiInstance = kboardApi("/tasks");
+export const useTaskRespository = (projectId: string, filter?: string) => {
+  const queryClient = useQueryClient()
 
-// export const createTask: (task: Task, projectId: string) => Promise<Task> = 
-//   async (task: Task) => {
-//   try {
-//     const response = await apiInstance.post("/", task);
+  const getTasksByProjectQuery = useQuery<TasksResponse>({
+    queryKey: ['getTasksByProject', filter],
+    queryFn: async () => {
+      const data = await taskService.getTasksByProject(projectId, filter)
+      return data
+    },
+    enabled: !!filter || filter === '', // Avoids refetching on every render
+  })
 
-//     return JSON.parse(response.data) as Task;
-//   } catch(error) {
-//     throw new Error("Error creating task: " + error?.toString());
-//   }
-// }
-
-// export const getTasksByProject: (projectId: string) => Promise<Task[]> = 
-//   async () => {
-//   try {
-//     const response = await apiInstance.get("/");
-
-//     return JSON.parse(response.data) as Task[];
-//   } catch(error) {
-//     throw new Error("Error getting tasks: " + error?.toString());
-//   }
-// }
+  return {
+    getTasksByProjectQuery,
+  }
+}

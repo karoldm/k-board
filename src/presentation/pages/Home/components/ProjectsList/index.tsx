@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { GetResponseAPI } from '../../../../../data/interfaces/apiResponse'
+import { GetPaginationResponseAPI } from '../../../../../data/interfaces/apiResponse'
 import { Project } from '../../../../../data/interfaces/project'
 import { useProjectRespository } from '../../../../../data/repositories/projectRepository'
 import { Column } from '../../../../components/Layouts/Column'
@@ -16,7 +16,7 @@ import { showToast } from '../../../../utils/showToast'
 import { Container } from './style'
 
 type Props = {
-  data?: GetResponseAPI<Project[]>
+  data?: GetPaginationResponseAPI<Project[]>
   isLoading: boolean
   isFetching: boolean
   page: number

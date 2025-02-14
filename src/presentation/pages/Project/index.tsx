@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { DragDropContext } from '@hello-pangea/dnd'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FaArrowLeft, FaInfo, FaPlus } from 'react-icons/fa'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '../../components/Button'
@@ -10,9 +10,7 @@ import { CustomModal } from '../../components/Modal'
 import { projectMock } from '../../../data/mocks/projectMock'
 import { Navbar, ProjectTitle, TaskWrapper, Wrapper } from './style'
 
-import { TaskStatus } from '../../../data/enums/taskStatus'
-import { Project } from '../../../data/interfaces/project'
-import { Task } from '../../../data/interfaces/task'
+import { useTaskRespository } from '../../../data/repositories/taskRepository'
 import { Row } from '../../components/Layouts/Row'
 import { InfoProjectModal } from '../../components/Modal/InfoProjectModal'
 import { NewTaskModal } from '../../components/Modal/NewTaskModal'
@@ -22,21 +20,16 @@ import { WithCopy } from '../../components/WithCopy'
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams()
+  const [project, setProject] = useState(projectMock)
 
   const [taskModal, setTaskModal] = useState(false)
   const [infoModal, setInfoModal] = useState(false)
 
-  const [project, setProject] = useState<Project | null>()
-  const [tasks, setTasks] = useState<Task[]>([])
+  const [filter, setFilter] = useState('')
 
-  const getProject = async () => {
-    setProject(projectMock)
-    setTasks(projectMock.tasks)
-  }
+  const { getTasksByProjectQuery } = useTaskRespository(id!, filter)
 
-  useEffect(() => {
-    getProject()
-  }, [])
+  const { isLoading, data: tasks } = getTasksByProjectQuery
 
   const handleDragEnd = async (result: any) => {
     if (!result.destination) return
@@ -46,7 +39,7 @@ export const ProjectPage: React.FC = () => {
       //   status: result.destination.droppableId,
       // });
     } else {
-      const items = Array.from(tasks)
+      const items = Array.from([])
       const [reorderedItem] = items.splice(result.source.index, 1)
       items.splice(result.destination.index, 0, reorderedItem)
       //setTasks(items);
@@ -73,7 +66,7 @@ export const ProjectPage: React.FC = () => {
           window.onscroll = function () {}
         }}
       >
-        <NewTaskModal project={project!} onConfirm={(task) => {}} />
+        <NewTaskModal project={project} onConfirm={(task) => {}} />
       </CustomModal>
 
       <CustomModal
@@ -91,13 +84,13 @@ export const ProjectPage: React.FC = () => {
         <Link to={'/'}>
           <FaArrowLeft color='#212121' />
         </Link>
-        <Row gap='8px'>
+        <Row wrap gap='8px'>
           <ProjectTitle>{project?.title}</ProjectTitle>
           <WithCopy text={id ?? ''}>
             <Tag size='small' label={id ?? ''} />
           </WithCopy>
         </Row>
-        <Row gap='8px'>
+        <Row wrap gap='8px'>
           <Button
             onClick={() => {
               setTaskModal(true)
@@ -126,35 +119,24 @@ export const ProjectPage: React.FC = () => {
           <TaskColumn
             id='pendent'
             percent={
-              tasks.filter((task) => task.taskStatus == TaskStatus.PENDING)
-                .length / tasks.length
+              tasks ? +(tasks!.totalPending / tasks!.total).toFixed(4) : 0
             }
-            taskList={tasks.filter(
-              (task) => task.taskStatus == TaskStatus.PENDING
-            )}
+            taskList={tasks?.pending ?? []}
             title='Pendente'
           />
           <TaskColumn
             id='doing'
-            percent={
-              tasks.filter((task) => task.taskStatus == TaskStatus.DOING)
-                .length / tasks.length
-            }
-            taskList={tasks.filter(
-              (task) => task.taskStatus == TaskStatus.DOING
-            )}
-            title='Em Progresso'
+            percent={tasks ? +(tasks!.totalDoing / tasks!.total).toFixed(4) : 0}
+            taskList={tasks?.doing ?? []}
+            title='Em progresso'
           />
           <TaskColumn
             id='completed'
             percent={
-              tasks.filter((task) => task.taskStatus == TaskStatus.COMPLETED)
-                .length / tasks.length
+              tasks ? +(tasks!.totalCompleted / tasks!.total).toFixed(4) : 0
             }
-            taskList={tasks.filter(
-              (task) => task.taskStatus == TaskStatus.COMPLETED
-            )}
-            title='Concluída'
+            taskList={tasks?.completed ?? []}
+            title='Concluídas'
           />
         </DragDropContext>
       </TaskWrapper>

@@ -18,7 +18,7 @@ export const TaskColumn = ({ id, taskList, percent, title }: Props) => {
         <TaskContainer percent={percent}>
           <Row justifyContent='space-between' id='header'>
             <p>{title}</p>
-            <p>{percent * 100}%</p>
+            <p>{percent * 100} %</p>
           </Row>
           <TaskContent {...provided.droppableProps} ref={provided.innerRef}>
             {taskList.map((task, index) => {

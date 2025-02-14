@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { GetResponseAPI } from '../interfaces/apiResponse'
+import { GetPaginationResponseAPI } from '../interfaces/apiResponse'
 import { Project } from '../interfaces/project'
 import { projectMapper } from '../mappers/projectMapper'
 import { projectService } from '../services/projectService'
@@ -11,7 +11,7 @@ export const useProjectRespository = (
 ) => {
   const queryClient = useQueryClient()
 
-  const getProjectsOwnerQuery = useQuery<GetResponseAPI<Project[]>>({
+  const getProjectsOwnerQuery = useQuery<GetPaginationResponseAPI<Project[]>>({
     queryKey: ['getProjectsOwner', projectsPage, filter],
     queryFn: async () => {
       const data = await projectService.getProjectsOwner(projectsPage, filter)
@@ -20,7 +20,9 @@ export const useProjectRespository = (
     enabled: !!filter || filter === '', // Avoids refetching on every render
   })
 
-  const getProjectsParticipationQuery = useQuery<GetResponseAPI<Project[]>>({
+  const getProjectsParticipationQuery = useQuery<
+    GetPaginationResponseAPI<Project[]>
+  >({
     queryKey: ['getProjectsParticipation', projectsParticipationPage, filter],
     queryFn: async () => {
       const data = await projectService.getProjectsParticipation(

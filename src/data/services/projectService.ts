@@ -1,4 +1,4 @@
-import { GetResponseAPI } from '../interfaces/apiResponse'
+import { GetPaginationResponseAPI } from '../interfaces/apiResponse'
 import { Project } from '../interfaces/project'
 import { KBoardApi } from './kboardApi'
 
@@ -6,7 +6,7 @@ class ProjectService {
   async getProjectsOwner(
     page?: number,
     filter?: string
-  ): Promise<GetResponseAPI<Project[]>> {
+  ): Promise<GetPaginationResponseAPI<Project[]>> {
     try {
       await new Promise((resolve) => setTimeout(resolve, 100))
 
@@ -29,7 +29,7 @@ class ProjectService {
   async getProjectsParticipation(
     page?: number,
     filter?: string
-  ): Promise<GetResponseAPI<Project[]>> {
+  ): Promise<GetPaginationResponseAPI<Project[]>> {
     try {
       await new Promise((resolve) => setTimeout(resolve, 100))
 

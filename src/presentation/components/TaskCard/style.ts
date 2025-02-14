@@ -5,19 +5,17 @@ export const TaskContainer = styled.div<{ color: string }>`
   height: auto;
   background: var(--background);
   border: 1px solid var(--primary);
-  border-top: 6px solid ${(props) => props.color};
   border-radius: 8px;
-  padding: 4px;
-  gap: 8px;
   display: flex;
   flex-direction: column;
   cursor: pointer;
   position: relative;
+  overflow: hidden;
 
   #close-button {
     position: absolute;
     right: 0px;
-    top: 0px;
+    top: 8px;
   }
 
   #title {
@@ -29,5 +27,11 @@ export const TaskContainer = styled.div<{ color: string }>`
   #description {
     font-size: 14px;
     color: var(--gray-light);
+  }
+
+  #task-color {
+    height: 8px;
+    width: 100%;
+    background: ${(props) => props.color};
   }
 `
