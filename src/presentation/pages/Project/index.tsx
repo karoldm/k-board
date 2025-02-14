@@ -160,7 +160,7 @@ export const ProjectPage: React.FC = () => {
               id='PENDING'
               percent={
                 tasks && tasks!.total > 0
-                  ? +(tasks!.totalPending / tasks!.total).toFixed(4)
+                  ? tasks!.totalPending / tasks!.total
                   : 0
               }
               taskList={tasks?.pending ?? []}
@@ -169,9 +169,7 @@ export const ProjectPage: React.FC = () => {
             <TaskColumn
               id='DOING'
               percent={
-                tasks && tasks!.total > 0
-                  ? +(tasks!.totalDoing / tasks!.total).toFixed(4)
-                  : 0
+                tasks && tasks!.total > 0 ? tasks!.totalDoing / tasks!.total : 0
               }
               taskList={tasks?.doing ?? []}
               title='Em progresso'
@@ -180,7 +178,7 @@ export const ProjectPage: React.FC = () => {
               id='COMPLETED'
               percent={
                 tasks && tasks!.total > 0
-                  ? +(tasks!.totalCompleted / tasks!.total).toFixed(4)
+                  ? tasks!.totalCompleted / tasks!.total
                   : 0
               }
               taskList={tasks?.completed ?? []}

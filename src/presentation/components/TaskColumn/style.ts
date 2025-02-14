@@ -3,9 +3,6 @@ import styled from 'styled-components'
 export const TaskContent = styled.div`
   overflow-y: scroll;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   padding: 8px;
   &::-webkit-scrollbar {
     width: 0;
