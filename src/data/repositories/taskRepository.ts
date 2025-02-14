@@ -4,7 +4,12 @@ import { Task, TaskPayload } from '../interfaces/task'
 import { taskMapper } from '../mappers/taskMapper'
 import { taskService } from '../services/taskService'
 
-export const useTaskRespository = (projectId?: string, filter?: string) => {
+type Props = {
+  projectId?: string
+  filter?: string
+}
+
+export const useTaskRespository = ({ projectId, filter }: Props) => {
   const queryClient = useQueryClient()
 
   const getTasksByProjectQuery = useQuery<TasksResponse>({
@@ -42,9 +47,19 @@ export const useTaskRespository = (projectId?: string, filter?: string) => {
     },
   })
 
+  const deleteTaskMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await taskService.deleteTask(id)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['getTasksByProject'] })
+    },
+  })
+
   return {
     getTasksByProjectQuery,
     editTaskMutation,
     createTaskMutation,
+    deleteTaskMutation,
   }
 }

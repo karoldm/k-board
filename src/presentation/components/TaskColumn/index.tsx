@@ -1,5 +1,8 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd'
 import { Task } from '../../../data/interfaces/task'
+import { useTaskRespository } from '../../../data/repositories/taskRepository'
+import { handleError } from '../../utils/handleError'
+import { showToast } from '../../utils/showToast'
 import { Row } from '../Layouts/Row'
 import { CustomProgressBar } from '../ProgressBar'
 import { TaskCard } from '../TaskCard'
@@ -13,6 +16,17 @@ type Props = {
 }
 
 export const TaskColumn = ({ id, taskList, percent, title }: Props) => {
+  const { deleteTaskMutation } = useTaskRespository({})
+
+  const handleRemoveTask = async (taskId: string) => {
+    try {
+      await deleteTaskMutation.mutateAsync(taskId)
+      showToast('Tarefa removida com sucesso!', 'success')
+    } catch (error) {
+      handleError(error)
+    }
+  }
+
   return (
     <Droppable droppableId={id}>
       {(provided: any) => (
@@ -27,7 +41,7 @@ export const TaskColumn = ({ id, taskList, percent, title }: Props) => {
           >
             <Row id='header' fullWidth justifyContent='space-between'>
               <p>{title}</p>
-              <p>{(percent * 100).toFixed(2)} %</p>
+              <p>{(percent * 100).toPrecision(2)} %</p>
             </Row>
           </CustomProgressBar>
 
@@ -41,6 +55,9 @@ export const TaskColumn = ({ id, taskList, percent, title }: Props) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       task={task}
+                      onRemove={() => {
+                        handleRemoveTask(task.id)
+                      }}
                     />
                   )}
                 </Draggable>

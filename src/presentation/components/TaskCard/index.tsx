@@ -10,16 +10,17 @@ import { TaskContainer } from './style'
 
 type Props = {
   task: Task
+  onRemove: () => void
 }
 
 export const TaskCard = forwardRef<HTMLDivElement, Props>(
-  ({ task, ...props }: Props, ref) => {
+  ({ task, onRemove, ...props }: Props, ref) => {
     return (
       <TaskContainer ref={ref} {...props} color={task.color}>
         <div id='task-color' />
         <Button
           id='close-button'
-          onClick={() => {}}
+          onClick={() => onRemove()}
           variant='secondary'
           noBorder
           width='auto'

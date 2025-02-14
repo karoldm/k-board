@@ -52,6 +52,15 @@ class TaskService {
       throw error
     }
   }
+
+  async deleteTask(id: string): Promise<void> {
+    try {
+      await KBoardApi().delete(`/task/${id}`)
+    } catch (error) {
+      console.error('deleteTask API error:', error)
+      throw error
+    }
+  }
 }
 
 export const taskService = new TaskService()

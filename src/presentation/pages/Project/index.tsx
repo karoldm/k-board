@@ -32,7 +32,7 @@ export const ProjectPage: React.FC = () => {
   const [filter, setFilter] = useState('')
 
   const { getTasksByProjectQuery, editTaskMutation, createTaskMutation } =
-    useTaskRespository(id!, filter)
+    useTaskRespository({ projectId: id!, filter: filter })
   const { data: tasks, isLoading: taskLoading } = getTasksByProjectQuery
 
   const { getProjectByIdQuery } = useProjectRespository({ projectId: id! })
