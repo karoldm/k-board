@@ -34,7 +34,9 @@ export const ProjectList = ({
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [projectModal, setProjectModal] = useState(false)
 
-  const { editProjectMutation, deleteProjectMutation } = useProjectRespository()
+  const { editProjectMutation, deleteProjectMutation } = useProjectRespository(
+    {}
+  )
 
   const onEditProject = (project: Project) => {
     setSelectedProject(project)

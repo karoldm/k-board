@@ -91,6 +91,16 @@ class ProjectService {
       throw error
     }
   }
+
+  async getById(id: string) {
+    try {
+      const response = await KBoardApi().get(`/project/${id}`)
+      return response.data
+    } catch (error) {
+      console.error('deleteProject API error:', error)
+      throw error
+    }
+  }
 }
 
 export const projectService = new ProjectService()

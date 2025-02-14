@@ -4,7 +4,7 @@ import { Project } from '../../../data/interfaces/project'
 import { Button } from '../Button'
 import { Row } from '../Layouts/Row'
 import { MembersList } from '../MembersList'
-import { ProgressBar } from '../ProgressBar'
+import { CustomProgressBar } from '../ProgressBar'
 import { Tag } from '../Tag'
 import { Container } from './style'
 
@@ -42,7 +42,7 @@ export const ProjectCard = ({
         )}
       </Row>
       <MembersList members={project.members.concat([project.owner])} />
-      <ProgressBar percent={project.progress * 100} />
+      <CustomProgressBar percent={project.progress} />
     </Container>
   )
 }

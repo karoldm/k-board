@@ -1,13 +1,17 @@
-import { Bar, Progress } from "./style";
+import { PropsWithChildren } from 'react'
+import { StyledProgressBar } from './style'
 
 type Props = {
-  percent: number;
+  percent: number
+  style?: React.CSSProperties
 }
 
-export const ProgressBar = ({percent}: Props) => {
+export const CustomProgressBar = ({
+  percent,
+  style,
+  children,
+}: PropsWithChildren<Props>) => {
   return (
-    <Bar>
-      <Progress percent={percent} />
-    </Bar>
-  );
+    <StyledProgressBar label={children} style={style} now={percent * 100} />
+  )
 }

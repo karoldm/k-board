@@ -1,19 +1,18 @@
-import styled from "styled-components";
-
-export const Bar = styled.div`
-  width: 100%;
-  height: 6px;
-  border-radius: 8px;
-  background-color: var(--white);
-`;
+import { ProgressBar } from 'react-bootstrap'
+import { styled } from 'styled-components'
 
 type Props = {
-  percent: number;
+  height?: string
+  borderRadius?: string
 }
 
-export const Progress = styled.div<Props>`
-  width: ${props => props.percent + "%"};
-  background: var(--blue-primary);
-  height: 100%;
-  border-radius: 8px;
-`;
+export const StyledProgressBar = styled(ProgressBar)<Props>`
+  width: 100%;
+  height: ${(props) => props.height ?? '8px'};
+  position: relative;
+  background: var(--background);
+
+  .progress-bar {
+    background: var(--blue-primary);
+  }
+`

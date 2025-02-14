@@ -45,9 +45,11 @@ export const Navbar = styled.div`
 
 export const TaskWrapper = styled.main`
   width: 100vw;
-  display: flex;
   flex-wrap: wrap;
   padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media (max - width: 480px) {
     flex-direction: column;

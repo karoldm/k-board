@@ -7,13 +7,14 @@ import { Link, useParams } from 'react-router-dom'
 import { Button } from '../../components/Button'
 import { CustomModal } from '../../components/Modal'
 
-import { projectMock } from '../../../data/mocks/projectMock'
 import { Navbar, ProjectTitle, TaskWrapper, Wrapper } from './style'
 
 import { taskStatusFromString } from '../../../data/enums/taskStatus'
 import { Task } from '../../../data/interfaces/task'
+import { useProjectRespository } from '../../../data/repositories/projectRepository'
 import { useTaskRespository } from '../../../data/repositories/taskRepository'
 import { Row } from '../../components/Layouts/Row'
+import { Loading } from '../../components/Loading'
 import { InfoProjectModal } from '../../components/Modal/InfoProjectModal'
 import { NewTaskModal } from '../../components/Modal/NewTaskModal'
 import { Tag } from '../../components/Tag'
@@ -23,7 +24,6 @@ import { handleError } from '../../utils/handleError'
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams()
-  const [project, setProject] = useState(projectMock)
 
   const [taskModal, setTaskModal] = useState(false)
   const [infoModal, setInfoModal] = useState(false)
@@ -34,8 +34,10 @@ export const ProjectPage: React.FC = () => {
     id!,
     filter
   )
+  const { data: tasks, isLoading: taskLoading } = getTasksByProjectQuery
 
-  const { isLoading, data: tasks } = getTasksByProjectQuery
+  const { getProjectByIdQuery } = useProjectRespository({ projectId: id! })
+  const { data: project, isLoading: projectLoading } = getProjectByIdQuery
 
   const editTask = async (task: Task) => {
     try {
@@ -89,7 +91,7 @@ export const ProjectPage: React.FC = () => {
           window.onscroll = function () {}
         }}
       >
-        <NewTaskModal project={project} onConfirm={(task) => {}} />
+        <NewTaskModal project={project!} onConfirm={(task) => {}} />
       </CustomModal>
 
       <CustomModal
@@ -100,7 +102,7 @@ export const ProjectPage: React.FC = () => {
           window.onscroll = function () {}
         }}
       >
-        <InfoProjectModal project={projectMock} />
+        <InfoProjectModal project={project!} />
       </CustomModal>
 
       <Navbar>
@@ -135,41 +137,45 @@ export const ProjectPage: React.FC = () => {
       </Navbar>
 
       <TaskWrapper>
-        <DragDropContext
-          onDragEnd={handleDragEnd}
-          onDragStart={handleDragStart}
-        >
-          <TaskColumn
-            id='PENDING'
-            percent={
-              tasks && tasks.total > 0
-                ? +(tasks!.totalPending / tasks!.total).toFixed(4)
-                : 0
-            }
-            taskList={tasks?.pending ?? []}
-            title='Pendente'
-          />
-          <TaskColumn
-            id='DOING'
-            percent={
-              tasks && tasks.total > 0
-                ? +(tasks!.totalDoing / tasks!.total).toFixed(4)
-                : 0
-            }
-            taskList={tasks?.doing ?? []}
-            title='Em progresso'
-          />
-          <TaskColumn
-            id='COMPLETED'
-            percent={
-              tasks && tasks.total > 0
-                ? +(tasks!.totalCompleted / tasks!.total).toFixed(4)
-                : 0
-            }
-            taskList={tasks?.completed ?? []}
-            title='Concluídas'
-          />
-        </DragDropContext>
+        {taskLoading || projectLoading ? (
+          <Loading variant='primary' />
+        ) : (
+          <DragDropContext
+            onDragEnd={handleDragEnd}
+            onDragStart={handleDragStart}
+          >
+            <TaskColumn
+              id='PENDING'
+              percent={
+                tasks && tasks!.total > 0
+                  ? +(tasks!.totalPending / tasks!.total).toFixed(4)
+                  : 0
+              }
+              taskList={tasks?.pending ?? []}
+              title='Pendente'
+            />
+            <TaskColumn
+              id='DOING'
+              percent={
+                tasks && tasks!.total > 0
+                  ? +(tasks!.totalDoing / tasks!.total).toFixed(4)
+                  : 0
+              }
+              taskList={tasks?.doing ?? []}
+              title='Em progresso'
+            />
+            <TaskColumn
+              id='COMPLETED'
+              percent={
+                tasks && tasks!.total > 0
+                  ? +(tasks!.totalCompleted / tasks!.total).toFixed(4)
+                  : 0
+              }
+              taskList={tasks?.completed ?? []}
+              title='Concluídas'
+            />
+          </DragDropContext>
+        )}
       </TaskWrapper>
     </Wrapper>
   )

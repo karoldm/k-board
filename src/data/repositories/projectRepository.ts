@@ -4,11 +4,19 @@ import { Project } from '../interfaces/project'
 import { projectMapper } from '../mappers/projectMapper'
 import { projectService } from '../services/projectService'
 
-export const useProjectRespository = (
-  projectsPage?: number,
-  projectsParticipationPage?: number,
+type Props = {
+  projectsPage?: number
+  projectsParticipationPage?: number
   filter?: string
-) => {
+  projectId?: string
+}
+
+export const useProjectRespository = ({
+  projectsPage,
+  projectsParticipationPage,
+  filter,
+  projectId,
+}: Props) => {
   const queryClient = useQueryClient()
 
   const getProjectsOwnerQuery = useQuery<GetPaginationResponseAPI<Project[]>>({
@@ -81,6 +89,14 @@ export const useProjectRespository = (
     },
   })
 
+  const getProjectByIdQuery = useQuery({
+    queryKey: ['getProjectByIdQuery'],
+    queryFn: async () => {
+      const data = await projectService.getById(projectId!)
+      return projectMapper(data)
+    },
+  })
+
   return {
     createProjectMutation,
     enterProjectMutation,
@@ -88,5 +104,6 @@ export const useProjectRespository = (
     getProjectsParticipationQuery,
     editProjectMutation,
     deleteProjectMutation,
+    getProjectByIdQuery,
   }
 }

@@ -9,8 +9,6 @@ class TaskService {
     filter?: string
   ): Promise<TasksResponse> {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 100))
-
       const result = await KBoardApi().get(
         `/task/${projectId}?filter=${filter ?? ''}`
       )

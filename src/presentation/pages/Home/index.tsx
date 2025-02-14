@@ -14,7 +14,11 @@ export const Home = () => {
   const [filter, setFilter] = useState('')
 
   const { getProjectsOwnerQuery, getProjectsParticipationQuery } =
-    useProjectRespository(pageOwner, pageParticipation, filter)
+    useProjectRespository({
+      projectsPage: pageOwner,
+      projectsParticipationPage: pageParticipation,
+      filter,
+    })
 
   const {
     data: projectsOwner,
