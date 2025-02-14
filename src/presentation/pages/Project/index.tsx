@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { DragDropContext } from '@hello-pangea/dnd'
+import { DragDropContext, DropResult } from '@hello-pangea/dnd'
 import { useState } from 'react'
 import { FaArrowLeft, FaInfo, FaPlus } from 'react-icons/fa'
 import { Link, useParams } from 'react-router-dom'
@@ -10,6 +10,8 @@ import { CustomModal } from '../../components/Modal'
 import { projectMock } from '../../../data/mocks/projectMock'
 import { Navbar, ProjectTitle, TaskWrapper, Wrapper } from './style'
 
+import { taskStatusFromString } from '../../../data/enums/taskStatus'
+import { Task } from '../../../data/interfaces/task'
 import { useTaskRespository } from '../../../data/repositories/taskRepository'
 import { Row } from '../../components/Layouts/Row'
 import { InfoProjectModal } from '../../components/Modal/InfoProjectModal'
@@ -17,6 +19,7 @@ import { NewTaskModal } from '../../components/Modal/NewTaskModal'
 import { Tag } from '../../components/Tag'
 import { TaskColumn } from '../../components/TaskColumn'
 import { WithCopy } from '../../components/WithCopy'
+import { handleError } from '../../utils/handleError'
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams()
@@ -27,26 +30,46 @@ export const ProjectPage: React.FC = () => {
 
   const [filter, setFilter] = useState('')
 
-  const { getTasksByProjectQuery } = useTaskRespository(id!, filter)
+  const { getTasksByProjectQuery, editTaskMutation } = useTaskRespository(
+    id!,
+    filter
+  )
 
   const { isLoading, data: tasks } = getTasksByProjectQuery
 
-  const handleDragEnd = async (result: any) => {
-    if (!result.destination) return
-
-    if (result.source.droppableId !== result.destination.droppableId) {
-      // await database.ref(`projects/${id}/tasks/${result.draggableId}`).update({
-      //   status: result.destination.droppableId,
-      // });
-    } else {
-      const items = Array.from([])
-      const [reorderedItem] = items.splice(result.source.index, 1)
-      items.splice(result.destination.index, 0, reorderedItem)
-      //setTasks(items);
+  const editTask = async (task: Task) => {
+    try {
+      await editTaskMutation.mutateAsync(task)
+    } catch (error) {
+      handleError(error)
     }
   }
 
-  const handleDragStart = () => {}
+  const handleDragEnd = async ({ source, destination }: DropResult<string>) => {
+    if (!destination || !tasks) return
+
+    const sourceKey = source.droppableId as keyof typeof taskStatusFromString
+    const destinationKey =
+      destination.droppableId as keyof typeof taskStatusFromString
+    if (sourceKey === destinationKey) return
+
+    const sourceList =
+      tasks![sourceKey.toLowerCase() as 'pending' | 'doing' | 'completed']
+    const task = sourceList[source.index]
+    if (!task) return
+
+    tasks![sourceKey.toLowerCase() as 'pending' | 'doing' | 'completed'] =
+      sourceList.filter((item) => item.id !== task.id)
+
+    tasks![
+      destinationKey.toLowerCase() as 'pending' | 'doing' | 'completed'
+    ].push(task)
+
+    task.taskStatus = taskStatusFromString[destinationKey]
+    await editTask(task)
+  }
+
+  const handleDragStart = ({ ...args }) => {}
 
   const disableScroll = () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop
@@ -90,7 +113,7 @@ export const ProjectPage: React.FC = () => {
             <Tag size='small' label={id ?? ''} />
           </WithCopy>
         </Row>
-        <Row wrap gap='8px'>
+        <Row gap='8px'>
           <Button
             onClick={() => {
               setTaskModal(true)
@@ -117,23 +140,31 @@ export const ProjectPage: React.FC = () => {
           onDragStart={handleDragStart}
         >
           <TaskColumn
-            id='pendent'
+            id='PENDING'
             percent={
-              tasks ? +(tasks!.totalPending / tasks!.total).toFixed(4) : 0
+              tasks && tasks.total > 0
+                ? +(tasks!.totalPending / tasks!.total).toFixed(4)
+                : 0
             }
             taskList={tasks?.pending ?? []}
             title='Pendente'
           />
           <TaskColumn
-            id='doing'
-            percent={tasks ? +(tasks!.totalDoing / tasks!.total).toFixed(4) : 0}
+            id='DOING'
+            percent={
+              tasks && tasks.total > 0
+                ? +(tasks!.totalDoing / tasks!.total).toFixed(4)
+                : 0
+            }
             taskList={tasks?.doing ?? []}
             title='Em progresso'
           />
           <TaskColumn
-            id='completed'
+            id='COMPLETED'
             percent={
-              tasks ? +(tasks!.totalCompleted / tasks!.total).toFixed(4) : 0
+              tasks && tasks.total > 0
+                ? +(tasks!.totalCompleted / tasks!.total).toFixed(4)
+                : 0
             }
             taskList={tasks?.completed ?? []}
             title='Concluídas'

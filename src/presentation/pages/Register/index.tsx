@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 
 import { BorderBackground, ContainerForm, Wrapper } from './style'
 
-import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserRepository } from '../../../data/repositories/userRepository'
@@ -11,6 +10,7 @@ import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 import { Column } from '../../components/Layouts/Column'
 import { registerSchema } from '../../schemas/register.schema'
+import { handleError } from '../../utils/handleError'
 import { showToast } from '../../utils/showToast'
 
 type FormData = {
@@ -41,16 +41,7 @@ export const Register = () => {
       reset()
       navigate('/login')
     } catch (error) {
-      const errorData = (error as AxiosError)?.response?.data as {
-        message: string
-        status: string
-      }
-
-      showToast(
-        'Tivemos um problema ao criar sua conta: ' +
-          (errorData.message || 'Erro desconhecido'),
-        'error'
-      )
+      handleError(error)
     }
   }
 

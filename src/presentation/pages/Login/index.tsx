@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 
 import { BorderBackground, ContainerForm, Wrapper } from './style'
 
-import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useUserRepository } from '../../../data/repositories/userRepository'
 import { useUser } from '../../../hooks/useUser'
@@ -11,7 +10,7 @@ import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 import { Column } from '../../components/Layouts/Column'
 import { loginSchema } from '../../schemas/login.schema'
-import { showToast } from '../../utils/showToast'
+import { handleError } from '../../utils/handleError'
 
 type FormData = {
   email: string
@@ -38,16 +37,7 @@ export const Login = () => {
       reset()
       navigate('/')
     } catch (error) {
-      console.log(error)
-      const errorData = (error as AxiosError)?.response?.data as {
-        message: string
-        status: string
-      }
-
-      showToast(
-        'Erro ao acessar o app: ' + (errorData?.message || 'Erro desconhecido'),
-        'error'
-      )
+      handleError(error)
     }
   }
 
