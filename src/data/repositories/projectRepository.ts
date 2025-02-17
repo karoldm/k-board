@@ -95,7 +95,7 @@ export const useProjectRespository = ({
       const data = await projectService.getById(projectId!)
       return projectMapper(data)
     },
-    enabled: !!filter || filter === '', // Avoids refetching on every render
+    enabled: !!filter || filter === '' || !!projectId || projectId === '', // Avoids refetching on every render
   })
 
   return {
