@@ -51,6 +51,7 @@ export const Home = () => {
       <NavBar text={searchText} onChange={onFilter} />
       <Grid columns='1fr 1fr' rows='auto'>
         <ProjectList
+          isOwner={true}
           data={projectsOwner}
           isFetching={isFetchingOwner}
           isLoading={isLoadingOwner}
@@ -60,6 +61,7 @@ export const Home = () => {
           page={pageOwner}
         />
         <ProjectList
+          isOwner={false}
           data={projectsParticipation}
           isFetching={isFetchingParticipation}
           isLoading={isLoadingParticipation}

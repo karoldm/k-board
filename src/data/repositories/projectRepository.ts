@@ -67,13 +67,21 @@ export const useProjectRespository = ({
   })
 
   const editProjectMutation = useMutation({
-    mutationFn: async ({ id, title }: { id: string; title: string }) => {
-      const data = await projectService.editProject(id, title)
+    mutationFn: async ({
+      id,
+      title,
+      membersToRemove,
+    }: {
+      id: string
+      title: string
+      membersToRemove: string[]
+    }) => {
+      const data = await projectService.editProject(id, title, membersToRemove)
       return projectMapper(data)
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['getProjectsOwner', projectsPage],
+        queryKey: ['getProjectsOwner'],
       })
     },
   })

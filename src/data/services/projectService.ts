@@ -71,10 +71,11 @@ class ProjectService {
     }
   }
 
-  async editProject(id: string, title: string) {
+  async editProject(id: string, title: string, membersToRemove: string[]) {
     try {
       const result = await KBoardApi().put(`/project/${id}`, {
         title,
+        membersIdToRemove: membersToRemove,
       })
       return result.data
     } catch (error) {
