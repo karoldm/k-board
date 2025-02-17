@@ -21,6 +21,7 @@ type Props = {
   isFetching: boolean
   page: number
   onPageChange: (page: number) => void
+  isOwner: boolean
 }
 
 export const ProjectList = ({
@@ -29,6 +30,7 @@ export const ProjectList = ({
   isLoading,
   onPageChange,
   page,
+  isOwner,
 }: Props) => {
   const [deleteProjectModal, setDeleteProjectModal] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -62,13 +64,16 @@ export const ProjectList = ({
     }
   }
 
-  const saveProject = async (title: string) => {
+  const saveProject = async (title: string, membersToRemove: string[]) => {
     try {
       if (!selectedProject) return
+
       await editProjectMutation.mutateAsync({
         id: selectedProject.id!,
         title: title,
+        membersToRemove: membersToRemove,
       })
+
       showToast('Projeto editado com sucesso!', 'success')
     } catch (error) {
       handleError(error)
@@ -106,7 +111,10 @@ export const ProjectList = ({
         }}
       >
         <NewProjectModal
-          initialValue={selectedProject?.title ?? ''}
+          initialValue={{
+            title: selectedProject?.title ?? '',
+            members: selectedProject?.members ?? [],
+          }}
           handleConfirm={saveProject}
         />
       </CustomModal>
@@ -139,7 +147,7 @@ export const ProjectList = ({
               >
                 {data?.content.map((project: Project) => (
                   <ProjectCard
-                    isOwner
+                    isOwner={isOwner}
                     onEdit={() => onEditProject(project)}
                     onDelete={() => onDeleteProject(project)}
                     key={project.id}

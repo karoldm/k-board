@@ -71,10 +71,11 @@ class ProjectService {
     }
   }
 
-  async editProject(id: string, title: string) {
+  async editProject(id: string, title: string, membersToRemove: string[]) {
     try {
       const result = await KBoardApi().put(`/project/${id}`, {
         title,
+        membersIdToRemove: membersToRemove,
       })
       return result.data
     } catch (error) {
@@ -97,7 +98,7 @@ class ProjectService {
       const response = await KBoardApi().get(`/project/${id}`)
       return response.data
     } catch (error) {
-      console.error('deleteProject API error:', error)
+      console.error('getById API error:', error)
       throw error
     }
   }

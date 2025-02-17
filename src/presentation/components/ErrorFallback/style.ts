@@ -1,22 +1,17 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
   height: 100vh;
   width: 100vw;
   background: var(--background);
   display: flex;
-  flex-direction: column;
-  gap: 32px;
   align-items: center;
   justify-content: center;
+  gap: 16px;
+  flex-direction: column;
+  color: var(--black);
 
   span {
-    font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 0.9rem;
   }
-
-  p {
-    font-size: .9rem;
-    font-weight: 500;
-  }
-`;
+`
