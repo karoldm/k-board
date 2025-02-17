@@ -11,7 +11,9 @@ import { GlobalStyle } from './presentation/styles/global'
 
 const rootElement = document.getElementById('root')
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+})
 
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement)
