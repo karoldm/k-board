@@ -97,7 +97,7 @@ class ProjectService {
       const response = await KBoardApi().get(`/project/${id}`)
       return response.data
     } catch (error) {
-      console.error('deleteProject API error:', error)
+      console.error('getById API error:', error)
       throw error
     }
   }

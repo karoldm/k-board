@@ -13,6 +13,7 @@ import { taskStatusFromString } from '../../../data/enums/taskStatus'
 import { Task, TaskPayload } from '../../../data/interfaces/task'
 import { useProjectRespository } from '../../../data/repositories/projectRepository'
 import { useTaskRepository } from '../../../data/repositories/taskRepository'
+import { ErrorFallback } from '../../components/ErrorFallback'
 import { Row } from '../../components/Layouts/Row'
 import { Loading } from '../../components/Loading'
 import { InfoProjectModal } from '../../components/Modal/InfoProjectModal'
@@ -33,10 +34,19 @@ export const ProjectPage: React.FC = () => {
 
   const { getTasksByProjectQuery, editTaskMutation, createTaskMutation } =
     useTaskRepository({ projectId: id!, filter: filter })
-  const { data: tasks, isLoading: taskLoading } = getTasksByProjectQuery
+
+  const {
+    data: tasks,
+    isLoading: taskLoading,
+    error: tasksError,
+  } = getTasksByProjectQuery
 
   const { getProjectByIdQuery } = useProjectRespository({ projectId: id! })
-  const { data: project, isLoading: projectLoading } = getProjectByIdQuery
+  const {
+    data: project,
+    isLoading: projectLoading,
+    error: projectError,
+  } = getProjectByIdQuery
 
   const editTask = async (task: Task) => {
     try {
@@ -91,6 +101,14 @@ export const ProjectPage: React.FC = () => {
     } catch (error) {
       handleError(error)
     }
+  }
+
+  if (projectError || tasksError) {
+    return (
+      <ErrorFallback
+        error={projectError ?? tasksError ?? new Error('Erro desconhecido')}
+      />
+    )
   }
 
   return (
