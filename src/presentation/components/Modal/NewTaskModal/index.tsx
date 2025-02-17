@@ -41,14 +41,14 @@ export const NewTaskModal = ({ onConfirm, project }: Props) => {
 
   const onSubmit = (data: FormData) => {
     reset()
-    dispatch({
-      type: 'reset',
-      payload: undefined,
-    })
     onConfirm({
       ...data,
       tags: task.tags,
       members: task.members.map((member) => member.id),
+    })
+    dispatch({
+      type: 'reset',
+      payload: undefined,
     })
   }
 
