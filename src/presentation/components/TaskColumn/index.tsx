@@ -42,7 +42,7 @@ export const TaskColumn = ({ id, taskList, percent, title }: Props) => {
           >
             <Row id='header' fullWidth justifyContent='space-between'>
               <p>{title}</p>
-              <p>{(percent * 100).toPrecision(2)} %</p>
+              <p>{(percent * 100).toFixed(0)} %</p>
             </Row>
           </CustomProgressBar>
 
