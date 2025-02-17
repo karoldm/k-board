@@ -12,7 +12,10 @@ import { GlobalStyle } from './presentation/styles/global'
 const rootElement = document.getElementById('root')
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  defaultOptions: {
+    queries: { retry: false, refetchOnWindowFocus: false },
+    mutations: { retry: false },
+  },
 })
 
 if (rootElement) {
