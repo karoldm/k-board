@@ -8,8 +8,6 @@ class ProjectService {
     filter?: string
   ): Promise<GetPaginationResponseAPI<Project[]>> {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 100))
-
       const result = await KBoardApi().get(
         `/project/owner?page=${page ?? 0}&size=4&filter=${filter ?? ''}`
       )
@@ -31,8 +29,6 @@ class ProjectService {
     filter?: string
   ): Promise<GetPaginationResponseAPI<Project[]>> {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 100))
-
       const result = await KBoardApi().get(
         `/project/member?page=${page ?? 0}&size=4&filter=${filter ?? ''}`
       )
