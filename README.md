@@ -25,6 +25,7 @@ Aplicação para Gerenciamento de Projetos e Tarefas em um Quadro Kanban! Desenv
 - **React Query**: Gerenciamento de estado assíncrono e cache de requisições (saiba mais em [React Query](https://tanstack.com/query/latest))
 - **Axios**: Para comunicação eficiente com a API (saiba mais em [Axios](https://axios-http.com/ptbr/docs/intro))
 - **React Bootstrap**: Para estilização e componentes responsivos (saiba mais em [React Boostrap](https://react-bootstrap.netlify.app/))
+- **Styled Components**: Para fácil estilização (saiba mais em [Styled Components](https://styled-components.com/))
 
 ## Como Executar o Projeto
 
