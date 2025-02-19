@@ -1,6 +1,6 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd'
 import { Task } from '../../../data/interfaces/task'
-import { useTaskRepository } from '../../../data/repositories/taskRepository'
+import { useDeleteTask } from '../../../data/repositories/taskRepository'
 import { handleError } from '../../utils/handleError'
 import { showToast } from '../../utils/showToast'
 import { Row } from '../Layouts/Row'
@@ -16,11 +16,11 @@ type Props = {
 }
 
 export const TaskColumn = ({ id, taskList, percent, title }: Props) => {
-  const { deleteTaskMutation } = useTaskRepository({})
+  const { mutateAsync } = useDeleteTask()
 
   const handleRemoveTask = async (taskId: string) => {
     try {
-      await deleteTaskMutation.mutateAsync(taskId)
+      await mutateAsync(taskId)
       showToast('Tarefa removida com sucesso!', 'success')
     } catch (error) {
       handleError(error)

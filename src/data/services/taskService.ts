@@ -4,14 +4,9 @@ import { Task, TaskPayload } from '../interfaces/task'
 import { KBoardApi } from './kboardApi'
 
 class TaskService {
-  async getTasksByProject(
-    projectId: string,
-    filter?: string
-  ): Promise<TasksResponse> {
+  async getTasksByProject(projectId: string): Promise<TasksResponse> {
     try {
-      const result = await KBoardApi().get(
-        `/task/${projectId}?filter=${filter ?? ''}`
-      )
+      const result = await KBoardApi().get(`/task/${projectId}`)
       return result.data
     } catch (error) {
       console.error('getProjectsOwner API error:', error)

@@ -4,62 +4,46 @@ import { Task, TaskPayload } from '../interfaces/task'
 import { taskMapper } from '../mappers/taskMapper'
 import { taskService } from '../services/taskService'
 
-type Props = {
-  projectId?: string
-  filter?: string
+export const useTasksByProject = (projectId: string) => {
+  return useQuery<TasksResponse>({
+    queryKey: ['getTasksByProject'],
+    queryFn: async () => taskService.getTasksByProject(projectId),
+  })
 }
 
-export const useTaskRepository = ({ projectId, filter }: Props) => {
+export const useEditTask = () => {
   const queryClient = useQueryClient()
-
-  const getTasksByProjectQuery = useQuery<TasksResponse>({
-    queryKey: ['getTasksByProject', filter],
-    queryFn: async () => {
-      const data = await taskService.getTasksByProject(projectId ?? '', filter)
-      return data
-    },
-    enabled: !!filter || filter === '', // Avoids refetching on every render
-  })
-
-  const editTaskMutation = useMutation({
-    mutationFn: async (payload: Task) => {
-      const data = await taskService.editTask(payload.id, payload)
-      return data
-    },
+  return useMutation({
+    mutationFn: async (payload: Task) =>
+      taskService.editTask(payload.id, payload),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['getTasksByProject'] })
     },
   })
+}
 
-  const createTaskMutation = useMutation({
+export const useCreateTask = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
     mutationFn: async ({
       projectId,
       payload,
     }: {
       projectId: string
       payload: TaskPayload
-    }) => {
-      const data = await taskService.createTask(projectId, payload)
-      return taskMapper(data)
-    },
+    }) => taskMapper(await taskService.createTask(projectId, payload)),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['getTasksByProject'] })
     },
   })
+}
 
-  const deleteTaskMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await taskService.deleteTask(id)
-    },
+export const useDeleteTask = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => taskService.deleteTask(id),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['getTasksByProject'] })
     },
   })
-
-  return {
-    getTasksByProjectQuery,
-    editTaskMutation,
-    createTaskMutation,
-    deleteTaskMutation,
-  }
 }

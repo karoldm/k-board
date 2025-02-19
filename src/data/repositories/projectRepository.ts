@@ -4,69 +4,54 @@ import { Project } from '../interfaces/project'
 import { projectMapper } from '../mappers/projectMapper'
 import { projectService } from '../services/projectService'
 
-type Props = {
-  projectsPage?: number
-  projectsParticipationPage?: number
-  filter?: string
-  projectId?: string
+export const useProjectsOwner = (projectsPage?: number, filter?: string) => {
+  return useQuery<GetPaginationResponseAPI<Project[]>>({
+    queryKey: ['getProjectsOwner', projectsPage, filter],
+    queryFn: async () => projectService.getProjectsOwner(projectsPage, filter),
+    enabled: !!filter || filter === '',
+  })
 }
 
-export const useProjectRespository = ({
-  projectsPage,
-  projectsParticipationPage,
-  filter,
-  projectId,
-}: Props) => {
-  const queryClient = useQueryClient()
-
-  const getProjectsOwnerQuery = useQuery<GetPaginationResponseAPI<Project[]>>({
-    queryKey: ['getProjectsOwner', projectsPage, filter],
-    queryFn: async () => {
-      const data = await projectService.getProjectsOwner(projectsPage, filter)
-      return data
-    },
-    enabled: !!filter || filter === '', // Avoids refetching on every render
-  })
-
-  const getProjectsParticipationQuery = useQuery<
-    GetPaginationResponseAPI<Project[]>
-  >({
+export const useProjectsParticipation = (
+  projectsParticipationPage?: number,
+  filter?: string
+) => {
+  return useQuery<GetPaginationResponseAPI<Project[]>>({
     queryKey: ['getProjectsParticipation', projectsParticipationPage, filter],
-    queryFn: async () => {
-      const data = await projectService.getProjectsParticipation(
+    queryFn: async () =>
+      projectService.getProjectsParticipation(
         projectsParticipationPage,
         filter
-      )
-      return data
-    },
-    enabled: !!filter || filter === '', // Avoids refetching on every render
+      ),
+    enabled: !!filter || filter === '',
   })
+}
 
-  const createProjectMutation = useMutation({
-    mutationFn: async (title: string) => {
-      const data = await projectService.createProject(title)
-      return projectMapper(data)
-    },
-    onSuccess: (newProject) => {
-      queryClient.setQueryData(['getProjectsOwner'], (oldData: any) => {
-        return oldData ? [...oldData, newProject] : [newProject]
-      })
+export const useCreateProject = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (title: string) =>
+      projectMapper(await projectService.createProject(title)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getProjectsOwner'] })
     },
   })
+}
 
-  const enterProjectMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const data = await projectService.enterProject(id)
-      return projectMapper(data)
-    },
-    onSuccess: (newProject) => {
-      queryClient.setQueryData(['getProjectsParticipation'], (oldData: any) => {
-        return oldData ? [...oldData, newProject] : [newProject]
-      })
+export const useEnterProject = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) =>
+      projectMapper(await projectService.enterProject(id)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getProjectsParticipation'] })
     },
   })
+}
 
-  const editProjectMutation = useMutation({
+export const useEditProject = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
     mutationFn: async ({
       id,
       title,
@@ -75,44 +60,33 @@ export const useProjectRespository = ({
       id: string
       title: string
       membersToRemove: string[]
-    }) => {
-      const data = await projectService.editProject(id, title, membersToRemove)
-      return projectMapper(data)
+    }) =>
+      projectMapper(
+        await projectService.editProject(id, title, membersToRemove)
+      ),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['getProjectsOwner'] })
     },
+  })
+}
+
+export const useDeleteProject = (projectsPage?: number) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => projectService.deleteProject(id),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['getProjectsOwner'],
       })
     },
   })
+}
 
-  const deleteProjectMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await projectService.deleteProject(id)
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['getProjectsOwner', projectsPage],
-      })
-    },
+export const useProjectById = (projectId?: string, filter?: string) => {
+  return useQuery({
+    queryKey: ['getProjectByIdQuery', projectId],
+    queryFn: async () =>
+      projectMapper(await projectService.getById(projectId!)),
+    enabled: !!filter || filter === '' || !!projectId || projectId === '',
   })
-
-  const getProjectByIdQuery = useQuery({
-    queryKey: ['getProjectByIdQuery'],
-    queryFn: async () => {
-      const data = await projectService.getById(projectId!)
-      return projectMapper(data)
-    },
-    enabled: !!filter || filter === '' || !!projectId || projectId === '', // Avoids refetching on every render
-  })
-
-  return {
-    createProjectMutation,
-    enterProjectMutation,
-    getProjectsOwnerQuery,
-    getProjectsParticipationQuery,
-    editProjectMutation,
-    deleteProjectMutation,
-    getProjectByIdQuery,
-  }
 }

@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { FaPlus, FaSearch, FaUserPlus } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
-import { useProjectRespository } from '../../../../../data/repositories/projectRepository'
+import {
+  useCreateProject,
+  useEnterProject,
+} from '../../../../../data/repositories/projectRepository'
 import { useUser } from '../../../../../hooks/useUser'
 import { Avatar } from '../../../../components/Avatar'
 import { Button } from '../../../../components/Button'
@@ -28,13 +31,12 @@ export const NavBar = ({ onChange, text }: Props) => {
   const [projectModal, setProjectModal] = useState(false)
   const [enterProjectModal, setEnterProjectModal] = useState(false)
 
-  const { createProjectMutation, enterProjectMutation } = useProjectRespository(
-    {}
-  )
+  const { mutateAsync: createPrjectMutation } = useCreateProject()
+  const { mutateAsync: enterProjectMutation } = useEnterProject()
 
   const saveProject = async (title: string) => {
     try {
-      await createProjectMutation.mutateAsync(title)
+      await createPrjectMutation(title)
       showToast('Projeto criado com sucesso!', 'success')
     } catch (error) {
       handleError(error)
@@ -45,7 +47,7 @@ export const NavBar = ({ onChange, text }: Props) => {
 
   const enterProject = async (id: string) => {
     try {
-      await enterProjectMutation.mutateAsync(id)
+      await enterProjectMutation(id)
       showToast('Participação adicionada com sucesso!', 'success')
     } catch (error) {
       handleError(error)

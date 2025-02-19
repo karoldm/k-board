@@ -11,8 +11,12 @@ import { Navbar, ProjectTitle, TaskWrapper, Wrapper } from './style'
 
 import { taskStatusFromString } from '../../../data/enums/taskStatus'
 import { Task, TaskPayload } from '../../../data/interfaces/task'
-import { useProjectRespository } from '../../../data/repositories/projectRepository'
-import { useTaskRepository } from '../../../data/repositories/taskRepository'
+import { useProjectById } from '../../../data/repositories/projectRepository'
+import {
+  useCreateTask,
+  useEditTask,
+  useTasksByProject,
+} from '../../../data/repositories/taskRepository'
 import { ErrorFallback } from '../../components/ErrorFallback'
 import { Row } from '../../components/Layouts/Row'
 import { Loading } from '../../components/Loading'
@@ -30,27 +34,24 @@ export const ProjectPage: React.FC = () => {
   const [taskModal, setTaskModal] = useState(false)
   const [infoModal, setInfoModal] = useState(false)
 
-  const [filter, setFilter] = useState('')
-
-  const { getTasksByProjectQuery, editTaskMutation, createTaskMutation } =
-    useTaskRepository({ projectId: id!, filter: filter })
+  const { mutateAsync: editTaskMutation } = useEditTask()
+  const { mutateAsync: createTaskMutation } = useCreateTask()
 
   const {
     data: tasks,
     isLoading: taskLoading,
     error: tasksError,
-  } = getTasksByProjectQuery
+  } = useTasksByProject(id ?? '')
 
-  const { getProjectByIdQuery } = useProjectRespository({ projectId: id! })
   const {
     data: project,
     isLoading: projectLoading,
     error: projectError,
-  } = getProjectByIdQuery
+  } = useProjectById(id)
 
   const editTask = async (task: Task) => {
     try {
-      await editTaskMutation.mutateAsync(task)
+      await editTaskMutation(task)
     } catch (error) {
       handleError(error)
     }
@@ -92,7 +93,7 @@ export const ProjectPage: React.FC = () => {
 
   const onCreateTask = async (data: TaskPayload) => {
     try {
-      await createTaskMutation.mutateAsync({
+      await createTaskMutation({
         projectId: id!,
         payload: data,
       })
