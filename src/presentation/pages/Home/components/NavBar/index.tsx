@@ -28,8 +28,9 @@ export const NavBar = ({ onChange, text }: Props) => {
   const [projectModal, setProjectModal] = useState(false)
   const [enterProjectModal, setEnterProjectModal] = useState(false)
 
-  const { createProjectMutation, enterProjectMutation } =
-    useProjectRespository({})
+  const { createProjectMutation, enterProjectMutation } = useProjectRespository(
+    {}
+  )
 
   const saveProject = async (title: string) => {
     try {
