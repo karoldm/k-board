@@ -7,7 +7,7 @@ export const userMapper = (data: Record<string, any>) => {
     id: userData['id'],
     email: userData['email'],
     name: userData['name'],
-    photoUrl: userData['photo'],
+    photoUrl: userData['photoUrl'],
     createdAt: userData['createdAt'],
     token: data['token'],
   }

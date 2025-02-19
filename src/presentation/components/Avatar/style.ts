@@ -14,4 +14,5 @@ export const StyledAvatar = styled.img<Props>`
   display: flex;
   align-items: center;
   justify-content: center;
+  object-fit: cover;
 `

@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { Task } from '../../../data/interfaces/task'
+import { Avatar } from '../Avatar'
 import { Button } from '../Button'
 import { Column } from '../Layouts/Column'
 import { Row } from '../Layouts/Row'
@@ -41,7 +42,11 @@ export const TaskCard = forwardRef<HTMLDivElement, Props>(
               <Tag size='small' key={tag} label={tag} />
             ))}
           </Row>
-          <MembersList noToolTip members={task.members} />
+
+          <Row gap='8px'>
+            <Avatar src={task.createdBy.photoUrl} />
+            <MembersList noToolTip members={task.members} />
+          </Row>
         </Column>
       </TaskContainer>
     )
