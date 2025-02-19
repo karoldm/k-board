@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react'
 
-import { useProjectRespository } from '../../../data/repositories/projectRepository'
+import {
+  useProjectsOwner,
+  useProjectsParticipation,
+} from '../../../data/repositories/projectRepository'
 import { Grid } from '../../components/Layouts/Grid'
 import { debounce } from '../../utils/debounce'
 import { NavBar } from './components/NavBar'
@@ -13,24 +16,17 @@ export const Home = () => {
   const [searchText, setSearchText] = useState('')
   const [filter, setFilter] = useState('')
 
-  const { getProjectsOwnerQuery, getProjectsParticipationQuery } =
-    useProjectRespository({
-      projectsPage: pageOwner,
-      projectsParticipationPage: pageParticipation,
-      filter,
-    })
-
   const {
     data: projectsOwner,
     isLoading: isLoadingOwner,
     isFetching: isFetchingOwner,
-  } = getProjectsOwnerQuery
+  } = useProjectsOwner(pageOwner, filter)
 
   const {
     data: projectsParticipation,
     isLoading: isLoadingParticipation,
     isFetching: isFetchingParticipation,
-  } = getProjectsParticipationQuery
+  } = useProjectsParticipation(pageParticipation, filter)
 
   // it persists the timeout of debouncer between renders
   const debouncedSetFilter = useMemo(

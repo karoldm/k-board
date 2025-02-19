@@ -3,22 +3,15 @@ import { LoginPayload, RegisterPayload } from '../interfaces/auth'
 import { userMapper } from '../mappers/userMapper'
 import { authService } from '../services/authService'
 
-export const useUserRepository = () => {
-  const loginMutation = useMutation({
-    mutationFn: async (payload: LoginPayload) => {
-      const data = await authService.login(payload)
-      return userMapper(data)
-    },
+export const useLogin = () => {
+  return useMutation({
+    mutationFn: async (payload: LoginPayload) =>
+      userMapper(await authService.login(payload)),
   })
+}
 
-  const registerMutation = useMutation({
-    mutationFn: (payload: RegisterPayload) => {
-      return authService.register(payload)
-    },
+export const useRegister = () => {
+  return useMutation({
+    mutationFn: (payload: RegisterPayload) => authService.register(payload),
   })
-
-  return {
-    loginMutation,
-    registerMutation,
-  }
 }

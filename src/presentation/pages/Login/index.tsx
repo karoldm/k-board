@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { BorderBackground, ContainerForm, Wrapper } from './style'
 
 import { useNavigate } from 'react-router-dom'
-import { useUserRepository } from '../../../data/repositories/userRepository'
+import { useLogin } from '../../../data/repositories/userRepository'
 import { useUser } from '../../../hooks/useUser'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
@@ -26,13 +26,14 @@ export const Login = () => {
     resolver: zodResolver(loginSchema),
   })
 
-  const { loginMutation } = useUserRepository()
+  const { mutateAsync, isPending } = useLogin()
+
   const navigate = useNavigate()
   const { setUserData } = useUser()
 
   const handleLogin = async (data: FormData) => {
     try {
-      const user = await loginMutation.mutateAsync(data)
+      const user = await mutateAsync(data)
       setUserData(user)
       reset()
       navigate('/')
@@ -71,7 +72,7 @@ export const Login = () => {
               type='password'
               placeholder='Senha'
             />
-            <Button loading={loginMutation.isPending} type='submit'>
+            <Button loading={isPending} type='submit'>
               <p>Entrar</p>
             </Button>
           </Column>

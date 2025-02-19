@@ -18,23 +18,5 @@ export const KBoardApi = () => {
     return config
   })
 
-  instance.interceptors.response.use(
-    (response) => {
-      return response
-    },
-    (error) => {
-      if (error.response) {
-        const { status } = error.response
-
-        if (status === 401 || status === 403) {
-          localStorage.removeItem(process.env.REACT_APP_STORAGE_KEY ?? '')
-          window.location.pathname = '/login'
-        }
-      }
-
-      return Promise.reject(error)
-    }
-  )
-
   return instance
 }

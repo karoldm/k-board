@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { GetPaginationResponseAPI } from '../../../../../data/interfaces/apiResponse'
 import { Project } from '../../../../../data/interfaces/project'
-import { useProjectRespository } from '../../../../../data/repositories/projectRepository'
+import {
+  useDeleteProject,
+  useEditProject,
+} from '../../../../../data/repositories/projectRepository'
 import { Column } from '../../../../components/Layouts/Column'
 import { Grid } from '../../../../components/Layouts/Grid'
 import { Row } from '../../../../components/Layouts/Row'
@@ -36,9 +39,8 @@ export const ProjectList = ({
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [projectModal, setProjectModal] = useState(false)
 
-  const { editProjectMutation, deleteProjectMutation } = useProjectRespository(
-    {}
-  )
+  const { mutateAsync: deleteProjectMuation } = useDeleteProject()
+  const { mutateAsync: editProjectMutation } = useEditProject()
 
   const onEditProject = (project: Project) => {
     setSelectedProject(project)
@@ -54,7 +56,7 @@ export const ProjectList = ({
     try {
       if (!selectedProject) return
 
-      await deleteProjectMutation.mutateAsync(selectedProject.id!)
+      await deleteProjectMuation(selectedProject.id!)
       showToast('Projeto deletado com sucesso!', 'success')
     } catch (error) {
       handleError(error)
@@ -68,7 +70,7 @@ export const ProjectList = ({
     try {
       if (!selectedProject) return
 
-      await editProjectMutation.mutateAsync({
+      await editProjectMutation({
         id: selectedProject.id!,
         title: title,
         membersToRemove: membersToRemove,
