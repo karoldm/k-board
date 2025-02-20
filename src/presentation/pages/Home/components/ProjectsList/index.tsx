@@ -139,7 +139,9 @@ export const ProjectList = ({
               gap='24px'
             >
               <Row justifyContent='space-between' fullWidth>
-                <h3 className='text'>Meus Projetos</h3>
+                <h3 className='text'>
+                  {isOwner ? 'Meus Projetos' : 'Outros projetos'}
+                </h3>
                 <p className='text'>{data?.totalElements ?? 0}</p>
               </Row>
               <Grid
