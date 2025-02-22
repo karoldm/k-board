@@ -23,11 +23,11 @@ Aplicação para Gerenciamento de Projetos e Tarefas em um Quadro Kanban! Desenv
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
   <img src="/assets/image1.png" alt="login" width="45%">
-  <img src="/assets/image2.png" alt="room" width="45%">
-  <img src="/assets/image3.png" alt="send-question" width="45%">
-  <img src="/assets/image4.png" alt="admin-room" width="45%">
-  <img src="/assets/image5.png" alt="admin-room" width="45%">
-  <img src="/assets/image6.png" alt="admin-room" width="45%">
+  <img src="/assets/image2.png" alt="home" width="45%">
+  <img src="/assets/image3.png" alt="enter project" width="45%">
+  <img src="/assets/image4.png" alt="tasks" width="45%">
+  <img src="/assets/image5.png" alt="new task" width="45%">
+  <img src="/assets/image6.png" alt="project info" width="45%">
 </div>
 
 ## Tecnologias e Ferramentas Utilizadas
