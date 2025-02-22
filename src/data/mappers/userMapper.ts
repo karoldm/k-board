@@ -19,7 +19,7 @@ export const simpleUserMapper = (data: Record<string, any>) => {
     id: data['id'],
     email: data['email'],
     name: data['name'],
-    photoUrl: data['photo'],
+    photoUrl: data['photoUrl'],
     createdAt: data['createdAt'],
   }
   return user
