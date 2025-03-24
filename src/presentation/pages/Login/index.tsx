@@ -78,6 +78,19 @@ export const Login = () => {
           </Column>
 
           <a href='/register'>Registrar-se</a>
+          <span
+            style={{
+              fontSize: '11px',
+              color: 'var(--gray)',
+              lineHeight: '13px',
+            }}
+          >
+            Obs.: A demora nas requisisões acontecem porque a API e o banco de
+            dados estão hospedados em uma instância gratuita do render, que
+            inativa a aplicação quando ela está sem uso e pode causar delays de
+            até 3 minutos. Já estou procurando uma maneira de contornar o
+            problema, obrigada pela paciência :)
+          </span>
         </ContainerForm>
       </BorderBackground>
     </Wrapper>
