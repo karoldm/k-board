@@ -35,7 +35,7 @@ export const ProjectPage: React.FC = () => {
   const [infoModal, setInfoModal] = useState(false)
 
   const { mutateAsync: editTaskMutation } = useEditTask()
-  const { mutateAsync: createTaskMutation } = useCreateTask()
+  const { mutateAsync: createTaskMutation, isPending: createTaskPending } = useCreateTask()
 
   const {
     data: tasks,
@@ -122,7 +122,7 @@ export const ProjectPage: React.FC = () => {
           window.onscroll = function () {}
         }}
       >
-        <NewTaskModal project={project!} onConfirm={onCreateTask} />
+        <NewTaskModal loading={createTaskPending} project={project!} onConfirm={onCreateTask} />
       </CustomModal>
 
       <CustomModal

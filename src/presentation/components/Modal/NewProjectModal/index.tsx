@@ -15,9 +15,10 @@ type Props = {
     members: User[]
   }
   handleConfirm: (title: string, members: string[]) => void
+  loading: boolean
 }
 
-export const NewProjectModal = ({ handleConfirm, initialValue }: Props) => {
+export const NewProjectModal = ({ handleConfirm, initialValue, loading }: Props) => {
   const {
     register,
     handleSubmit,
@@ -60,7 +61,7 @@ export const NewProjectModal = ({ handleConfirm, initialValue }: Props) => {
           />
         ))}
       </Row>
-      <Button type='submit'>
+      <Button loading={loading} type='submit'>
         <p>Salvar</p>
       </Button>
     </Column>

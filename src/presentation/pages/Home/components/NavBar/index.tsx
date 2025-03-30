@@ -31,12 +31,12 @@ export const NavBar = ({ onChange, text }: Props) => {
   const [projectModal, setProjectModal] = useState(false)
   const [enterProjectModal, setEnterProjectModal] = useState(false)
 
-  const { mutateAsync: createPrjectMutation } = useCreateProject()
-  const { mutateAsync: enterProjectMutation } = useEnterProject()
+  const { mutateAsync: createProjectMutation, isPending: createProjectPending } = useCreateProject()
+  const { mutateAsync: enterProjectMutation, isPaused: enterProjectPending } = useEnterProject()
 
   const saveProject = async (title: string) => {
     try {
-      await createPrjectMutation(title)
+      await createProjectMutation(title)
       showToast('Projeto criado com sucesso!', 'success')
     } catch (error) {
       handleError(error)
@@ -65,7 +65,7 @@ export const NavBar = ({ onChange, text }: Props) => {
           window.onscroll = function () {}
         }}
       >
-        <NewProjectModal handleConfirm={saveProject} />
+        <NewProjectModal loading={createProjectPending} handleConfirm={saveProject} />
       </CustomModal>
 
       <CustomModal
@@ -76,7 +76,7 @@ export const NavBar = ({ onChange, text }: Props) => {
           window.onscroll = function () {}
         }}
       >
-        <EnterProjectModal handleConfirm={enterProject} />
+        <EnterProjectModal loading={enterProjectPending} handleConfirm={enterProject} />
       </CustomModal>
       <Nav>
         <Row fullWidth gap='8px'>

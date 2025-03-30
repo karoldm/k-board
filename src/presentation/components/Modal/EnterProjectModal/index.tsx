@@ -7,9 +7,10 @@ import { Column } from '../../Layouts/Column'
 
 type Props = {
   handleConfirm: (id: string) => void
+  loading: boolean
 }
 
-export const EnterProjectModal = ({ handleConfirm }: Props) => {
+export const EnterProjectModal = ({ handleConfirm, loading }: Props) => {
   const {
     register,
     handleSubmit,
@@ -35,7 +36,7 @@ export const EnterProjectModal = ({ handleConfirm }: Props) => {
         error={errors.id?.message?.toString()}
         {...register('id')}
       />
-      <Button type='submit'>
+      <Button loading={loading} type='submit'>
         <p>Participar</p>
       </Button>
     </Column>

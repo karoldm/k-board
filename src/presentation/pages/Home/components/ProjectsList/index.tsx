@@ -39,8 +39,8 @@ export const ProjectList = ({
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [projectModal, setProjectModal] = useState(false)
 
-  const { mutateAsync: deleteProjectMuation } = useDeleteProject()
-  const { mutateAsync: editProjectMutation } = useEditProject()
+  const { mutateAsync: deleteProjectMuation, isPending: deleteProjectPending } = useDeleteProject()
+  const { mutateAsync: editProjectMutation, isPending: editProjectPending } = useEditProject()
 
   const onEditProject = (project: Project) => {
     setSelectedProject(project)
@@ -96,6 +96,7 @@ export const ProjectList = ({
         }}
       >
         <ConfirmModal
+          loading={deleteProjectPending}
           onConfirm={deleteProject}
           onCancel={() => {
             setDeleteProjectModal(false)
@@ -113,6 +114,7 @@ export const ProjectList = ({
         }}
       >
         <NewProjectModal
+          loading={editProjectPending}
           initialValue={{
             title: selectedProject?.title ?? '',
             members: selectedProject?.members ?? [],

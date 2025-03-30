@@ -24,9 +24,10 @@ type FormData = {
 type Props = {
   onConfirm: (task: TaskPayload) => void
   project: Project
+  loading: boolean
 }
 
-export const NewTaskModal = ({ onConfirm, project }: Props) => {
+export const NewTaskModal = ({ onConfirm, project, loading }: Props) => {
   const { task, dispatch } = useTaskReducer()
   const [tagText, setTagText] = useState('')
 
@@ -108,7 +109,7 @@ export const NewTaskModal = ({ onConfirm, project }: Props) => {
       </Row>
 
       <DropdownSelect
-        options={project.members.map((member) => ({
+        options={project.members.concat([project.owner]).map((member) => ({
           value: member.id,
           label: member.name,
         }))}
@@ -133,7 +134,7 @@ export const NewTaskModal = ({ onConfirm, project }: Props) => {
         ))}
       </Row>
 
-      <Button type='submit'>
+      <Button loading={loading} type='submit'>
         <p>Criar</p>
       </Button>
     </ModalTaskContent>
