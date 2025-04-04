@@ -50,7 +50,7 @@ export const TaskWrapper = styled.main`
   align-items: center;
   justify-content: center;
 
-  @media (max - width: 480px) {
+  @media (max-width: 480px) {
     flex-direction: column;
     height: 80rem;
   }
