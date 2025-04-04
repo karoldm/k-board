@@ -116,7 +116,9 @@ export const NavBar = ({ onChange, text }: Props) => {
           <Divider type='vertical' />
           <PopupMenu
             items={[
-              { onClick: () => {}, label: userData?.email ?? '' },
+              { onClick: () => {
+                navigate('/profile')
+              }, label: userData?.name ?? '' },
               {
                 onClick: () => {
                   clearUserData()
@@ -127,8 +129,7 @@ export const NavBar = ({ onChange, text }: Props) => {
             ]}
           >
             <Avatar
-              src={userData?.photoUrl ?? ''}
-              alt={userData?.name + ' photo'}
+              image={userData?.photoUrl ?? ''}
             />
           </PopupMenu>
         </Row>

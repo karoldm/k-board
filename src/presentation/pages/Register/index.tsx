@@ -5,7 +5,7 @@ import { BorderBackground, ContainerForm, Wrapper } from './style'
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useRegister } from '../../../data/repositories/userRepository'
+import { useRegister } from '../../../data/repositories/authRepository'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 import { Column } from '../../components/Layouts/Column'

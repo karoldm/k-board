@@ -15,8 +15,7 @@ export const MembersList = ({ members, noToolTip = false }: Props) => {
           tooltip={!noToolTip ? member.name : undefined}
           key={member.id}
           style={index != 0 ? { marginLeft: '-8px' } : {}}
-          src={member.photoUrl}
-          alt={member.name + ' photo'}
+          image={member.photoUrl}
         />
       ))}
     </Row>

@@ -20,6 +20,7 @@ export const ItemsContainer = styled.div`
   right: 0;
   display: flex;
   flex-direction: column;
+  min-width: 200px;
 
   border: 1px solid var(--primary);
 `;

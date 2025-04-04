@@ -44,7 +44,7 @@ export const TaskCard = forwardRef<HTMLDivElement, Props>(
           </Row>
 
           <Row gap='8px'>
-            <Avatar src={task.createdBy.photoUrl} />
+            <Avatar image={task.createdBy.photoUrl} />
             <MembersList noToolTip members={task.members} />
           </Row>
         </Column>

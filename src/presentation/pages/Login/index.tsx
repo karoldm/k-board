@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { BorderBackground, ContainerForm, Wrapper } from './style'
 
 import { useNavigate } from 'react-router-dom'
-import { useLogin } from '../../../data/repositories/userRepository'
+import { useLogin } from '../../../data/repositories/authRepository'
 import { useUser } from '../../../hooks/useUser'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'

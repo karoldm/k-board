@@ -13,8 +13,7 @@ export const InfoProjectModal = ({ project }: Props) => {
   return (
     <ModalInfoContent gap='8px'>
       <Avatar
-        src={project.owner.photoUrl}
-        alt={project.owner.name + ' photo'}
+        image={project.owner.photoUrl}
       />
       <strong>{project.title}</strong>
       <WithCopy text={project.id ?? ''}>

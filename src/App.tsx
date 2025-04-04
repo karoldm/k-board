@@ -7,6 +7,7 @@ import { ProjectPage } from './presentation/pages/Project'
 import { useUser } from './hooks/useUser'
 import { NotFound } from './presentation/components/NotFound'
 import { Register } from './presentation/pages/Register'
+import { Profile } from './presentation/pages/Profile'
 
 type ProtectedRouteProps = {
   authenticationPath: string
@@ -34,6 +35,15 @@ export const App = () => {
           <ProtectedRoute
             authenticationPath='/login'
             outlet={<ProjectPage />}
+          />
+        }
+      />
+      <Route
+        path='/profile'
+        element={
+          <ProtectedRoute
+            authenticationPath='/login'
+            outlet={<Profile />}
           />
         }
       />
