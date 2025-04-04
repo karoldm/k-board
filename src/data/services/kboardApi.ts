@@ -18,5 +18,15 @@ export const KBoardApi = () => {
     return config
   })
 
+  instance.interceptors.response.use(function (config) {
+    return config;
+  }, function (error) {
+    if(error.status == 401){
+      localStorage.removeItem(process.env.REACT_APP_STORAGE_KEY ?? "")
+      window.location.href = "/"
+    }
+    return Promise.reject(error)
+  });
+
   return instance
 }
