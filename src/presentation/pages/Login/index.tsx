@@ -85,7 +85,7 @@ export const Login = () => {
               lineHeight: '13px',
             }}
           >
-            Obs.: A demora nas requisisões acontecem porque a API e o banco de
+            Obs.: A demora nas requisições acontecem porque a API e o banco de
             dados estão hospedados em uma instância gratuita do render, que
             inativa a aplicação quando ela está sem uso e pode causar delays de
             até 3 minutos. Já estou procurando uma maneira de contornar o

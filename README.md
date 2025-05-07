@@ -8,6 +8,10 @@ Aplicação para Gerenciamento de Projetos e Tarefas em um Quadro Kanban! Desenv
 
 - **Cadastro de Usuários**: Permite que novos usuários se cadastrem informando nome, email, senha e foto de perfil
 - **Login**: Autenticação integrada com a API utilizando JWT
+  
+### Gerenciamento de Perfil
+- **Atualizar Perfil**: Os usuários podem alterar foto e nome
+- **Atualizar Senha**: Os usuários pode trocar de senha
 
 ### Projetos
 
