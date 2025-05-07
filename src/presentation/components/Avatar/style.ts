@@ -10,14 +10,17 @@ export const StyledAvatar = styled.div<Props>`
   border-radius: 100%;
   width: ${(props) => props.width ?? '40px'};
   height: ${(props) => props.width ?? '40px'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-direction: column;
+  gap: 24px;
   background: ${(props) => props.image ? 'transparent' : 'var(--primary)'};
   background-image: ${(props) => props.image ? `url('${props.image}')` : 'none'};
   background-size: cover;
   background-position: center;
   border: 2px solid var(--white);
-  display: flex;
-  align-items: end;
-  justify-content: end;
   overflow: hidden;
   cursor: pointer;
 
@@ -26,6 +29,8 @@ export const StyledAvatar = styled.div<Props>`
     height: 24%;
     width: 100%;
     align-items: center;
+    position: absolute;
+    bottom: 0;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.5);
   }
